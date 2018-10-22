@@ -1,0 +1,324 @@
+﻿@model hrhdashboard.ViewModel.HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+<link href="/css/gorilla-studio.css" rel="stylesheet" data-n-head="true">
+
+<style>
+    #map { 
+        height:650px;
+        border: 1px solid #ccc;
+        padding: 0;
+        border-radius: 4px;
+
+    }
+    .marker {
+        background-image: url('/images/location_map_pin_blue.png');
+        background-size: cover;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .mapboxgl-popup {
+        max-width: 200px;
+    }
+    .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+    }
+    .zero-margin {
+        margin:0!important;
+    }
+    .zero-padding {
+        padding: 0!important;
+    }
+    .collection .collection-item.avatar {
+        min-height: 70px;
+        padding-left: 70px;
+        position: relative;
+    }
+    #doughnut-chart {
+        width: 150px !important;
+        height: 100px !important;
+        margin-left: -23px;
+    }
+    #trending-bar-chart {
+        height: 100px!important;
+        width: 350px!important;
+    }
+    .meteo div.col-md-3 i.material-icons {
+        font-size: 2rem;
+        padding-top: 5px;
+        color: #f00;
+    }
+    .meteo div.col-md-3.active i.material-icons {
+        color: #00adef;
+    }
+</style>
+
+<script type="text/javascript">
+    jq(function() {
+        jq('.meteo div').click(function(){
+            alert('click');
+        });
+
+    });
+
+</script>
+
+<script src="~/js/custom-index-script.js"></script>
+<div class="row" style="margin-top: 20px;">
+    <div id='map' class="col-md-6"></div>
+    <div class="col-md-6">
+        <ul id="issues-collection" class="collection z-depth-1 zero-margin">
+          <li class="collection-item avatar">
+            <i class="material-icons red accent-2 circle">bug_report</i>
+            <h5 class="collection-header m-0">Norms &amp; Standards</h5>
+            <a class="btn-floating btn-move-up waves-effect waves-light red accent-2 z-depth-4 right">
+                <i class="material-icons activator">filter_list</i>
+            </a>
+            <p class="cyan-text">National Level, <span class="deep-orange-text"><b>5007</b> facilities</span></p>
+          </li>
+          <li class="collection-item">
+            <img src="/images/dist.png" alt="Cadre Distribution" style="width:100%">
+          </li>
+          <li class="collection-item">
+            <div class="card-content row" style="margin-bottom:0px">
+                <div class="col-md-3">
+                    <div id="doughnut-chart-wrapper" class="zero-margin zero-padding">
+                        <canvas id="doughnut-chart" height="200" style="height:300"></canvas>
+                        <div class="doughnut-chart-status">
+                            5,007
+                            <p class="ultra-small center-align">FACILITIES</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 zero-margin">
+                    <ul class="doughnut-chart-legend">
+                        <li class="mobile ultra-small">
+                            <span class="legend-color"></span>Tier 1
+                        </li>
+
+                        <li class="home ultra-small">
+                            <span class="legend-color"></span> Tier 2
+                        </li>
+
+                        <li class="vpower ultra-small">
+                            <span class="legend-color"></span> Tier 3
+                        </li>
+
+                        <li class="kitchen ultra-small">
+                            <span class="legend-color"></span> Tier 4
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-8 teal" style="margin: -11px -19px -11px 0;width: 70%;">
+                    <div class="line-chart-wrapper">
+                        <canvas id="line-chart" height="114"></canvas>
+                    </div>
+                </div>
+            </div>
+          </li>
+          <li class="collection-item">
+            <div class="row" style="margin-bottom:0">
+              <div class="col s7">
+                <p class="collections-title"><strong>12.06%</strong> Services Available</p>
+              </div>
+              <div class="col s2">
+                <span class="task-cat red accent-2">P3</span>
+              </div>
+              <div class="col s3">
+                <div class="progress">
+                  <div class="determinate" style="width: 10%"></div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="collection-item zero-margin zero-padding ">
+            <section class="energy-consumption text-center">
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="symbol">
+                            <svg>
+                                <use xlink:href="#cooking-pot" x="0" y="0">
+                                    <svg id="cooking-pot" viewBox="0 0 41 50" width="100%" height="100%">
+                                        <path d="M38,18H27.3c1,0,1.8-0.8,1.8-1.8c0-1-0.8-1.7-1.8-1.7H23c-1,0-1.7,0.8-1.7,1.7c0,1,0.8,1.8,1.7,1.8H12.3
+                                            c-3,0-5.4,2.7-5.9,5.5h37.6C43.4,20.7,41,18,38,18z"></path><path d="M44,26.5V26H6.4H6.3H0v2.5h6.3V44c0,3.3,2.7,6,6,6H38c3.3,0,6-2.7,6-6V29h6v-2.5H44z"></path><path d="M16,6c0.2,0.2,0.4,0.5,0.6,0.7L17,7.2c0.3,0.3,0.6,0.6,0.8,0.9c0.1,0.1,0.2,0.3,0.3,0.4c0.1,0.1,0.1,0.2,0.1,0.3
+                                            c0,0.1-0.1,0.3-0.2,0.5c-0.1,0.2-0.3,0.3-0.5,0.5c0.3,0.1,0.6,0.1,0.9,0.1c0.3,0,0.6-0.2,0.9-0.5c0.3-0.3,0.4-0.7,0.5-1.1
+                                            c0-0.4,0-0.7-0.1-1c-0.2-0.6-0.5-1.1-0.8-1.6c-0.2-0.2-0.3-0.5-0.5-0.6c-0.1-0.2-0.3-0.3-0.4-0.5c-0.5-0.7-0.8-1.2-0.9-1.9
+                                            c-0.1-0.7,0-1.6,0.4-2.6c-1.1,0.2-2.1,1.1-2.4,2.4c-0.2,0.6-0.1,1.3,0,1.9C15.3,5,15.6,5.5,16,6z"></path><path d="M22.4,6c0.2,0.2,0.4,0.5,0.6,0.7l0.5,0.5c0.3,0.3,0.6,0.6,0.8,0.9c0.1,0.1,0.2,0.3,0.3,0.4c0.1,0.1,0.1,0.2,0.1,0.3
+                                            c0,0.1-0.1,0.3-0.2,0.5c-0.1,0.2-0.3,0.3-0.6,0.5c0.3,0.1,0.6,0.1,0.9,0.1c0.3,0,0.6-0.2,0.9-0.5c0.3-0.3,0.4-0.7,0.5-1.1
+                                            c0-0.4,0-0.7-0.1-1c-0.2-0.6-0.5-1.1-0.8-1.6C25.2,5.4,25,5.2,24.8,5c-0.1-0.2-0.3-0.3-0.4-0.5c-0.5-0.7-0.8-1.2-0.9-1.9
+                                            C23.4,1.9,23.6,1,24,0c-1.1,0.2-2.1,1.1-2.4,2.4c-0.2,0.6-0.1,1.3,0,1.9C21.8,5,22.1,5.5,22.4,6z"></path><path d="M28.3,6c0.2,0.2,0.4,0.5,0.6,0.7l0.5,0.5C29.7,7.5,30,7.8,30.2,8c0.1,0.1,0.2,0.3,0.3,0.4c0.1,0.1,0.1,0.2,0.1,0.3
+                                            c0,0.1-0.1,0.3-0.2,0.5c-0.1,0.2-0.3,0.3-0.6,0.5c0.3,0.1,0.6,0.1,0.9,0.1c0.3,0,0.6-0.2,0.9-0.5c0.3-0.3,0.4-0.7,0.5-1.1
+                                            c0-0.4,0-0.7-0.1-1c-0.2-0.6-0.5-1.1-0.8-1.6c-0.2-0.2-0.3-0.5-0.5-0.6c-0.1-0.2-0.3-0.3-0.4-0.5c-0.5-0.7-0.8-1.2-0.9-1.9
+                                            c-0.1-0.7,0-1.6,0.4-2.6c-1.1,0.2-2.1,1.1-2.4,2.4c-0.2,0.6-0.1,1.3,0,1.9C27.7,5,28,5.5,28.3,6z">
+                                        </path>
+                                    </svg>
+                                </use>
+                            </svg>
+                        </div>
+                        <div class="description">
+                            <h6 class="title">Norm <span class="separator">:</span><span class="active"> Kitchenett</span></h6>
+                            <div class="highlight">0.30%</div>
+                        </div>
+                        <div class="row meteo zero-margin">
+                            <div class="col-md-3 active"><i class="material-icons">whatshot</i></div>
+                            <div class="col-md-3"><i class="material-icons">directions_car</i></div>
+                            <div class="col-md-3"><i class="material-icons">kitchen</i></div>
+                            <div class="col-md-3"><i class="material-icons">hot_tub</i></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="symbol">
+                            <svg>
+                                <use xlink:href="#lightbulb" x="0" y="0">
+                                    <svg id="lightbulb" viewBox="0 0 50 50" width="100%" height="100%">
+                                        <path d="M7.9,25.6l-3.2,1.3c-0.6,0.2-0.8,0.8-0.6,1.3c0.2,0.5,0.8,0.8,1.3,0.6l3.2-1.3
+                                            c0.5-0.2,0.8-0.8,0.6-1.3C8.9,25.7,8.4,25.4,7.9,25.6z M36.8,14.7c0.2,0.5,0.8,0.8,1.3,0.6l3.2-1.3c0.5-0.2,0.8-0.8,0.6-1.3
+                                            c-0.2-0.5-0.8-0.8-1.3-0.6l-3.2,1.3C36.8,13.5,36.6,14.1,36.8,14.7z M8.1,20.4c0-0.6-0.4-1-1-1H3.6c-0.6,0-1,0.4-1,1
+                                            c0,0.6,0.4,1,1,1H7C7.6,21.4,8.1,21,8.1,20.4z M42.6,19.4h-3.5c-0.6,0-1,0.4-1,1c0,0.6,0.4,1,1,1h3.5c0.6,0,1-0.4,1-1
+                                            C43.6,19.9,43.1,19.4,42.6,19.4z M35,9.8l2.5-2.5c0.4-0.4,0.4-1,0-1.4c-0.4-0.4-1-0.4-1.4,0l-2.5,2.5c-0.4,0.4-0.4,1,0,1.4
+                                            C33.9,10.2,34.6,10.2,35,9.8z M28.6,6.6c0.5,0.2,1.1,0,1.3-0.5l1.3-3.2c0.2-0.5,0-1.1-0.5-1.3s-1.1,0-1.3,0.5l-1.3,3.2
+                                            C27.9,5.8,28.1,6.4,28.6,6.6z M22.9,5.5c0.6,0,1-0.4,1-1V1c0-0.6-0.4-1-1-1s-1,0.4-1,1v3.5C21.9,5.1,22.3,5.5,22.9,5.5z M15.9,6.1
+                                            c0.2,0.6,0.8,0.8,1.3,0.6c0.5-0.2,0.8-0.8,0.6-1.3l-1.3-3.2c-0.2-0.5-0.8-0.8-1.3-0.6c-0.5,0.2-0.8,0.8-0.6,1.3L15.9,6.1z M10.9,10
+                                            c0.4,0.4,1,0.4,1.4,0c0.4-0.4,0.4-1,0-1.4L9.9,6.1c-0.4-0.4-1-0.4-1.4,0c-0.4,0.4-0.4,1,0,1.4L10.9,10z M41.4,27.2l-3.2-1.3
+                                            c-0.5-0.2-1.1,0-1.3,0.5c-0.2,0.5,0,1.1,0.5,1.3l3.2,1.3c0.5,0.3,1.1,0,1.3-0.5C42.1,28,41.9,27.4,41.4,27.2z M4.6,14.1l3.2,1.3
+                                            c0.5,0.3,1.1,0,1.3-0.5c0.2-0.5,0-1.1-0.5-1.3l-3.2-1.3c-0.5-0.2-1.1,0-1.3,0.5C3.8,13.3,4,13.9,4.6,14.1z M31,43.6h-1.3v-3l-13.5,0
+                                            v3h-1.3c-0.6,0-1,0.4-1,1c0,0.6,0.4,1,1,1h1.3h0c0.4,2.5,2.5,4.4,5.1,4.4h3.1c2.6,0,4.8-1.9,5.2-4.4c0,0,0,0,0,0H31c0.6,0,1-0.4,1-1
+                                            C32,44,31.6,43.6,31,43.6z M22.3,7.4C15.6,7.8,10.2,13.4,10,20.1c-0.1,3.1,0.9,6,2.7,8.3c2.3,3,3.9,6.4,4.6,10.1l11.4,0
+                                            c0.7-3.6,2.2-7,4.5-9.8c1.8-2.2,2.9-5.1,2.9-8.2C36.1,13,29.8,7,22.3,7.4z">
+
+                                        </path>
+                                    </svg>
+                                </use>
+                            </svg>
+                        </div>
+                        <div class="description">
+                            <h6 class="title">Power Source <span class="separator">:</span><span class="active"> Electricity</span></h6>
+                            <div class="highlight">65.01%</div>
+                        </div>
+                        <div class="row meteo zero-margin">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3 active"><i class="material-icons">power</i></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+          </li>
+        </ul>
+    </div>
+    <div class="clear:both"></div>
+</div>
+
+<script>
+    var geojson = @Html.Raw(Model.Markers);
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2aWVtdWt1bmdpIiwiYSI6ImNqbXVhbjNwYzAwc3EzcHBjbW5vcDRoMWEifQ.4J5fIUC3XydcHasrtAt3qQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [37.6456, 0.40815],
+        zoom: 5.4
+    });
+
+    var hoveredStateId =  null;
+
+    map.on('load', function () {
+        map.addSource("states", {
+            "type": "geojson",
+            "data": "https://raw.githubusercontent.com/mikelmaron/kenya-election-data/master/data/counties.geojson"
+        });
+
+        // The feature-state dependent fill-opacity expression will render the hover effect
+        // when a feature's hover state is set to true.
+       
+        map.addLayer({
+              "id": "state-fills",
+              "type": "fill",
+              "source": "states",
+              "layout": {},
+              "paint": {
+                 "fill-color": "#dc3545",
+                 "fill-opacity": ["case",
+                      ["boolean", ["feature-state", "hover"], false],
+                     1, 0.1
+                  ]
+             }
+        });
+
+        map.addLayer({
+            "id": "state-borders",
+            "type": "line",
+           "source": "states",
+           "layout": {},
+            "paint": {
+               "line-color": "#f00",
+               "line-width": 1
+          }
+        });
+
+        // When the user moves their mouse over the state-fill layer, we'll update the
+        // feature state for the feature under the mouse.
+        map.on("mousemove", "state-fills", function(e) {
+            if (e.features.length > 0) {
+                if (hoveredStateId) {
+                    map.setFeatureState({source: 'states', id: hoveredStateId}, { hover: false});
+                }
+                hoveredStateId = e.features[0].id;
+                map.setFeatureState({source: 'states', id: hoveredStateId}, { hover: true});
+            }
+        });
+
+        // When the mouse leaves the state-fill layer, update the feature state of the
+        // previously hovered feature.
+        map.on("mouseleave", "state-fills", function() {
+            if (hoveredStateId) {
+                map.setFeatureState({source: 'states', id: hoveredStateId}, { hover: false});
+            }
+            hoveredStateId =  null;
+        });
+    });
+
+    geojson.features.forEach(function(marker) {
+      var el = document.createElement('div');
+      var popup = new mapboxgl.Popup({ offset: 25 });
+    
+      el.className = 'marker';
+
+      new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+      .addTo(map);
+    
+      el.addEventListener('mouseover', function(e){
+         popup.setLngLat(marker.geometry.coordinates)
+         .setHTML('<h6>' + marker.properties.title + '</h6><p>' + marker.properties.description + '</p>')
+         .addTo(map);
+        e.stopPropagation();
+      });
+
+      el.addEventListener('mouseleave', function(e){
+         popup.remove();
+      });
+    
+      el.addEventListener('click', () =>{
+          setTimeout(function() {
+            window.location.href = "/county/" + marker.properties.id;
+          }, 500);
+      });
+    });
+</script>

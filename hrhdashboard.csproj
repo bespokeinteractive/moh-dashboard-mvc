@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="RestSharp" Version="106.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
+    <Folder Include="Services\" />
+    <Folder Include="Views\Facility\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Account\Login.cshtml" />
+    <Content Remove="wwwroot\js\custom-script.js" />
+    <Content Remove="wwwroot\js\customers-index-script.js" />
+    <Content Remove="wwwroot\js\jquery.validate.min.js" />
+    <Content Remove="wwwroot\js\materialize.js" />
+    <Content Remove="wwwroot\js\plugins.js" />
+    <Content Remove="wwwroot\fonts\material-design-icons\LICENSE.txt" />
+    <Content Remove="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.eot" />
+    <Content Remove="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.svg" />
+    <Content Remove="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.ttf" />
+    <Content Remove="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.woff" />
+    <Content Remove="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.woff2" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Bold.woff" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Bold.woff2" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Light.woff" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Light.woff2" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Medium.woff" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Medium.woff2" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Regular.woff" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Regular.woff2" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Thin.woff" />
+    <Content Remove="wwwroot\fonts\roboto\Roboto-Thin.woff2" />
+    <Content Remove="wwwroot\css\materialize.css" />
+    <Content Remove="wwwroot\css\materialize.custom.css" />
+    <Content Remove="wwwroot\css\materialize.style.css" />
+    <Content Remove="wwwroot\css\vendor.perfect-scrollbar.css" />
+    <Content Remove="wwwroot\js\vendor.chart.min.js" />
+    <Content Remove="wwwroot\js\vendor.perfect-scrollbar.js" />
+    <Content Remove="Views\Home\Contact.cshtml" />
+    <Content Remove="wwwroot\js\facility-list-main.scripts" />
+    <Content Remove="wwwroot\js\dashboard-analytics.js" />
+    <Content Remove="wwwroot\css\styles.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="wwwroot\js\facility-list-main.scripts.js" />
+    <None Remove="wwwroot\js\custom-index-script.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\Account\Login.cshtml" />
+    <None Include="wwwroot\js\custom-script.js" />
+    <None Include="wwwroot\js\jquery.validate.min.js" />
+    <None Include="wwwroot\js\materialize.js" />
+    <None Include="wwwroot\js\plugins.js" />
+    <None Include="wwwroot\fonts\material-design-icons\LICENSE.txt" />
+    <None Include="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.eot" />
+    <None Include="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.svg" />
+    <None Include="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.ttf" />
+    <None Include="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.woff" />
+    <None Include="wwwroot\fonts\material-design-icons\MaterialIcons-Regular.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Bold.woff" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Bold.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Light.woff" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Light.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Medium.woff" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Medium.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Regular.woff" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Regular.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Thin.woff" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Thin.woff2" />
+    <None Include="wwwroot\css\materialize.css" />
+    <None Include="wwwroot\css\materialize.custom.css" />
+    <None Include="wwwroot\css\materialize.style.css" />
+    <None Include="wwwroot\css\vendor.perfect-scrollbar.css" />
+    <None Include="wwwroot\js\vendor.chart.min.js" />
+    <None Include="wwwroot\js\vendor.perfect-scrollbar.js" />
+    <None Include="wwwroot\css\gorilla-studio.css" />
+  </ItemGroup>
+</Project>
