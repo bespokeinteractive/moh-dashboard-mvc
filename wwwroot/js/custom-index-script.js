@@ -4,25 +4,30 @@
 
 	// Polor chart data
 	var doughnutData = [{
-		value: 3000,
+		value: 7203,
 		color: "#F7464A",
 		highlight: "#FF5A5E",
-		label: "Tier1"
+		label: "Level2"
 	}, {
-		value: 500,
+		value: 2039,
 		color: "#46BFBD",
 		highlight: "#5AD3D1",
-		label: "Tier4"
+		label: "Level3"
 	}, {
-		value: 1000,
+		value: 428,
 		color: "#FDB45C",
 		highlight: "#FFC870",
-		label: "Tier3"
+		label: "Level4"
 	}, {
-        value: 1000,
+        value: 173,
         color: "#ab47bc",
         highlight: "#ab47bc",
-        label: "Tier4"
+        label: "Level5"
+    }, {
+        value: 11,
+        color: "#000",
+        highlight: "#000",
+        label: "Level6"
     }];
 
 

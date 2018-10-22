@@ -30,6 +30,25 @@ namespace hrhdashboard.Services
             return county;
         }
 
+        public List<County> GetCounties(){
+            List<County> counties = new List<County>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT ct_idnt, ct_name FROM County");
+            if (dr.HasRows){
+                while (dr.Read())
+                {
+                    County county = new County
+                    {
+                        Id = Convert.ToInt16(dr[0]),
+                        Name = dr[1].ToString()
+                    };
+                }
+            }
+
+            return counties;
+        }
+
         public Constituency GetConstituency(int idnt)
         {
             Constituency constitiency = new Constituency(idnt);

@@ -26,7 +26,7 @@ namespace hrhdashboard.Controllers
         {
             model.county = service.GetCounty(idnt);
             model.county.Facilities = fac.GetFacilityCount(model.county);
-            model.tiers = fac.GetFacilityCategorizationByTiers(model.county);
+            model.levels = fac.GetFacilityCategorizationByLevels(model.county);
 
             return View(model);
         }
@@ -70,6 +70,30 @@ namespace hrhdashboard.Controllers
                 var data = JsonConvert.DeserializeObject<KmhflFacilitiesObject>(response);
                 return View(data);
             }
+        }
+
+        [Route("/search")]
+        public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, int county=0, int level=0){
+            string SearchString = "WHERE fc_level<>99";
+            if (county != 0){
+                SearchString += " AND fc_county=" + county;
+            }
+            if (level != 0){
+                SearchString += " AND fc_level=" + level;
+            }
+
+            //Don't Pull if Nothing Passed
+            if (string.IsNullOrEmpty(SearchString)){
+                SearchString = "WHERE fc_idnt=0";
+            }
+
+            model.county = county;
+            model.level = level;
+            model.count = service.GetFacilityCount(SearchString);
+            model.counties = dashboard.GetCounties();
+            model.facilities = service.GetFacilities(SearchString);
+
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

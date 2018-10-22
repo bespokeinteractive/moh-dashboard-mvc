@@ -16,33 +16,36 @@ namespace hrhdashboard.Services
             Facility facility = new Facility();
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_kmflcode='" + code +"' ORDER BY fc_name");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_kmflcode='" + code +"' ORDER BY fc_name");
             if (dr.Read())
             {
                 facility.Id = Convert.ToInt64(dr[0]);
                 facility.Name = dr[1].ToString();
                 facility.Code = code;
+                facility.Type = dr[3].ToString();
+                facility.Owner = dr[4].ToString();
+                facility.Regulator = dr[5].ToString();
 
-                facility.County.Id = Convert.ToInt16(dr[3]);
-                facility.County.Name = dr[4].ToString();
+                facility.County.Id = Convert.ToInt16(dr[6]);
+                facility.County.Name = dr[7].ToString();
 
-                facility.SubCounty.Id = Convert.ToInt16(dr[5]);
-                facility.SubCounty.Name = dr[6].ToString();
+                facility.SubCounty.Id = Convert.ToInt16(dr[8]);
+                facility.SubCounty.Name = dr[9].ToString();
 
-                facility.Ward.Id = Convert.ToInt16(dr[7]);
-                facility.Ward.Name = dr[8].ToString();
+                facility.Ward.Id = Convert.ToInt16(dr[10]);
+                facility.Ward.Name = dr[11].ToString();
 
-                facility.Status.Id = Convert.ToInt64(dr[9]);
-                facility.Status.Name = dr[10].ToString();
+                facility.Status.Id = Convert.ToInt64(dr[12]);
+                facility.Status.Name = dr[13].ToString();
 
-                facility.Category.Id = Convert.ToInt64(dr[11]);
-                facility.Category.Name = dr[12].ToString();
+                facility.Category.Id = Convert.ToInt64(dr[14]);
+                facility.Category.Name = dr[15].ToString();
 
-                facility.Category.Tier.Id = Convert.ToInt64(dr[13]);
-                facility.Category.Tier.Name = dr[14].ToString();
+                facility.Category.Tier.Id = Convert.ToInt64(dr[16]);
+                facility.Category.Tier.Name = dr[17].ToString();
 
-                facility.Category.Level.Id = Convert.ToInt16(dr[15]);
-                facility.Category.Level.Name = dr[16].ToString();
+                facility.Category.Level.Id = Convert.ToInt16(dr[18]);
+                facility.Category.Level.Name = dr[19].ToString();
             }
 
             return facility;
@@ -53,36 +56,84 @@ namespace hrhdashboard.Services
             Facility facility = new Facility();
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_idnt=" + Id + " ORDER BY fc_name");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, fc_type, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_idnt=" + Id + " ORDER BY fc_name");
             if (dr.Read())
             {
                 facility.Id = Id;
                 facility.Name = dr[1].ToString();
                 facility.Code = dr[2].ToString();
+                facility.Type = dr[3].ToString();
+                facility.Owner = dr[4].ToString();
+                facility.Regulator = dr[5].ToString();
 
-                facility.County.Id = Convert.ToInt16(dr[3]);
-                facility.County.Name = dr[4].ToString();
+                facility.County.Id = Convert.ToInt16(dr[6]);
+                facility.County.Name = dr[7].ToString();
 
-                facility.SubCounty.Id = Convert.ToInt16(dr[5]);
-                facility.SubCounty.Name = dr[6].ToString();
+                facility.SubCounty.Id = Convert.ToInt16(dr[8]);
+                facility.SubCounty.Name = dr[9].ToString();
 
-                facility.Ward.Id = Convert.ToInt16(dr[7]);
-                facility.Ward.Name = dr[8].ToString();
+                facility.Ward.Id = Convert.ToInt16(dr[10]);
+                facility.Ward.Name = dr[11].ToString();
 
-                facility.Status.Id = Convert.ToInt64(dr[9]);
-                facility.Status.Name = dr[10].ToString();
+                facility.Status.Id = Convert.ToInt64(dr[12]);
+                facility.Status.Name = dr[13].ToString();
 
-                facility.Category.Id = Convert.ToInt64(dr[11]);
-                facility.Category.Name = dr[12].ToString();
+                facility.Category.Id = Convert.ToInt64(dr[14]);
+                facility.Category.Name = dr[15].ToString();
 
-                facility.Category.Tier.Id = Convert.ToInt64(dr[13]);
-                facility.Category.Tier.Name = dr[14].ToString();
+                facility.Category.Tier.Id = Convert.ToInt64(dr[16]);
+                facility.Category.Tier.Name = dr[17].ToString();
 
-                facility.Category.Level.Id = Convert.ToInt16(dr[15]);
-                facility.Category.Level.Name = dr[16].ToString();
+                facility.Category.Level.Id = Convert.ToInt16(dr[18]);
+                facility.Category.Level.Name = dr[19].ToString();
             }
 
             return facility;
+        }
+
+        public List<Facility> GetFacilities(string query) {
+            List<Facility> facilities = new List<Facility>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt " + query + " ORDER BY fc_kmflcode, fc_level");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    Facility facility = new Facility();
+                    facility.Id = Convert.ToInt64(dr[0]);
+                    facility.Name = dr[1].ToString();
+                    facility.Code = dr[2].ToString();
+                    facility.Type = dr[3].ToString();
+                    facility.Owner = dr[4].ToString();
+                    facility.Regulator = dr[5].ToString();
+
+                    facility.County.Id = Convert.ToInt16(dr[6]);
+                    facility.County.Name = dr[7].ToString();
+
+                    facility.SubCounty.Id = Convert.ToInt16(dr[8]);
+                    facility.SubCounty.Name = dr[9].ToString();
+
+                    facility.Ward.Id = Convert.ToInt16(dr[10]);
+                    facility.Ward.Name = dr[11].ToString();
+
+                    facility.Status.Id = Convert.ToInt64(dr[12]);
+                    facility.Status.Name = dr[13].ToString();
+
+                    facility.Category.Id = Convert.ToInt64(dr[14]);
+                    facility.Category.Name = dr[15].ToString();
+
+                    facility.Category.Tier.Id = Convert.ToInt64(dr[16]);
+                    facility.Category.Tier.Name = dr[17].ToString();
+
+                    facility.Category.Level.Id = Convert.ToInt16(dr[18]);
+                    facility.Category.Level.Name = dr[19].ToString();
+
+                    facilities.Add(facility);
+                }
+            }
+
+            return facilities;
         }
         
         public List<Facility> GetFacilitiesByUserLoggedIn(){
@@ -93,7 +144,7 @@ namespace hrhdashboard.Services
             List<Facility> facilities = new List<Facility>();
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM UsersFacility INNER JOIN Facility ON fc_idnt=uf_fac INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE uf_user=" + UserId + " ORDER BY fc_name");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM UsersFacility INNER JOIN Facility ON fc_idnt=uf_fac INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE uf_user=" + UserId + " ORDER BY fc_name");
             if (dr.HasRows)
             {
                 while (dr.Read())
@@ -102,33 +153,45 @@ namespace hrhdashboard.Services
                     facility.Id = Convert.ToInt64(dr[0]);
                     facility.Name = dr[1].ToString();
                     facility.Code = dr[2].ToString();
+                    facility.Type = dr[3].ToString();
+                    facility.Owner = dr[4].ToString();
+                    facility.Regulator = dr[5].ToString();
 
-                    facility.County.Id = Convert.ToInt16(dr[3]);
-                    facility.County.Name = dr[4].ToString();
+                    facility.County.Id = Convert.ToInt16(dr[6]);
+                    facility.County.Name = dr[7].ToString();
 
-                    facility.SubCounty.Id = Convert.ToInt16(dr[5]);
-                    facility.SubCounty.Name = dr[6].ToString();
+                    facility.SubCounty.Id = Convert.ToInt16(dr[8]);
+                    facility.SubCounty.Name = dr[9].ToString();
 
-                    facility.Ward.Id = Convert.ToInt16(dr[7]);
-                    facility.Ward.Name = dr[8].ToString();
+                    facility.Ward.Id = Convert.ToInt16(dr[10]);
+                    facility.Ward.Name = dr[11].ToString();
 
-                    facility.Status.Id = Convert.ToInt64(dr[9]);
-                    facility.Status.Name = dr[10].ToString();
+                    facility.Status.Id = Convert.ToInt64(dr[12]);
+                    facility.Status.Name = dr[13].ToString();
 
-                    facility.Category.Id = Convert.ToInt64(dr[11]);
-                    facility.Category.Name = dr[12].ToString();
+                    facility.Category.Id = Convert.ToInt64(dr[14]);
+                    facility.Category.Name = dr[15].ToString();
 
-                    facility.Category.Tier.Id = Convert.ToInt64(dr[13]);
-                    facility.Category.Tier.Name = dr[14].ToString();
+                    facility.Category.Tier.Id = Convert.ToInt64(dr[16]);
+                    facility.Category.Tier.Name = dr[17].ToString();
 
-                    facility.Category.Level.Id = Convert.ToInt16(dr[15]);
-                    facility.Category.Level.Name = dr[16].ToString();
+                    facility.Category.Level.Id = Convert.ToInt16(dr[18]);
+                    facility.Category.Level.Name = dr[19].ToString();
 
                     facilities.Add(facility);
                 }
             }
 
             return facilities;
+        }
+
+        public int GetFacilityCount(string query)
+        {
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT COUNT(*) fctg_count FROM Facility " + query);
+            if (dr.Read())
+                return Convert.ToInt16(dr[0]);
+            return 0;
         }
 
         public int GetFacilityCount(County county)
@@ -158,6 +221,28 @@ namespace hrhdashboard.Services
             return 0;
         }
 
+        public List<Level> GetFacilityCategorizationByLevels(County county){
+            List<Level> levels = new List<Level>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fl_idnt, ISNULL(fc_count,0) fl_count FROM Levels LEFT OUTER JOIN (SELECT fc_level, COUNT(*) fc_count FROM Facility WHERE fc_level<>99 AND fc_county=" + county.Id + " GROUP BY fc_level) AS Foo ON fc_level=fl_idnt WHERE fl_idnt<>99 ORDER BY fl_idnt");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    Level lvls = new Level {
+                        Id = Convert.ToInt16(dr[0]),
+                        Name = "Level " + dr[0],
+                        Count = Convert.ToDouble(dr[1])
+                    };
+
+                    levels.Add(lvls);
+                }
+            }
+
+            return levels;
+        }
+
         public List<Tiers> GetFacilityCategorizationByTiers(County county){
             List<Tiers> tiers = new List<Tiers>();
 
@@ -167,10 +252,11 @@ namespace hrhdashboard.Services
             {
                 while (dr.Read())
                 {
-                    Tiers tier = new Tiers();
-                    tier.Id = Convert.ToInt64(dr[0]);
-                    tier.Name = dr[1].ToString();
-                    tier.Count = Convert.ToDouble(dr[2]);
+                    Tiers tier = new Tiers {
+                        Id = Convert.ToInt64(dr[0]),
+                        Name = dr[1].ToString(),
+                        Count = Convert.ToDouble(dr[2])
+                    };
 
                     tiers.Add(tier);
                 }

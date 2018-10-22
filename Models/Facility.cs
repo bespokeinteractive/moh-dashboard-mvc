@@ -6,6 +6,10 @@ namespace hrhdashboard.Models
         public Int64 Id { get; set; }
         public String Name { get; set; }
         public String Code { get; set; }
+        public String Type { get; set; }
+        public String Owner { get; set; }
+        public String Regulator { get; set; }
+
         public Level Level { get; set; }
         public County County { get; set; }
         public Constituency SubCounty { get; set; }
@@ -18,6 +22,9 @@ namespace hrhdashboard.Models
             Id = 0;
             Name = "";
             Code = "";
+            Type = "";
+            Owner = "";
+            Regulator = "";
             Level = new Level();
             County = new County();
             SubCounty = new Constituency();
@@ -32,6 +39,9 @@ namespace hrhdashboard.Models
             Id = idnt;
             Name = "";
             Code = "";
+            Type = "";
+            Owner = "";
+            Regulator = "";
             Level = new Level();
             County = new County();
             SubCounty = new Constituency();

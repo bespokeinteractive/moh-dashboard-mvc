@@ -62,6 +62,12 @@
         height: 100px !important;
         width: 350px !important;
     }
+    #facility-levels td {
+        padding:0 5px;
+    }
+    table.bordered > thead > tr, table.bordered > tbody > tr:last-child {
+        border-bottom: 0px none;
+    }
 </style>
 
 <div class="row" style="margin-top: 20px;">
@@ -92,26 +98,43 @@
                 <div class="col-md-2 zero-margin">
                     <ul class="doughnut-chart-legend">
                         <li class="mobile ultra-small">
-                            <span class="legend-color"></span> Level 1 (@Model.tiers[0].Count)
+                            <span class="legend-color"></span> Level 2
                         </li>
 
                         <li class="kitchen ultra-small">
-                            <span class="legend-color"></span> Level 2 (@Model.tiers[1].Count)
+                            <span class="legend-color"></span> Level 3
                         </li>
 
                         <li class="home ultra-small">
-                            <span class="legend-color"></span> Level 3 (@Model.tiers[2].Count)
+                            <span class="legend-color"></span> Level 4
                         </li>
 
                         <li class="vpower ultra-small">
-                            <span class="legend-color"></span> Level 4 (@Model.tiers[3].Count)
+                            <span class="legend-color"></span> Level 5
                         </li>
 
                         <li class="others ultra-small">
-                            <span class="legend-color"></span> Level 5 (@Model.tiers[4].Count)
+                            <span class="legend-color"></span> Level 6
                         </li>
 
                     </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <table id="facility-levels" class="bordered" style="margin-top: -5px;">
+                        <tbody>
+                            @foreach (var lvls in Model.levels)
+                            {
+                                <tr>
+                                    <td>@lvls.Id.</td>
+                                    <td><a href="/search?county=@Model.county.Id&level=@lvls.Id">@lvls.Name</a></td>
+                                    <td>0.00%</td>
+                                    <td>@lvls.Count @(lvls.Count==1?"facility":"facilities")</td>
+                                </tr>
+                            }
+                        </tbody>
+                              
+                    </table>
                 </div>
             </div>
           </li>
@@ -122,30 +145,30 @@
 
 <script>
     var doughnutData = [{
-        value: @Model.tiers[0].Count,
+        value: @Model.levels[1].Count,
         color: "#F7464A",
         highlight: "#FF5A5E",
-        label: "Tier1"
+        label: "L2"
     }, {
-        value: @Model.tiers[1].Count,
+        value: @Model.levels[2].Count,
         color: "#46BFBD",
         highlight: "#5AD3D1",
-        label: "Tier2"
+        label: "L3"
     }, {
-        value: @Model.tiers[2].Count,
+        value: @Model.levels[3].Count,
         color: "#FDB45C",
         highlight: "#FFC870",
-        label: "Tier3"
+        label: "L4"
     }, {
-        value: @Model.tiers[3].Count,
+        value: @Model.levels[4].Count,
         color: "#ab47bc",
         highlight: "#ab47bc",
-        label: "Tier4"
+        label: "L5"
     }, {
-        value: @Model.tiers[4].Count,
+        value: @Model.levels[5].Count,
         color: "#000",
         highlight: "#000",
-        label: "Others"
+        label: "L6"
     }];
 
     var doughnutChart = document.getElementById("doughnut-chart").getContext("2d");

@@ -1,0 +1,52 @@
+﻿@model hrhdashboard.ViewModel.FacilitySearchViewModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<style type="text/css">
+    .zero-padding {
+        padding: 0px;
+    }
+    .zero-margin {
+        margin:0px;
+    }
+</style>
+
+
+<div class="row" style="margin-top: 10px">
+    <div class="card col-md-3 zero-padding">
+        <div class="card-content deep-orange accent-2 white-text" style="padding:5px; border-radius:0;">
+          <h5 class="card-stats-number zero-margin">Find Facilities</h5>
+        </div>
+        <div class="card-action  deep-orange darken-1" style="padding:5px; border-radius:0;">
+            <div class="white-text">@Model.count @(Model.count == 1?"Facility":"Facilities") Filtered</div>
+        </div>
+
+        <div class="input-field col s12" style="margin-top: 10px;">
+            <i class="material-icons prefix">comment</i>
+            <input id="name-field" type="text" class="validate">
+            <label class="active" for="name">Facility Name</label>
+        </div>
+
+        <div class="input-field col s12">
+            <select id="county-field" style="display:block">
+                <option value=""></option>
+            </select>
+            <label>County</label>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        @foreach (var fac in Model.facilities)
+        {
+            <div class="card" style="padding:10px;">
+                <div class="light-blue-text bold-text">@fac.Code :: @fac.Name <span class="task-cat deep-orange accent-2 right">@fac.Type.ToUpper()</span></div>
+                <div class="bold-text">Status: <span class="green-text">Operational</span></div>
+                <div class="bold-text dark-gray-text">@fac.County.Name.ToUpper() COUNTY</div>
+                <div>@fac.SubCounty.Name Constituency, @fac.Ward.Name Ward<span class="right"><i class="material-icons tiny">account_circle</i> @fac.Owner</span></div>
+            </div>
+        }
+    </div>
+
+</div>

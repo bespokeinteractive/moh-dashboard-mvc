@@ -8,12 +8,12 @@ namespace hrhdashboard.ViewModel
     public class HomeCountyViewModel
     {
         public County county { get; set; }
-        public List<Tiers> tiers { get; set; }
+        public List<Level> levels { get; set; }
 
         public HomeCountyViewModel()
         {
             county = new County();
-            tiers = new List<Tiers>();
+            levels = new List<Level>();
         }
     }
 }
