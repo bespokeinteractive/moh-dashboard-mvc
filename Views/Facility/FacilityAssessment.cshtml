@@ -140,6 +140,10 @@
                                     <th>&nbsp;</th>
                                     <th>HUMAN RESOURCE</th>
                                     <th>NORMS</th>
+                                    <th>F</th>
+                                    <th>M</th> 
+                                    <th>w (Dasability)</th>
+                                    <th>N (Disability)</th>
                                     <th>AVAILABLE</th>
                                     <th>GAPS</th>
                                 </tr>
@@ -158,7 +162,7 @@
 
                                         <tr style="background-color:#f2f2f2">
                                             <td>&nbsp;</td>
-                                            <td colspan="4" class="bold-text">@catg</td>
+                                            <td colspan="8" class="bold-text">@catg</td>
                                         </tr>
                                     }
                                     else
@@ -166,16 +170,32 @@
                                         index += 1;
                                     }
 
-                                    <tr>
-                                        <td>@(index).</td>
-                                        <td>@norm.Item.Name</td>
-                                        <td class="bfo">@norm.Norm</td>
-                                        <td class="now">
-                                            @Html.TextBoxFor(model => Model.HumanResources[i].Value, new { type = "number", min = "0", step = "1" })
-                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                        </td>
-                                        <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
-                                    </tr>
+                                        <tr>
+                                            <td>@(index).</td>
+                                            <td>@norm.Item.Name</td>
+                                            <td class="bfo">@norm.Norm</td>
+                                            <td class="now">
+                                                @Html.TextBoxFor(model => Model.HumanResources[i].Female, new { type = "number", min = "0", step = "1" })
+                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                            </td>
+                                            <td class=" bfo">
+                                                @Html.TextBoxFor(model => Model.HumanResources[i].Male, new { type = "number", min = "0", step = "1" })
+                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                            </td>
+                                            <td class="now">
+                                                @Html.TextBoxFor(model => Model.HumanResources[i].Fit, new { type = "number", min = "0", step = "1" })
+                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                            </td>
+                                            <td class="now">
+                                                @Html.TextBoxFor(model => Model.HumanResources[i].Disabled, new { type = "number", min = "0", step = "1" })
+                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                            </td>
+                                            <td class="now">
+                                                @Html.TextBoxFor(model => Model.HumanResources[i].Value, new { type = "number", min = "0", step = "1" })
+                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                            </td>
+                                          <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
+                                        </tr>
                                 }
                             </tbody>
                         </table>

@@ -273,7 +273,7 @@ namespace hrhdashboard.Services
                 AdditionalQuery = "";
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail, nr_female FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
             if (dr.HasRows)
             {
                 while (dr.Read())
@@ -286,11 +286,55 @@ namespace hrhdashboard.Services
 
                     norm.Norm = Convert.ToInt64(dr[4]);
                     norm.Value = Convert.ToInt64(dr[5]);
+                   
 
                     if (norm.Value > norm.Norm){
                         norm.Gaps = 0;
                     }
                     else {
+                        norm.Gaps = norm.Norm - norm.Value;
+                    }
+
+                    norms.Add(norm);
+                }
+            }
+
+            return norms;
+        }
+
+        public List<Norms> GetHumanResourceNorms(Facility facility, Int64 type, Boolean includeZeros = false)
+        {
+            List<Norms> norms = new List<Norms>();
+
+            string AdditionalQuery = " AND NOT (nt_norm=0 AND nr_available IS NULL)";
+            if (includeZeros)
+                AdditionalQuery = "";
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail, ISNULL(nr_female,0) nt_femal, ISNULL(nr_male,0) nt_male, ISNULL(nr_fit,0) nt_fit , ISNULL(nr_disabled,0) nt_disabled  FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    Norms norm = new Norms();
+                    norm.Item.Category.Id = Convert.ToInt64(dr[0]);
+                    norm.Item.Category.Name = dr[1].ToString();
+                    norm.Item.Id = Convert.ToInt64(dr[2]);
+                    norm.Item.Name = dr[3].ToString();
+
+                    norm.Norm = Convert.ToInt64(dr[4]);
+                    norm.Value = Convert.ToInt64(dr[5]);
+                    norm.Female = Convert.ToInt64(dr[6]);
+                    norm.Male = Convert.ToInt64(dr[7]);
+                    norm.Fit = Convert.ToInt64(dr[8]);
+                    norm.Disabled = Convert.ToInt64(dr[9]);
+
+                    if (norm.Value > norm.Norm)
+                    {
+                        norm.Gaps = 0;
+                    }
+                    else
+                    {
                         norm.Gaps = norm.Norm - norm.Value;
                     }
 

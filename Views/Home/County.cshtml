@@ -270,7 +270,7 @@
     
       el.addEventListener('mouseover', function(e){
          popup.setLngLat(marker.geometry.coordinates)
-         .setHTML('<h6>' + marker.properties.title + '</h6><p>' + marker.properties.description + '</p>')
+         .setHTML('<h6>' + "Constituency" + '</h6><p>' + marker.properties.description + '</p>')
          .addTo(map);
         e.stopPropagation();
       });

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using hrhdashboard.Models;
 using hrhdashboard.ViewModel;
 using hrhdashboard.Services;
+using static hrhdashboard.Models.Norms;
 
 namespace hrhdashboard.Controllers
 {
@@ -26,7 +27,7 @@ namespace hrhdashboard.Controllers
             else
                 model.Selected = svc.GetFacility(code);
             
-            model.HumanResources = svc.GetNorms(model.Selected, 1);
+            model.HumanResources = svc.GetHumanResourceNorms(model.Selected, 1);
             model.Infrastructure = svc.GetNorms(model.Selected, 2);
             model.FacilityChecks = svc.GetNorms(model.Selected, 3, true);
 
@@ -34,6 +35,7 @@ namespace hrhdashboard.Controllers
         }
 
         [HttpPost]
+       
         public IActionResult PostFacilityChecks(FacilityAssessmentViewModel model, FacilityService svc)
         {
             foreach (var norm in Input.FacilityChecks)
@@ -45,13 +47,15 @@ namespace hrhdashboard.Controllers
             return LocalRedirect("/assessment/facility/" + Input.Selected.Code);
         }
 
+
         [HttpPost]
+        
         public IActionResult PostHumanResources(FacilityAssessmentViewModel model, FacilityService svc)
         {
             foreach (var norm in Input.HumanResources)
             {
                 norm.Facility = new Facility(Input.Selected.Id);
-                norm.Save();
+                norm.SaveHumanResource();
             }
 
             return LocalRedirect("/assessment/facility/" + Input.Selected.Code + "#humanresources");
