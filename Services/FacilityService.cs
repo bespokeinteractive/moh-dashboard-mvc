@@ -243,6 +243,30 @@ namespace hrhdashboard.Services
             return levels;
         }
 
+        public List<Level> GetFacilityCategorizationByLevels(Constituency constituency)
+        {
+            List<Level> levels = new List<Level>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fl_idnt, ISNULL(fc_count,0) fl_count FROM Levels LEFT OUTER JOIN (SELECT fc_level, COUNT(*) fc_count FROM Facility WHERE fc_level<>99 AND fc_subcounty=" + constituency.Id + " GROUP BY fc_level) AS Foo ON fc_level=fl_idnt WHERE fl_idnt<>99 ORDER BY fl_idnt");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    Level lvls = new Level
+                    {
+                        Id = Convert.ToInt16(dr[0]),
+                        Name = "Level " + dr[0],
+                        Count = Convert.ToDouble(dr[1])
+                    };
+
+                    levels.Add(lvls);
+                }
+            }
+
+            return levels;
+        }
+
         public List<Tiers> GetFacilityCategorizationByTiers(County county){
             List<Tiers> tiers = new List<Tiers>();
 

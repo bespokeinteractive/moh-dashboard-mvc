@@ -174,19 +174,19 @@
                                             <td>@(index).</td>
                                             <td>@norm.Item.Name</td>
                                             <td class="bfo">@norm.Norm</td>
-                                            <td class="now">
+                                            <td class="fem">
                                                 @Html.TextBoxFor(model => Model.HumanResources[i].Female, new { type = "number", min = "0", step = "1" })
                                                 @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
                                             </td>
-                                            <td class=" bfo">
+                                            <td class="mal">
                                                 @Html.TextBoxFor(model => Model.HumanResources[i].Male, new { type = "number", min = "0", step = "1" })
                                                 @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
                                             </td>
-                                            <td class="now">
+                                            <td class="fit">
                                                 @Html.TextBoxFor(model => Model.HumanResources[i].Fit, new { type = "number", min = "0", step = "1" })
                                                 @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
                                             </td>
-                                            <td class="now">
+                                            <td class="dis">
                                                 @Html.TextBoxFor(model => Model.HumanResources[i].Disabled, new { type = "number", min = "0", step = "1" })
                                                 @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
                                             </td>

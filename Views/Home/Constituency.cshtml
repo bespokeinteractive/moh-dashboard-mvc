@@ -89,6 +89,47 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2 zero-margin">
+                        <ul class="doughnut-chart-legend">
+                            <li class="mobile ultra-small">
+                                <span class="legend-color"></span> Level 2
+                            </li>
+
+                            <li class="kitchen ultra-small">
+                                <span class="legend-color"></span> Level 3
+                            </li>
+
+                            <li class="home ultra-small">
+                                <span class="legend-color"></span> Level 4
+                            </li>
+
+                            <li class="vpower ultra-small">
+                                <span class="legend-color"></span> Level 5
+                            </li>
+
+                            <li class="others ultra-small">
+                                <span class="legend-color"></span> Level 6
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6">
+                        <table id="facility-levels" class="bordered" style="margin-top: -5px;">
+                            <tbody>
+                                @foreach (var lvls in Model.levels)
+                                {
+                                    <tr>
+                                        <td>@lvls.Id.</td>
+                                        <td><a href="/search?constituency=@Model.constituency.Id&level=@lvls.Id">@lvls.Name</a></td>
+                                        <td>0.00%</td>
+                                        <td>@lvls.Count @(lvls.Count == 1 ? "facility" : "facilities")</td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -97,6 +138,51 @@
 </div>
 
 <script>
+
+      var doughnutData = [{
+        value: @Model.levels[1].Count,
+        color: "#F7464A",
+        highlight: "#FF5A5E",
+        label: "L2"
+    }, {
+        value: @Model.levels[2].Count,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "L3"
+    }, {
+        value:@Model.levels[3].Count,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "L4"
+    }, {
+        value:@Model.levels[4].Count,
+        color: "#ab47bc",
+        highlight: "#ab47bc",
+        label: "L5"
+    }, {
+        value: @Model.levels[5].Count,
+        color: "#000",
+        highlight: "#000",
+        label: "L6"
+    }];
+
+    var doughnutChart = document.getElementById("doughnut-chart").getContext("2d");
+    window.myDoughnut = new Chart(doughnutChart).Doughnut(doughnutData, {
+        segmentStrokeColor: "#fff",
+        tooltipTitleFontFamily: "'Roboto','Helvetica Neue', 'Helvetica', 'Arial', sans-serif", // String - Tooltip title font declaration for the scale label       
+        percentageInnerCutout: 50,
+        animationSteps: 15,
+        segmentStrokeWidth: 4,
+        animateScale: true,
+        percentageInnerCutout: 60,
+        responsive: true
+    });
+
+
+
+
+
+
     var data = "@Model.constituency.Json.ToString()";
 
     var parser = new DOMParser;

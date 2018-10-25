@@ -36,6 +36,7 @@ namespace hrhdashboard.Controllers
         {
             model.constituency = service.GetConstituency(idnt);
             model.constituency.Facilities = fac.GetFacilityCount(model.constituency);
+            model.levels = fac.GetFacilityCategorizationByLevels(model.constituency); 
             return View(model);
         }
 
@@ -73,14 +74,19 @@ namespace hrhdashboard.Controllers
         }
 
         [Route("/search")]
-        public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, int county=0, int level=0){
+        public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, int county=0, int level=0 , int constituency = 0){
             string SearchString = "WHERE fc_level<>99";
             if (county != 0){
                 SearchString += " AND fc_county=" + county;
             }
+            if (constituency != 0)
+            {
+                SearchString += " AND fc_subcounty=" + constituency;
+            }
             if (level != 0){
                 SearchString += " AND fc_level=" + level;
             }
+            
 
             //Don't Pull if Nothing Passed
             if (string.IsNullOrEmpty(SearchString)){
@@ -89,12 +95,17 @@ namespace hrhdashboard.Controllers
 
             model.county = county;
             model.level = level;
+            model.constituency = constituency;
+
             model.count = service.GetFacilityCount(SearchString);
             model.counties = dashboard.GetCounties();
+        
             model.facilities = service.GetFacilities(SearchString);
 
             return View(model);
         }
+
+   
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
