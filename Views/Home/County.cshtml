@@ -1,0 +1,288 @@
+﻿@model hrhdashboard.ViewModel.HomeCountyViewModel
+
+@{
+    ViewData["Title"] = Model.county.Name + " County";
+}
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+<link href="/css/gorilla-studio.css" rel="stylesheet" data-n-head="true">
+
+<style>
+    #map {
+        height: 650px;
+        border: 1px solid #ccc;
+        padding: 0;
+        border-radius: 4px;
+    }
+
+    .marker {
+        background-image: url('/images/location_map_pin_blue.png');
+        background-size: cover;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .mapboxgl-popup {
+        max-width: 200px;
+    }
+
+    .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .zero-margin {
+        margin: 0 !important;
+    }
+
+    .zero-padding {
+        padding: 0 !important;
+    }
+
+    .collection .collection-item.avatar {
+        min-height: 70px;
+        padding-left: 70px;
+        position: relative;
+    }
+
+    #doughnut-chart {
+        width: 180px !important;
+        height: 130px !important;
+        margin-left: -30px;
+    }
+    .doughnut-chart-status {
+        top: -90px !important;
+        left: -15px !important;
+    }
+
+    #trending-bar-chart {
+        height: 100px !important;
+        width: 350px !important;
+    }
+    #facility-levels td {
+        padding:0 5px;
+    }
+    table.bordered > thead > tr, table.bordered > tbody > tr:last-child {
+        border-bottom: 0px none;
+    }
+</style>
+
+<div class="row" style="margin-top: 20px;">
+    <div id='map' class="col-md-6"></div>
+    <div class="col-md-6">
+        <ul id="issues-collection" class="collection z-depth-1 zero-margin">
+          <li class="collection-item avatar">
+            <i class="material-icons red accent-2 circle">bug_report</i>
+            <h5 class="collection-header m-0">Norms &amp; Standards</h5>
+            <a class="btn-floating btn-move-up waves-effect waves-light red accent-2 z-depth-4 right">
+                <i class="material-icons activator">filter_list</i>
+            </a>
+            <p class="cyan-text"><a asp-area="" asp-controller="Home" asp-action="Index">Kenya</a> , @Model.county.Name County <span class="deep-orange-text"><b>@Model.county.Facilities</b> facilities</span></p>
+          </li>
+            
+          <li class="collection-item">
+            <div class="card-content row" style="margin-bottom:0px">
+                <div class="col-md-4">
+                    <div id="doughnut-chart-wrapper" class="zero-margin zero-padding">
+                        <canvas id="doughnut-chart" height="200" style="height:300"></canvas>
+                        <div class="doughnut-chart-status">
+                            @Model.county.Facilities
+                            <p class="ultra-small center-align">FACILITIES</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 zero-margin">
+                    <ul class="doughnut-chart-legend">
+                        <li class="mobile ultra-small">
+                            <span class="legend-color"></span> Level 2
+                        </li>
+
+                        <li class="kitchen ultra-small">
+                            <span class="legend-color"></span> Level 3
+                        </li>
+
+                        <li class="home ultra-small">
+                            <span class="legend-color"></span> Level 4
+                        </li>
+
+                        <li class="vpower ultra-small">
+                            <span class="legend-color"></span> Level 5
+                        </li>
+
+                        <li class="others ultra-small">
+                            <span class="legend-color"></span> Level 6
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <table id="facility-levels" class="bordered" style="margin-top: -5px;">
+                        <tbody>
+                            @foreach (var lvls in Model.levels)
+                            {
+                                <tr>
+                                    <td>@lvls.Id.</td>
+                                    <td><a href="/search?county=@Model.county.Id&level=@lvls.Id">@lvls.Name</a></td>
+                                    <td>0.00%</td>
+                                    <td>@lvls.Count @(lvls.Count==1?"facility":"facilities")</td>
+                                </tr>
+                            }
+                        </tbody>
+                              
+                    </table>
+                </div>
+            </div>
+          </li>
+        </ul>
+    </div>
+    <div class="clear:both"></div>
+</div>
+
+<script>
+    var doughnutData = [{
+        value: @Model.levels[1].Count,
+        color: "#F7464A",
+        highlight: "#FF5A5E",
+        label: "L2"
+    }, {
+        value: @Model.levels[2].Count,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "L3"
+    }, {
+        value: @Model.levels[3].Count,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "L4"
+    }, {
+        value: @Model.levels[4].Count,
+        color: "#ab47bc",
+        highlight: "#ab47bc",
+        label: "L5"
+    }, {
+        value: @Model.levels[5].Count,
+        color: "#000",
+        highlight: "#000",
+        label: "L6"
+    }];
+
+    var doughnutChart = document.getElementById("doughnut-chart").getContext("2d");
+    window.myDoughnut = new Chart(doughnutChart).Doughnut(doughnutData, {
+        segmentStrokeColor: "#fff",
+        tooltipTitleFontFamily: "'Roboto','Helvetica Neue', 'Helvetica', 'Arial', sans-serif", // String - Tooltip title font declaration for the scale label       
+        percentageInnerCutout: 50,
+        animationSteps: 15,
+        segmentStrokeWidth: 4,
+        animateScale: true,
+        percentageInnerCutout: 60,
+        responsive: true
+    });
+
+    var data = "@Model.county.Json.ToString()";
+
+    var parser = new DOMParser;
+    var dom = parser.parseFromString('<!doctype html><body>' + data, 'text/html');
+    var dom2 = parser.parseFromString('<!doctype html><body>' + mark, 'text/html');
+    
+    var data = dom.body.textContent;
+    var mark = dom2.body.textContent;
+
+    var geojson = @Html.Raw(Model.county.GetMarkers());
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2aWVtdWt1bmdpIiwiYSI6ImNqbXVhbjNwYzAwc3EzcHBjbW5vcDRoMWEifQ.4J5fIUC3XydcHasrtAt3qQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: @Model.county.Center,
+        zoom: @Model.county.Zoom
+    });
+
+    var hoveredStateId =  null;
+
+    map.on('load', function () {
+        map.addSource("states", {
+            "type": "geojson",
+            "data": jq.parseJSON(data)
+        });
+
+        // The feature-state dependent fill-opacity expression will render the hover effect
+        // when a feature's hover state is set to true.
+       
+        map.addLayer({
+              "id": "state-fills",
+              "type": "fill",
+              "source": "states",
+              "layout": {},
+              "paint": {
+                 "fill-color": "#dc3545",
+                 "fill-opacity": ["case",
+                      ["boolean", ["feature-state", "hover"], false],
+                     1, 0.3
+                  ]
+             }
+        });
+
+        map.addLayer({
+            "id": "state-borders",
+            "type": "line",
+           "source": "states",
+           "layout": {},
+            "paint": {
+               "line-color": "#f00",
+               "line-width": 3
+          }
+        });
+    
+        map.on("mousemove", "state-fills", function(e) {
+            if (e.features.length > 0) {
+                if (hoveredStateId) {
+                    map.setFeatureState({source: 'states', id: hoveredStateId}, { hover: false});
+                }
+                hoveredStateId = e.features[0].id;
+                map.setFeatureState({source: 'states', id: hoveredStateId}, { hover: true});
+            }
+        });
+
+        // When the mouse leaves the state-fill layer, update the feature state of the
+        // previously hovered feature.
+        map.on("mouseleave", "state-fills", function() {
+            if (hoveredStateId) {
+                map.setFeatureState({source: 'states', id: hoveredStateId}, { hover: false});
+            }
+            hoveredStateId =  null;
+        });
+    });
+
+    geojson.features.forEach(function(marker) {
+      var el = document.createElement('div');
+      var popup = new mapboxgl.Popup({ offset: 25 });
+    
+      el.className = 'marker';
+
+      new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+      .addTo(map);
+    
+      el.addEventListener('mouseover', function(e){
+         popup.setLngLat(marker.geometry.coordinates)
+         .setHTML('<h6>' + marker.properties.title + '</h6><p>' + marker.properties.description + '</p>')
+         .addTo(map);
+        e.stopPropagation();
+      });
+
+      el.addEventListener('mouseleave', function(e){
+         popup.remove();
+      });
+    
+      el.addEventListener('click', () =>{
+          setTimeout(function() {
+            window.location.href = "/constituency/" + marker.properties.id;
+          }, 500);
+      });
+    });
+</script>

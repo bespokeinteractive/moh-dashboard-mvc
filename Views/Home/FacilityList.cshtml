@@ -1,0 +1,48 @@
+﻿@model hrhdashboard.Extensions.KmhflFacilitiesObject
+
+@{
+    ViewData["Title"] = "Facilities";
+}
+
+<table class="bordered">
+    <thead>
+        <tr>
+            <td><b>CODE</b></td>
+            <td><b>NAME</b></td>
+            <td><b>Type</b></td>
+            <td><b>Level</b></td>
+            <td><b>Status</b></td>
+            <td><b>County</b></td>
+            <td><b>constituency</b></td>
+            <td><b>ward_name</b></td>
+            <td><b>Owner</b></td>
+            <td><b>GEO</b></td>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var data in Model.results)
+        {
+            <tr>
+                <td>@data.code</td>
+                <td><a href="/facility/@data.code">@data.name</a></td>
+                <td>@data.facility_type_name</td>
+                <td>@data.keph_level_name</td>
+                <td>@data.operation_status_name</td>
+                <td>@data.county</td>
+                <td>@data.constituency</td>
+                <td>@data.ward_name</td>
+                <td>@data.owner_name</td>
+                @if(data.lat_long == null){
+                    <td>Null</td>
+                }
+                else {
+                    <td>@data.lat_long[1].ToString(),@data.lat_long[0].ToString()</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>Page @Model.current_page of @Model.total_pages (@Model.count Records)</div>
+<a asp-area="" asp-controller="Home" asp-action="FacilityList" asp-route-page=@(Model.current_page+1)>Next</a>
