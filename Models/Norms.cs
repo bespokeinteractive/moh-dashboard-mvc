@@ -20,14 +20,7 @@ namespace hrhdashboard.Models
         public Int64 Fit { get; set; }
         public Int64 Disabled { get; set; }
 
-
-      
-
-
-
-
-
-
+    
         public Norms()
         {
             Id = 0;
@@ -38,13 +31,14 @@ namespace hrhdashboard.Models
             Male = 0;
             Fit = 0;
             Disabled = 0;
-           
-           
 
 
-            Item = new NormsItems();
+
+           Item = new NormsItems();
             Facility = new Facility();
         }
+
+        
 
         public Norms Save(){
             SqlServerConnection conn = new SqlServerConnection();

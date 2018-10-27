@@ -6,17 +6,18 @@ using hrhdashboard.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Linq;
 namespace hrhdashboard.Services
 {
     [Authorize]
     public class FacilityService
     {
-        public Facility GetFacility(String code) {
+        public Facility GetFacility(String code)
+        {
             Facility facility = new Facility();
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_kmflcode='" + code +"' ORDER BY fc_name");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_kmflcode='" + code + "' ORDER BY fc_name");
             if (dr.Read())
             {
                 facility.Id = Convert.ToInt64(dr[0]);
@@ -91,7 +92,8 @@ namespace hrhdashboard.Services
             return facility;
         }
 
-        public List<Facility> GetFacilities(string query) {
+        public List<Facility> GetFacilities(string query)
+        {
             List<Facility> facilities = new List<Facility>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -135,12 +137,14 @@ namespace hrhdashboard.Services
 
             return facilities;
         }
-        
-        public List<Facility> GetFacilitiesByUserLoggedIn(){
+
+        public List<Facility> GetFacilitiesByUserLoggedIn()
+        {
             return GetFacilitiesByUser(1);
         }
 
-        public List<Facility> GetFacilitiesByUser(Int64 UserId){
+        public List<Facility> GetFacilitiesByUser(Int64 UserId)
+        {
             List<Facility> facilities = new List<Facility>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -221,7 +225,8 @@ namespace hrhdashboard.Services
             return 0;
         }
 
-        public List<Level> GetFacilityCategorizationByLevels(County county){
+        public List<Level> GetFacilityCategorizationByLevels(County county)
+        {
             List<Level> levels = new List<Level>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -230,7 +235,8 @@ namespace hrhdashboard.Services
             {
                 while (dr.Read())
                 {
-                    Level lvls = new Level {
+                    Level lvls = new Level
+                    {
                         Id = Convert.ToInt16(dr[0]),
                         Name = "Level " + dr[0],
                         Count = Convert.ToDouble(dr[1])
@@ -267,7 +273,8 @@ namespace hrhdashboard.Services
             return levels;
         }
 
-        public List<Tiers> GetFacilityCategorizationByTiers(County county){
+        public List<Tiers> GetFacilityCategorizationByTiers(County county)
+        {
             List<Tiers> tiers = new List<Tiers>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -276,7 +283,8 @@ namespace hrhdashboard.Services
             {
                 while (dr.Read())
                 {
-                    Tiers tier = new Tiers {
+                    Tiers tier = new Tiers
+                    {
                         Id = Convert.ToInt64(dr[0]),
                         Name = dr[1].ToString(),
                         Count = Convert.ToDouble(dr[2])
@@ -289,7 +297,9 @@ namespace hrhdashboard.Services
             return tiers;
         }
 
-        public List<Norms> GetNorms(Facility facility, Int64 type, Boolean includeZeros = false){
+        public List<Norms> GetNorms(Facility facility, Int64 type, Boolean includeZeros = false)
+        {
+
             List<Norms> norms = new List<Norms>();
 
             string AdditionalQuery = " AND NOT (nt_norm=0 AND nr_available IS NULL)";
@@ -308,23 +318,26 @@ namespace hrhdashboard.Services
                     norm.Item.Id = Convert.ToInt64(dr[2]);
                     norm.Item.Name = dr[3].ToString();
 
+
                     norm.Norm = Convert.ToInt64(dr[4]);
                     norm.Value = Convert.ToInt64(dr[5]);
-                   
 
-                    if (norm.Value > norm.Norm){
+
+                    if (norm.Value > norm.Norm)
+                    {
                         norm.Gaps = 0;
                     }
-                    else {
+                    else
+                    {
                         norm.Gaps = norm.Norm - norm.Value;
                     }
-
                     norms.Add(norm);
                 }
             }
 
             return norms;
         }
+
 
         public List<Norms> GetHumanResourceNorms(Facility facility, Int64 type, Boolean includeZeros = false)
         {
@@ -361,12 +374,13 @@ namespace hrhdashboard.Services
                     {
                         norm.Gaps = norm.Norm - norm.Value;
                     }
-
                     norms.Add(norm);
                 }
             }
-
             return norms;
         }
     }
 }
+    
+
+

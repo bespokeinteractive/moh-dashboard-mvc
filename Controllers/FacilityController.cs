@@ -29,8 +29,9 @@ namespace hrhdashboard.Controllers
             
             model.HumanResources = svc.GetHumanResourceNorms(model.Selected, 1);
             model.Infrastructure = svc.GetNorms(model.Selected, 2);
-            model.FacilityChecks = svc.GetNorms(model.Selected, 3, true);
-
+            model.FacilityChecks = svc.GetNorms(model.Selected, 3, true); 
+           
+    
             return View(model);
         }
 

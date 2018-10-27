@@ -4,6 +4,23 @@
     ViewData["Title"] = "Infrastructure";
     string catg = "";
     Int64 index = 0;
+
+    //float total_norms_available = 0;
+    //double facc = 0, hr= 0, 
+    float available_checklist = 0;
+    float available_hr_norms = 0;
+    float available_infra_norms = 0;
+    float must_have_checklist = 0;
+    float ticked_grayed = 0;
+    float must_have_hr_norms = 0;
+    float must_have_infra_norms = 0;
+    float total_must_have_norms = 0;
+    float total_available_norms = 0;
+    float checklist_percentage = 0;
+    float hr_percentage = 0;
+    float infra_percentage = 0;
+    float overal_percentage = 0;
+
 }
 
 <style>
@@ -15,17 +32,20 @@
     #human-resources-list td:first-child {
         padding-left: 20px;
     }
+
     td, th {
         border-radius: 0;
         padding: 0 5px;
         line-height: 2.5em;
     }
+
     input:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[typeAssessmenl]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea {
         border: none;
         margin: 0px;
         width: 50px;
         height: 1.2rem;
     }
+
     #human-resources-list td:nth-child(3),
     #infrastructure-list td:nth-child(3),
     #human-resources-list td:nth-child(4),
@@ -34,6 +54,7 @@
     #human-resources-list td:nth-child(5) {
         text-align: center;
     }
+
     button.btn {
         margin: 10px 0 50px 72px;
     }
@@ -41,28 +62,28 @@
 
 <script src="~/js/facility-list-main.scripts.js"></script>
 
-<div class="row" style="margin-bottom:0px;">
-    <div id="email-list" class="col s10 m3 l3 card-panel z-depth-1" style="margin-bottom:0px; margin-top: 20px;">
+<div class="row" style="margin-bottom:0px; margin-left:-5.7rem; margin-right:-17.75rem">
+    <div id="email-list" class="col s10 m2 l3 card-panel z-depth-1" style="margin-bottom:0px; margin-top: 20px; width: 20%">
         <ul class="collection">
             @foreach (var fac in Model.Facilities)
             {
-            var dateClass = fac.Code == Model.Selected.Code ? "grey-text" : "blue-text";
-            var iconClass = fac.Code == Model.Selected.Code ? "attach_file" : "";
+                var dateClass = fac.Code == Model.Selected.Code ? "grey-text" : "blue-text";
+                var iconClass = fac.Code == Model.Selected.Code ? "attach_file" : "";
 
-            <li class="collection-item avatar email-unread @(fac.Code == Model.Selected.Code ? " selected" : "" )" data-facility="@fac.Code.ToLower()">
-                <img src="~/images/kcoa.png" alt="" class="circle">
-                <span class="email-title">@fac.Name</span>
-                <p class="truncate grey-text ultra-small"> @fac.Ward.Name, @fac.SubCounty.Name, @fac.County.Name COUNTY</p>
-                <a href="#!" class="secondary-content email-time">
-                    <i class="material-icons attach-file">@iconClass</i>
-                    <span class="@dateClass ultra-small">@fac.Code</span>
-                </a>
-            </li>
+                <li class="collection-item avatar email-unread @(fac.Code == Model.Selected.Code ? " selected" : "" )" data-facility="@fac.Code.ToLower()">
+                    <img src="~/images/kcoa.png" alt="" class="circle">
+                    <span class="email-title">@fac.Name</span> 
+                    <p class="truncate grey-text ultra-small"> @fac.Ward.Name, @fac.SubCounty.Name, @fac.County.Name COUNTY</p>
+                    <a href="#!" class="secondary-content email-time">
+                        <i class="material-icons attach-file">@iconClass</i>
+                        <span class="@dateClass ultra-small">@fac.Code</span>
+                    </a>
+                </li>
             }
         </ul>
-    </div>
 
-    <div class="col-md-9">
+    </div>
+    <div class="col-md-7">
         <div id="flight-card" class="card">
             <div class="card-header deep-orange accent-2">
                 <div class="card-title">
@@ -85,6 +106,10 @@
                 </div>
 
                 <div id="checklist" class="body">
+                    @{ available_checklist = 0;
+                       must_have_checklist = 0;
+                       ticked_grayed = 0;
+                    }
                     @using (Html.BeginForm("PostFacilityChecks", "Facility", FormMethod.Post))
                     {
                         <table id="facilitychecks-list" class="bordered">
@@ -96,18 +121,38 @@
                             </thead>
 
                             <tbody>
+
+
+
                                 @for (int i = 0; i < Model.FacilityChecks.Count; i++)
                                 {
                                     var norm = Model.FacilityChecks[i];
+                                   
+
+                                    
                                     <tr>
                                         <td>
                                             <div class="switch">
                                                 <label>
-                                                    @if (norm.Value == 1) {
+                                                    @if (norm.Value == 1)
+                                                    {
+                                                        available_checklist += norm.Value;
+
                                                         <input checked type="checkbox" data-idnt="@(i)">
                                                     }
-                                                    else {
+                                                    else
+                                                    {
+
                                                         <input type="checkbox" data-idnt="@(i)">
+                                                    }
+                                                    @if (norm.Norm > 0)
+                                                    {
+                                                        must_have_checklist += norm.Norm;
+
+                                                    }
+                                                    else
+                                                    {                                                 
+                                                            ticked_grayed += norm.Value;                                                    
                                                     }
                                                     <span class="lever"></span>
                                                 </label>
@@ -141,7 +186,7 @@
                                     <th>HUMAN RESOURCE</th>
                                     <th>NORMS</th>
                                     <th>F</th>
-                                    <th>M</th> 
+                                    <th>M</th>
                                     <th>w (Dasability)</th>
                                     <th>N (Disability)</th>
                                     <th>AVAILABLE</th>
@@ -150,15 +195,27 @@
                             </thead>
 
                             <tbody>
-                                @(catg = "")
+                                @{ 
+                                    catg = "";
+                                    must_have_hr_norms = 0;
+                                    available_hr_norms = 0;
+                                }                             
+                                @*@(total_norms_available = 0)*@
+
                                 @for (int i = 0; i < Model.HumanResources.Count; i++)
                                 {
                                     var norm = Model.HumanResources[i];
+                                    //total = Model.HumanResources[i].Sum_norms;
+                                    //total_norms_available = Model.HumanResources[i].sum_available_norms;
+                                    must_have_hr_norms += norm.Norm;
+                                    available_hr_norms += norm.Value;
 
                                     @if (!catg.Equals(norm.Item.Category.Name))
                                     {
                                         catg = norm.Item.Category.Name;
                                         index = 1;
+
+
 
                                         <tr style="background-color:#f2f2f2">
                                             <td>&nbsp;</td>
@@ -170,33 +227,35 @@
                                         index += 1;
                                     }
 
-                                        <tr>
-                                            <td>@(index).</td>
-                                            <td>@norm.Item.Name</td>
-                                            <td class="bfo">@norm.Norm</td>
-                                            <td class="fem">
-                                                @Html.TextBoxFor(model => Model.HumanResources[i].Female, new { type = "number", min = "0", step = "1" })
-                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                            </td>
-                                            <td class="mal">
-                                                @Html.TextBoxFor(model => Model.HumanResources[i].Male, new { type = "number", min = "0", step = "1" })
-                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                            </td>
-                                            <td class="fit">
-                                                @Html.TextBoxFor(model => Model.HumanResources[i].Fit, new { type = "number", min = "0", step = "1" })
-                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                            </td>
-                                            <td class="dis">
-                                                @Html.TextBoxFor(model => Model.HumanResources[i].Disabled, new { type = "number", min = "0", step = "1" })
-                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                            </td>
-                                            <td class="now">
-                                                @Html.TextBoxFor(model => Model.HumanResources[i].Value, new { type = "number", min = "0", step = "1" })
-                                                @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                            </td>
-                                          <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
-                                        </tr>
+                                    <tr>
+                                        <td>@(index).</td>
+                                        <td>@norm.Item.Name</td>
+                                        <td class="bfo">@norm.Norm</td>
+                                        <td class="fem">
+                                            @Html.TextBoxFor(model => Model.HumanResources[i].Female, new { type = "number", min = "0", step = "1" })
+                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                        </td>
+                                        <td class="mal">
+                                            @Html.TextBoxFor(model => Model.HumanResources[i].Male, new { type = "number", min = "0", step = "1" })
+                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                        </td>
+                                        <td class="fit">
+                                            @Html.TextBoxFor(model => Model.HumanResources[i].Fit, new { type = "number", min = "0", step = "1" })
+                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                        </td>
+                                        <td class="dis">
+                                            @Html.TextBoxFor(model => Model.HumanResources[i].Disabled, new { type = "number", min = "0", step = "1" })
+                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                        </td>
+                                        <td class="now">
+                                            @Html.TextBoxFor(model => Model.HumanResources[i].Value, new { type = "number", min = "0", step = "1" })
+                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                        </td>
+                                        <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
+                                    </tr>
                                 }
+
+
                             </tbody>
                         </table>
 
@@ -210,6 +269,7 @@
 
                 <div id="infrastructure" class="body">
                     @(catg = "")
+                   
                     @using (Html.BeginForm("PostInfrastructure", "Facility", FormMethod.Post))
                     {
                         <table id="infrastructure-list" class="bordered">
@@ -224,19 +284,34 @@
                             </thead>
 
                             <tbody>
+                                @{ 
+                                    must_have_infra_norms = 0;
+                                    available_infra_norms = 0;
+                                }                                                         
                                 @for (int i = 0; i < Model.Infrastructure.Count; i++)
                                 {
                                     var norm = Model.Infrastructure[i];
-                                    @if (!catg.Equals(norm.Item.Category.Name)){
+
+                                    must_have_infra_norms += norm.Norm;
+                                    available_infra_norms += norm.Value;
+
+                                    @if (!catg.Equals(norm.Item.Category.Name))
+                                    {
                                         catg = norm.Item.Category.Name;
                                         index = 1;
+                                        //facc = Model.HumanResources[i].Sum_norms;
+
+
+
+
 
                                         <tr style="background-color:#f2f2f2">
                                             <td>&nbsp;</td>
                                             <td colspan="4" class="bold-text">@catg</td>
                                         </tr>
                                     }
-                                    else {
+                                    else
+                                    {
                                         index += 1;
                                     }
 
@@ -262,6 +337,34 @@
                     }
                 </div>
             </nav>
+
         </div>
     </div>
+   @{ 
+       total_must_have_norms =  must_have_checklist + must_have_hr_norms + must_have_infra_norms;
+       total_available_norms = available_checklist + available_hr_norms + available_infra_norms;
+       checklist_percentage = ((available_checklist) / (must_have_checklist) * 100);
+       hr_percentage = ((available_hr_norms) / (must_have_hr_norms) * 100);
+       infra_percentage = ((available_hr_norms) / (must_have_infra_norms) * 100);
+       overal_percentage = ((total_available_norms)/(total_must_have_norms) * 100);
+
+       string s = string.Format("{0:N0}%", checklist_percentage);
+       string t = string.Format("{0:N0}%", hr_percentage);
+       string u = string.Format("{0:N0}%", infra_percentage);
+       string v = string.Format("{0:N0}%", overal_percentage);
+
+   }
+
+    <div class="col-md-2" style="padding-left:1px; width: 15.7%">
+        <div id="card" class="card" style="margin-top:13px; height:150px; ">
+            <h6 class="flight-card-title" style="padding-left:5px; color:indianred"> <strong>@Model.Selected.Name</strong></h6>
+
+            <h6 class="flight-card-title" style="padding-left:5px; color:#448AFF; icon:"> checklist: @s  </h6>
+            <h6 class="flight-card-title" style="padding-left:5px; color:#448AFF;"> HR: @t </h6>
+            <h6 class="flight-card-title" style="padding-left:5px;color:#448AFF; ">INFRASTRUCTURE: @u  </h6>
+            <h6 class="flight-card-title" style="padding-left:5px; color:indianred"> <strong> Overal score: @v</strong></h6>
+        </div>
+    </div>
+
 </div>
+
