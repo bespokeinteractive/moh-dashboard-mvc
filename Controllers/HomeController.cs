@@ -75,43 +75,42 @@ namespace hrhdashboard.Controllers
         }
 
         [Route("/search")]
-        public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, int county=0, int level=0 , int constituency = 0, int ward = 0){
+        public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, string facility = "", int county = 0, int level = 0)
+        {
             string SearchString = "WHERE fc_level<>99";
-            if (county != 0){
+
+            if (!string.IsNullOrWhiteSpace(facility))
+            {
+                SearchString += " AND fc_name LIKE '%" + facility.Replace("'", "`") + "%'";
+            }
+
+            if (county != 0)
+            {
                 SearchString += " AND fc_county=" + county;
             }
-            if (constituency != 0)
+
+            if (level != 0)
             {
-                SearchString += " AND fc_subcounty=" + constituency;
-            }
-            if (ward != 0)
-            {
-                SearchString += " AND fc_ward=" + ward;
-            }
-            if (level != 0){
                 SearchString += " AND fc_level=" + level;
             }
-            
 
             //Don't Pull if Nothing Passed
-            if (string.IsNullOrEmpty(SearchString)){
-                SearchString = "WHERE fc_idnt=0";
+            if (SearchString.Equals("WHERE fc_level<>99"))
+            {
+                SearchString += " AND fc_idnt=0";
             }
 
+            model.facility = facility.Trim();
             model.county = county;
             model.level = level;
-            model.constituency = constituency;
-            model.ward = ward;
-
             model.count = service.GetFacilityCount(SearchString);
             model.counties = dashboard.GetCounties();
-        
             model.facilities = service.GetFacilities(SearchString);
 
             return View(model);
         }
 
-   
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

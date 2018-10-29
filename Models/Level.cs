@@ -9,9 +9,23 @@ namespace hrhdashboard.Models
         public string Description { get; set; }
         public double Count { get; set; }
 
+
         public Level()
         {
             Id = 0;
+            Name = "";
+            Count = 0;
+        }
+        public Level(int idnt, string name)
+        {
+            Id = 0;
+            Name = "";
+            Count = 0;
+        }
+
+        public Level(int idnt)
+        {
+            Id = idnt;
             Name = "";
             Count = 0;
         }

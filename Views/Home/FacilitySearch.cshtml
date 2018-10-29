@@ -4,12 +4,47 @@
     ViewData["Title"] = "Search";
 }
 
+<script>
+    jq(function() {
+        jq('a.btn').click(function(){
+            var url = '/search?';
+
+            if (jq('#name-field').val().trim() !== ''){
+                url += 'facility=' + jq('#name-field').val().trim()+'&'
+            }
+
+            if (jq('#level-field').val() !== ''){
+                url += 'level=' + jq('#level-field').val()+'&'
+            }
+
+            if (jq('#county-field').val() !== ''){
+                url += 'county=' + jq('#county-field').val()+'&'
+            }
+
+            window.location.href = url;
+        });
+    });
+</script>
+
 <style type="text/css">
     .zero-padding {
         padding: 0px;
     }
+
     .zero-margin {
-        margin:0px;
+        margin: 0px;
+    }
+
+    .dropdown-content li {
+        min-height: 10px;
+    }
+
+        .dropdown-content li > a, .dropdown-content li > span {
+            padding: 10px;
+        }
+
+    a.btn.waves-effect.waves-light {
+        margin: 0px 55px 55px;
     }
 </style>
 
@@ -17,24 +52,62 @@
 <div class="row" style="margin-top: 10px">
     <div class="card col-md-3 zero-padding">
         <div class="card-content deep-orange accent-2 white-text" style="padding:5px; border-radius:0;">
-          <h5 class="card-stats-number zero-margin">Find Facilities</h5>
+            <h5 class="card-stats-number zero-margin">Find Facilities</h5>
         </div>
+
         <div class="card-action  deep-orange darken-1" style="padding:5px; border-radius:0;">
-            <div class="white-text">@Model.count @(Model.count == 1?"Facility":"Facilities") Filtered</div>
+            <div class="white-text">@Model.count @(Model.count == 1 ? "Facility" : "Facilities") Filtered</div>
         </div>
 
-        <div class="input-field col s12" style="margin-top: 10px;">
-            <i class="material-icons prefix">comment</i>
-            <input id="name-field" type="text" class="validate">
-            <label class="active" for="name">Facility Name</label>
+        <div class="card-search-items" style="min-height: 200px;">
+            <div class="input-field col s12" style="margin-top: 10px;">
+                <i class="material-icons prefix">toc</i>
+                <input id="name-field" type="text" class="validate" value="@Model.facility">
+                <label class="active" for="name">Facility Name</label>
+            </div>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">swap_horiz</i>
+                <select id="level-field">
+                    <option value="" selected>Select Level</option>
+                    @foreach (var lvl in Model.levels)
+                    {
+                        @if (lvl.Id == Model.level)
+                        {
+                            <option value="@lvl.Id" selected>@lvl.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@lvl.Id">@lvl.Name</option>
+                        }
+                    }
+                </select>
+                <label>Level Select</label>
+            </div>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">language</i>
+                <select id="county-field">
+                    <option value="" selected>Select County</option>
+                    @foreach (var ct in Model.counties)
+                    {
+                        @if (ct.Id == Model.county)
+                        {
+                            <option value="@ct.Id" selected>@ct.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@ct.Id">@ct.Name</option>
+                        }
+                    }
+                </select>
+                <label>County Select</label>
+            </div>
+
+            <a class="btn waves-effect waves-light gradient-45deg-purple-deep-orange">Search</a>
+
         </div>
 
-        <div class="input-field col s12">
-            <select id="county-field" style="display:block">
-                <option value=""></option>
-            </select>
-            <label>County</label>
-        </div>
     </div>
 
     <div class="col-md-9">

@@ -43,6 +43,7 @@ namespace hrhdashboard.Services
                         Id = Convert.ToInt16(dr[0]),
                         Name = dr[1].ToString()
                     };
+                    counties.Add(county);
                 }
             }
 
