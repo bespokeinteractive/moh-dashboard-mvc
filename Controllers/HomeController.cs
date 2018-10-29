@@ -41,9 +41,10 @@ namespace hrhdashboard.Controllers
         }
 
         [Route("/ward/{idnt}")]
-        public IActionResult Ward(int idnt, HomeWardViewModel model, CountyService service)
+        public IActionResult Ward(int idnt, HomeWardViewModel model, CountyService service , FacilityService fac)
         {
             model.Ward = service.GetWard(idnt);
+            model.Levels = fac.GetFacilityCategorizationByLevels(model.Ward);
             return View(model);
         }
 
@@ -74,7 +75,7 @@ namespace hrhdashboard.Controllers
         }
 
         [Route("/search")]
-        public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, int county=0, int level=0 , int constituency = 0){
+        public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, int county=0, int level=0 , int constituency = 0, int ward = 0){
             string SearchString = "WHERE fc_level<>99";
             if (county != 0){
                 SearchString += " AND fc_county=" + county;
@@ -82,6 +83,10 @@ namespace hrhdashboard.Controllers
             if (constituency != 0)
             {
                 SearchString += " AND fc_subcounty=" + constituency;
+            }
+            if (ward != 0)
+            {
+                SearchString += " AND fc_ward=" + ward;
             }
             if (level != 0){
                 SearchString += " AND fc_level=" + level;
@@ -96,6 +101,7 @@ namespace hrhdashboard.Controllers
             model.county = county;
             model.level = level;
             model.constituency = constituency;
+            model.ward = ward;
 
             model.count = service.GetFacilityCount(SearchString);
             model.counties = dashboard.GetCounties();

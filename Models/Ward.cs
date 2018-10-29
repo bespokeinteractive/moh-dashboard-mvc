@@ -12,7 +12,7 @@ namespace hrhdashboard.Models
         public double Zoom { get; set; }
         public string Center { get; set; }
         public string Json { get; set; }
-
+        public int Facilities { get; set; }
         public Constituency Constituency { get; set; }
 
         public Ward()
@@ -23,7 +23,7 @@ namespace hrhdashboard.Models
             Name = "";
             Center = "";
             Json = "";
-
+            Facilities = 0;
             Constituency = new Constituency();
         }
 
@@ -35,7 +35,7 @@ namespace hrhdashboard.Models
             Name = "";
             Center = "";
             Json = "";
-
+            Facilities = 0;
             Constituency = new Constituency();
         }
 

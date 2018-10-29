@@ -86,10 +86,35 @@
                             <canvas id="doughnut-chart" height="200" style="height:300"></canvas>
                             <div class="doughnut-chart-status">
                                 @count
-                            <p class="ultra-small center-align">FACILITIES</p>
+                                <p class="ultra-small center-align">FACILITIES</p>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2 zero-margin">
+                        <ul class="doughnut-chart-legend">
+                            <li class="mobile ultra-small">
+                                <span class="legend-color"></span> Level 2
+                            </li>
+
+                            <li class="kitchen ultra-small">
+                                <span class="legend-color"></span> Level 3
+                            </li>
+
+                            <li class="home ultra-small">
+                                <span class="legend-color"></span> Level 4
+                            </li>
+
+                            <li class="vpower ultra-small">
+                                <span class="legend-color"></span> Level 5
+                            </li>
+
+                            <li class="others ultra-small">
+                                <span class="legend-color"></span> Level 6
+                            </li>
+
+                        </ul>
+                    </div>
+                   
                 </div>
             </li>
         </ul>
@@ -98,6 +123,48 @@
 </div>
 
 <script>
+
+          var doughnutData = [{
+        value: 6666,
+        color: "#F7464A",
+        highlight: "#FF5A5E",
+        label: "L2"
+    }, {
+        value: 4646,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "L3"
+    }, {
+        value:44646,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "L4"
+    }, {
+        value:646464,
+        color: "#ab47bc",
+        highlight: "#ab47bc",
+        label: "L5"
+    }, {
+        value:464646,
+        color: "#000",
+        highlight: "#000",
+        label: "L6"
+        }];
+
+    var doughnutChart = document.getElementById("doughnut-chart").getContext("2d");
+    window.myDoughnut = new Chart(doughnutChart).Doughnut(doughnutData, {
+        segmentStrokeColor: "#fff",
+        tooltipTitleFontFamily: "'Roboto','Helvetica Neue', 'Helvetica', 'Arial', sans-serif", // String - Tooltip title font declaration for the scale label       
+        percentageInnerCutout: 50,
+        animationSteps: 15,
+        segmentStrokeWidth: 4,
+        animateScale: true,
+        percentageInnerCutout: 60,
+        responsive: true
+    });
+
+
+
     var data = "@Model.Ward.Json.ToString()";
 
     var parser = new DOMParser;
