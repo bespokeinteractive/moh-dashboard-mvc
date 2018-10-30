@@ -80,7 +80,7 @@
             <a class="btn-floating btn-move-up waves-effect waves-light red accent-2 z-depth-4 right">
                 <i class="material-icons activator">filter_list</i>
             </a>
-            <p class="cyan-text"><a asp-area="" asp-controller="Home" asp-action="Index">Kenya</a> , @Model.county.Name County <span class="deep-orange-text"><b>@Model.county.Facilities</b> facilities</span></p>
+            <p class="cyan-text"><a asp-area="" asp-controller="Home" asp-action="Index">Kenya</a> , @Model.county.Name County <span class="deep-orange-text"><b>@Model.levels.Count</b> facilities</span></p>
           </li>
             
           <li class="collection-item">
@@ -89,7 +89,7 @@
                     <div id="doughnut-chart-wrapper" class="zero-margin zero-padding">
                         <canvas id="doughnut-chart" height="200" style="height:300"></canvas>
                         <div class="doughnut-chart-status">
-                            @Model.county.Facilities
+                            @Model.levels.Count
                             <p class="ultra-small center-align">FACILITIES</p>
                         </div>
                     </div>

@@ -156,9 +156,4 @@
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Stores\" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Remove="Views\Billing\Cashier.cshtml" />
-    <Content Remove="Views\PatientDashboard\Queue.cshtml" />
-    <Content Remove="Views\Registration\EditPatient.cshtml" />
-  </ItemGroup>
 </Project>

@@ -243,6 +243,54 @@ namespace hrhdashboard.Services
             return levels;
         }
 
+        public List<Level> GetFacilityCategorizationByLevels(Constituency constituency)
+        {
+            List<Level> levels = new List<Level>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fl_idnt, ISNULL(fc_count,0) fl_count FROM Levels LEFT OUTER JOIN (SELECT fc_level, COUNT(*) fc_count FROM Facility WHERE fc_level<>99 AND fc_subcounty=" + constituency.Id + " GROUP BY fc_level) AS Foo ON fc_level=fl_idnt WHERE fl_idnt<>99 ORDER BY fl_idnt");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    Level lvls = new Level
+                    {
+                        Id = Convert.ToInt16(dr[0]),
+                        Name = "Level " + dr[0],
+                        Count = Convert.ToDouble(dr[1])
+                    };
+
+                    levels.Add(lvls);
+                }
+            }
+
+            return levels;
+        }
+
+        public List<Level> GetFacilityCategorizationByLevels(Ward ward)
+        {
+            List<Level> levels = new List<Level>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fl_idnt, ISNULL(fc_count,0) fl_count FROM Levels LEFT OUTER JOIN (SELECT fc_level, COUNT(*) fc_count FROM Facility WHERE fc_level<>99 AND fc_ward=" + ward.Id + " GROUP BY fc_level) AS Foo ON fc_level=fl_idnt WHERE fl_idnt<>99 ORDER BY fl_idnt");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    Level lvls = new Level
+                    {
+                        Id = Convert.ToInt16(dr[0]),
+                        Name = "Level " + dr[0],
+                        Count = Convert.ToDouble(dr[1])
+                    };
+
+                    levels.Add(lvls);
+                }
+            }
+
+            return levels;
+        }
+
         public List<Tiers> GetFacilityCategorizationByTiers(County county){
             List<Tiers> tiers = new List<Tiers>();
 
@@ -273,7 +321,7 @@ namespace hrhdashboard.Services
                 AdditionalQuery = "";
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail, ISNULL(nr_female,0) nt_female, ISNULL(nr_male,0)_nt_male, ISNULL(nr_fit,0) nt_fit, ISNULL(nr_disabled,0)nt_disabled FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
             if (dr.HasRows)
             {
                 while (dr.Read())
@@ -287,6 +335,11 @@ namespace hrhdashboard.Services
                     norm.Norm = Convert.ToInt64(dr[4]);
                     norm.Value = Convert.ToInt64(dr[5]);
 
+                    norm.Female = Convert.ToInt64(dr[6]);
+                    norm.Male = Convert.ToInt64(dr[7]);
+                    norm.Fit = Convert.ToInt64(dr[8]);
+                    norm.Disabled = Convert.ToInt64(dr[9]);
+
                     if (norm.Value > norm.Norm){
                         norm.Gaps = 0;
                     }
@@ -299,6 +352,14 @@ namespace hrhdashboard.Services
             }
 
             return norms;
+        }
+
+        /*DataWriters*/
+        public Norms SaveNorms(Norms norm) {
+            SqlServerConnection conn = new SqlServerConnection();
+            norm.Id = conn.SqlServerUpdate("DECLARE @fac INT=" + norm.Facility.Id + " , @norm INT=" + norm.Item.Id + ", @val INT=" + norm.Value + ", @fem INT=" + norm.Female + ", @mal INT=" + norm.Male + ", @fit INT=" + norm.Fit + ", @dis INT=" + norm.Disabled + "; IF NOT EXISTS (SELECT nr_idnt FROM Norms WHERE nr_facility=@fac AND nr_norm=@norm) BEGIN INSERT INTO Norms(nr_facility, nr_norm, nr_available, nr_female, nr_male, nr_fit, nr_disabled) output INSERTED.nr_idnt VALUES (@fac, @norm, @val, @fem, @mal, @fit, @dis) END ELSE BEGIN UPDATE Norms SET nr_available=@val, nr_female=@fem, nr_male=@mal, nr_fit=@fit, nr_disabled=@dis output INSERTED.nr_idnt WHERE nr_facility=@fac AND nr_norm=@norm END");
+
+            return norm;
         }
     }
 }

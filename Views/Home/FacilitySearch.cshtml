@@ -52,7 +52,7 @@
         </div>
 
         <div class="card-action  deep-orange darken-1" style="padding:5px; border-radius:0;">
-            <div class="white-text">@Model.count @(Model.count == 1?"Facility":"Facilities") Filtered</div>
+            <div class="white-text">@Model.facilities.Count @(Model.facilities.Count == 1?"Facility":"Facilities") Filtered</div>
         </div>
 
         <div class="card-search-items" style="min-height: 200px;">
@@ -110,6 +110,14 @@
                 <div class="bold-text">Status: <span class="green-text">Operational</span></div>
                 <div class="bold-text dark-gray-text">@fac.County.Name.ToUpper() COUNTY</div>
                 <div>@fac.SubCounty.Name Constituency, @fac.Ward.Name Ward<span class="right"><i class="material-icons tiny">account_circle</i> @fac.Owner</span></div>
+            </div>
+        }
+
+        @if(Model.facilities.Count == 0)
+        {
+            <div class="card" style="padding:10px;">
+                <div class="light-blue-text bold-text">ZERO FACILITIES FILTERED</div>
+                <div>Specify a search Criteria</div>
             </div>
         }
     </div>

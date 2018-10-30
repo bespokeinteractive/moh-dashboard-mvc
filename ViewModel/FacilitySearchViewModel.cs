@@ -9,7 +9,6 @@ namespace hrhdashboard.ViewModel
     public class FacilitySearchViewModel
     {
         public string facility { get; set; }
-        public int count { get; set; }
         public int county { get; set; }
         public int constituency { get; set; }
         public int ward { get; set; }
@@ -20,7 +19,6 @@ namespace hrhdashboard.ViewModel
 
         public FacilitySearchViewModel() {
             facility = "";
-            count = 0;
             county = 0;
             constituency = 0;
             ward = 0;

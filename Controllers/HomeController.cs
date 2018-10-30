@@ -25,7 +25,6 @@ namespace hrhdashboard.Controllers
         public IActionResult County(int idnt, HomeCountyViewModel model, CountyService service, FacilityService fac)
         {
             model.county = service.GetCounty(idnt);
-            model.county.Facilities = fac.GetFacilityCount(model.county);
             model.levels = fac.GetFacilityCategorizationByLevels(model.county);
 
             return View(model);
@@ -35,14 +34,17 @@ namespace hrhdashboard.Controllers
         public IActionResult Constituency(int idnt, HomeConstituencyViewModel model, CountyService service, FacilityService fac)
         {
             model.constituency = service.GetConstituency(idnt);
-            model.constituency.Facilities = fac.GetFacilityCount(model.constituency);
+            model.levels = fac.GetFacilityCategorizationByLevels(model.constituency);
+
             return View(model);
         }
 
         [Route("/ward/{idnt}")]
-        public IActionResult Ward(int idnt, HomeWardViewModel model, CountyService service)
+        public IActionResult Ward(int idnt, HomeWardViewModel model, CountyService service, FacilityService fac)
         {
             model.Ward = service.GetWard(idnt);
+            model.Levels = fac.GetFacilityCategorizationByLevels(model.Ward);
+
             return View(model);
         }
 
@@ -96,7 +98,6 @@ namespace hrhdashboard.Controllers
             model.facility = facility.Trim();
             model.county = county;
             model.level = level;
-            model.count = service.GetFacilityCount(SearchString);
             model.counties = dashboard.GetCounties();
             model.facilities = service.GetFacilities(SearchString);
 

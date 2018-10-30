@@ -11,7 +11,6 @@ namespace hrhdashboard.Models
         public double Zoom { get; set; }
         public string Center { get; set; }
         public string Json { get; set; }
-        public int Facilities { get; set; }
 
         public County()
         {
@@ -20,19 +19,11 @@ namespace hrhdashboard.Models
             Name = "";
             Center = "";
             Json = "";
-
-            Facilities = 0;
         }
 
-        public County(int idnt)
+        public County(int idnt) : this()
         {
             Id = idnt;
-            Zoom = 0;
-            Name = "";
-            Center = "";
-            Json = "";
-
-            Facilities = 0;
         }
 
         public JObject GetMarkers() {

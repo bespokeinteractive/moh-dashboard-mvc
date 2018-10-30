@@ -27,16 +27,9 @@ namespace hrhdashboard.Models
             Constituency = new Constituency();
         }
 
-        public Ward(int idnt)
+        public Ward(int idnt) : this()
         {
             Id = idnt;
-            Code = 0;
-            Zoom = 0;
-            Name = "";
-            Center = "";
-            Json = "";
-
-            Constituency = new Constituency();
         }
 
         public int GetFacilitiesCount() {
