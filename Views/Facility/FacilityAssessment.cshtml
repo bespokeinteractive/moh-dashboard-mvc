@@ -125,30 +125,26 @@
                                         <td>
                                             <div class="switch">
                                                 <label>
-                                                    @if (norm.Value == 1)
-                                                    {
+                                                    @if (norm.Value == 1) {
                                                         available_checklist += norm.Value;
 
                                                         <input checked type="checkbox" data-idnt="@(i)">
                                                     }
-                                                    else
-                                                    {
+                                                    else {
 
                                                         <input type="checkbox" data-idnt="@(i)">
                                                     }
-                                                    @if (norm.Norm > 0)
-                                                    {
+                                                    @if (norm.Norm > 0) {
                                                         must_have_checklist += norm.Norm;
-
                                                     }
-                                                    else
-                                                    {                                                 
-                                                            ticked_grayed += norm.Value;                                                    
+                                                    else {                                                 
+                                                         ticked_grayed += norm.Value;                                                    
                                                     }
                                                     <span class="lever"></span>
                                                 </label>
                                             </div>
                                         </td>
+
                                         <td class='@(norm.Norm > 0?"":"grey-text")'>
                                             @norm.Item.Name
                                             @Html.HiddenFor(model => Model.FacilityChecks[i].Value)
@@ -176,12 +172,11 @@
                                     <th>&nbsp;</th>
                                     <th>HUMAN RESOURCE</th>
                                     <th>NORMS</th>
-                                    <th>F</th>
-                                    <th>M</th>
-                                    <th>w (Dasability)</th>
-                                    <th>N (Disability)</th>
                                     <th>AVAILABLE</th>
                                     <th>GAPS</th>
+                                    <th>FEMALE</th>
+                                    <th>MALE</th>
+                                    <th>DISABLED</th>
                                 </tr>
                             </thead>
 
@@ -213,27 +208,14 @@
                                         <td>@(index).</td>
                                         <td>@norm.Item.Name</td>
                                         <td class="bfo">@norm.Norm</td>
-                                        <td>
-                                            @Html.TextBoxFor(model => Model.HumanResources[i].Female, new { type = "number", min = "0", step = "1" })
-                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => Model.HumanResources[i].Male, new { type = "number", min = "0", step = "1" })
-                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => Model.HumanResources[i].Fit, new { type = "number", min = "0", step = "1" })
-                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => Model.HumanResources[i].Disabled, new { type = "number", min = "0", step = "1" })
-                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                        </td>
-                                        <td class="now">
-                                            @Html.TextBoxFor(model => Model.HumanResources[i].Value, new { type = "number", min = "0", step = "1" })
-                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
-                                        </td>
+                                        <td class="now">@Html.TextBoxFor(model => Model.HumanResources[i].Value, new { type = "number", min = "0", step = "1" })</td>
                                         <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
+                                        <td>@Html.TextBoxFor(model => Model.HumanResources[i].Female, new { type = "number", min = "0", step = "1" })</td>
+                                        <td>@Html.TextBoxFor(model => Model.HumanResources[i].Male, new { type = "number", min = "0", step = "1" })</td>
+                                        <td>
+                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                            @Html.TextBoxFor(model => Model.HumanResources[i].Disabled, new { type = "number", min = "0", step = "1" })
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
