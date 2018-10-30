@@ -205,14 +205,15 @@
                                 @for (int i = 0; i < Model.HumanResources.Count; i++)
                                 {
                                     var norm = Model.HumanResources[i];
-                                    //total = Model.HumanResources[i].Sum_norms;
-                                    //total_norms_available = Model.HumanResources[i].sum_available_norms;
+                                   
                                     must_have_hr_norms += norm.Norm;
                                     available_hr_norms += norm.Value;
 
                                     @if (!catg.Equals(norm.Item.Category.Name))
                                     {
                                         catg = norm.Item.Category.Name;
+
+
                                         index = 1;
 
 
@@ -359,7 +360,7 @@
         <div id="card" class="card" style="margin-top:13px; height:150px; ">
             <h6 class="flight-card-title" style="padding-left:5px; color:indianred"> <strong>@Model.Selected.Name</strong></h6>
 
-            <h6 class="flight-card-title" style="padding-left:5px; color:#448AFF; icon:"> checklist: @s  </h6>
+            <h6 class="flight-card-title" style="padding-left:5px; color:#448AFF;"> checklist: @s  </h6>
             <h6 class="flight-card-title" style="padding-left:5px; color:#448AFF;"> HR: @t </h6>
             <h6 class="flight-card-title" style="padding-left:5px;color:#448AFF; ">INFRASTRUCTURE: @u  </h6>
             <h6 class="flight-card-title" style="padding-left:5px; color:indianred"> <strong> Overal score: @v</strong></h6>
