@@ -60,39 +60,26 @@
     }
 </style>
 
+<script src="~/js/facility-list-main.scripts.js"></script>
 <script src="~/js/jquery.circlechart.js"></script>
-<script>
-    $(function() {
-        jq('.chart-circle').percentcircle({
-            animate : true,
-            diameter : 100,
-            guage: 10,
-            coverBg: '#fff',
-            bgColor: '#efefef',
-            fillColor: '#D870A9',
-            percentSize: '18px',
-            percentWeight: 'normal'
-        });
-    }); 
-</script>
 
 <div class="row" style="margin-bottom:0px;">
     <div id="email-list" class="col s10 m3 l3 card-panel z-depth-1" style="margin-bottom:0px; margin-top: 20px;">
         <ul class="collection">
             @foreach (var fac in Model.Facilities)
             {
-            var dateClass = fac.Code == Model.Selected.Code ? "grey-text" : "blue-text";
-            var iconClass = fac.Code == Model.Selected.Code ? "attach_file" : "";
+                var dateClass = fac.Code == Model.Selected.Code ? "grey-text" : "blue-text";
+                var iconClass = fac.Code == Model.Selected.Code ? "attach_file" : "";
 
-            <li class="collection-item avatar email-unread @(fac.Code == Model.Selected.Code ? " selected" : "" )" data-facility="@fac.Code.ToLower()">
-                <img src="~/images/kcoa.png" alt="" class="circle">
-                <span class="email-title">@fac.Name</span>
-                <p class="truncate grey-text ultra-small"> @fac.Ward.Name, @fac.SubCounty.Name, @fac.County.Name COUNTY</p>
-                <a href="#!" class="secondary-content email-time">
-                    <i class="material-icons attach-file">@iconClass</i>
-                    <span class="@dateClass ultra-small">@fac.Code</span>
-                </a>
-            </li>
+                <li class="collection-item avatar email-unread @(fac.Code == Model.Selected.Code ? " selected" : "" )" data-facility="@fac.Code.ToLower()">
+                    <img src="~/images/kcoa.png" alt="" class="circle">
+                    <span class="email-title">@fac.Name</span>
+                    <p class="truncate grey-text ultra-small"> @fac.Ward.Name, @fac.SubCounty.Name, @fac.County.Name COUNTY</p>
+                    <a href="#!" class="secondary-content email-time">
+                        <i class="material-icons attach-file">@iconClass</i>
+                        <span class="@dateClass ultra-small">@fac.Code</span>
+                    </a>
+                </li>
             }
         </ul>
     </div>
