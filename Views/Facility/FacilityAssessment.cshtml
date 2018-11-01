@@ -103,6 +103,7 @@
                         <li class="tab"><a href="#checklist">Checklist</a>/li>
                         <li class="tab"><a href="#humanresources">Human Resource</a></li>
                         <li class="tab"><a href="#infrastructure">Infrastructure</a></li>
+                        <li class="tab"><a href="#services">Services</a></li>
                     </ul>
                 </div>
 
@@ -125,20 +126,24 @@
                                         <td>
                                             <div class="switch">
                                                 <label>
-                                                    @if (norm.Value == 1) {
+                                                    @if (norm.Value == 1)
+                                                    {
                                                         available_checklist += norm.Value;
 
                                                         <input checked type="checkbox" data-idnt="@(i)">
                                                     }
-                                                    else {
+                                                    else
+                                                    {
 
                                                         <input type="checkbox" data-idnt="@(i)">
                                                     }
-                                                    @if (norm.Norm > 0) {
+                                                    @if (norm.Norm > 0)
+                                                    {
                                                         must_have_checklist += norm.Norm;
                                                     }
-                                                    else {                                                 
-                                                         ticked_grayed += norm.Value;                                                    
+                                                    else
+                                                    {
+                                                        ticked_grayed += norm.Value;
                                                     }
                                                     <span class="lever"></span>
                                                 </label>
@@ -244,7 +249,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody>                                                      
+                            <tbody>
                                 @for (int i = 0; i < Model.Infrastructure.Count; i++)
                                 {
                                     var norm = Model.Infrastructure[i];
@@ -262,7 +267,8 @@
                                             <td colspan="4" class="bold-text">@catg</td>
                                         </tr>
                                     }
-                                    else {
+                                    else
+                                    {
                                         index += 1;
                                     }
 
@@ -288,19 +294,67 @@
                     }
                 </div>
 
-                <div id="summaries" class="body demo-chart">
-                   @{ 
-                       total_must_have_norms =  must_have_checklist + must_have_hr_norms + must_have_infra_norms;
-                       total_available_norms = available_checklist + available_hr_norms + available_infra_norms;
-                       checklist_percentage = ((available_checklist) / (must_have_checklist) * 100);
-                       hr_percentage = ((available_hr_norms) / (must_have_hr_norms) * 100);
-                       infra_percentage = ((available_hr_norms) / (must_have_infra_norms) * 100);
-                       overal_percentage = ((total_available_norms)/(total_must_have_norms) * 100);
+                <div id="services" class="body">
+                    @(catg = "")
+                    @using (Html.BeginForm("PostInfrastructure", "Facility", FormMethod.Post))
+                    {
+                        <table id="infrastructure-list" class="bordered">
+                            <thead class="deep-orange accent-1 white-text">
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>SERVICES AVAILABLE</th>
+                                    
+                                </tr>
+                            </thead>
 
-                       string s = string.Format("{0:N0}%", checklist_percentage);
-                       string t = string.Format("{0:N0}%", hr_percentage);
-                       string u = string.Format("{0:N0}%", infra_percentage);
-                       string v = string.Format("{0:N0}%", overal_percentage);
+                            <tbody>
+                                @for (int i = 0; i < Model.Infrastructure.Count; i++)
+                                {
+                                    var norm = Model.Infrastructure[i];
+
+                                    must_have_infra_norms += norm.Norm;
+                                    available_infra_norms += norm.Value;
+
+                                    @if (!catg.Equals(norm.Item.Category.Name))
+                                    {
+                                        catg = norm.Item.Category.Name;
+                                        index = 1;
+
+                                        <tr style="background-color:#f2f2f2">
+                                            <td>&nbsp;</td>
+                                            <td colspan="4" class="bold-text">@catg</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        index += 1;
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+
+                        @Html.HiddenFor(model => model.Selected.Id)
+                        @Html.HiddenFor(model => model.Selected.Code)
+                        @Html.HiddenFor(model => model.ActiveTab)
+
+                        
+                    }
+                </div>
+
+                <div id="summaries" class="body demo-chart">
+                    @{
+                        total_must_have_norms = must_have_checklist + must_have_hr_norms + must_have_infra_norms;
+                        total_available_norms = available_checklist + available_hr_norms + available_infra_norms;
+                        checklist_percentage = ((available_checklist) / (must_have_checklist) * 100);
+                        hr_percentage = ((available_hr_norms) / (must_have_hr_norms) * 100);
+                        infra_percentage = ((available_hr_norms) / (must_have_infra_norms) * 100);
+                        overal_percentage = ((total_available_norms) / (total_must_have_norms) * 100);
+
+                        string s = string.Format("{0:N0}%", checklist_percentage);
+                        string t = string.Format("{0:N0}%", hr_percentage);
+                        string u = string.Format("{0:N0}%", infra_percentage);
+                        string v = string.Format("{0:N0}%", overal_percentage);
 
                         <div class="chart-circle" data-percent="@checklist_percentage">Checklist</div>
                         <div class="chart-circle" data-percent="@hr_percentage">Human Resource</div>
@@ -311,7 +365,7 @@
                         <h6 class="flight-card-title" style="color:#448AFF;"> HR: <b>@t</b> </h6>
                         <h6 class="flight-card-title" style="color:#448AFF; ">INFRA: <b>@u</b></h6>
                         <h6 class="flight-card-title" style="color:indianred; padding-top:10px; "> <strong> OVERALL SCORE: @v</strong></h6>
-                   }
+                    }
 
                 </div>
             </nav>
