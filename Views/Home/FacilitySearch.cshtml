@@ -105,12 +105,12 @@
     <div class="col-md-9">
         @foreach (var fac in Model.facilities)
         {
-            <div class="card" style="padding:10px;">
-                <div class="light-blue-text bold-text">@fac.Code :: @fac.Name <span class="task-cat deep-orange accent-2 right">@fac.Type.ToUpper()</span></div>
-                <div class="bold-text">Status: <span class="green-text">Operational</span></div>
-                <div class="bold-text dark-gray-text">@fac.County.Name.ToUpper() COUNTY</div>
-                <div>@fac.SubCounty.Name Constituency, @fac.Ward.Name Ward<span class="right"><i class="material-icons tiny">account_circle</i> @fac.Owner</span></div>
-            </div>
+        <div class="card" style="padding:10px;">
+            <a href="/facility/services/@fac.Code" class="light-blue-text bold-text">@fac.Code :: @fac.Name <span class="task-cat deep-orange accent-2 right">@fac.Type.ToUpper()</span></a>
+            <div class="bold-text">Status: <span class="green-text">Operational</span></div>
+            <div class="bold-text dark-gray-text">@fac.County.Name.ToUpper() COUNTY</div>
+            <div>@fac.SubCounty.Name Constituency, @fac.Ward.Name Ward<span class="right"><i class="material-icons tiny">account_circle</i> @fac.Owner</span></div>
+        </div>
         }
 
         @if(Model.facilities.Count == 0)
