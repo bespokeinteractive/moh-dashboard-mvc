@@ -6,6 +6,7 @@ using hrhdashboard.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace hrhdashboard.Services
 {
@@ -360,5 +361,57 @@ namespace hrhdashboard.Services
 
             return norm;
         }
+
+        public NormsItems SaveNormsItems(NormsItems items) {
+
+            SqlServerConnection conn = new SqlServerConnection();
+            items.Id = conn.SqlServerUpdate("DECLARE @idnt INT=722,@type INT = 3, @catg INT= 999,@norm nvarchar(100) = 'Lighting';  BEGIN INSERT INTO NormsItems(ni_idnt, ni_type, ni_catg, ni_item) output INSERTED.ni_idnt VALUES (@idnt, @type, @catg, @norm) END");
+
+            return items;
+        }
+
+        public List<SelectListItem> GetNormsTypesIEnumerable()
+        {
+            List<SelectListItem> types = new List<SelectListItem>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT ntp_idnt, ntp_type FROM NormsTypes");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    SelectListItem type = new SelectListItem();
+                    type.Value = dr[0].ToString();
+                    type.Text = dr[1].ToString();
+
+                    types.Add(type);
+                }
+            }
+
+            return types;
+        }
+
+        public List<SelectListItem> GetNormsCategoryIEnumerable()
+        {
+            List<SelectListItem> categories = new List<SelectListItem>();
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("select nc_idnt, nc_category from NormsCategory");
+
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    SelectListItem category = new SelectListItem();
+                    category.Value = dr[0].ToString();
+                    category.Text = dr[1].ToString();
+
+                    categories.Add(category);
+                }
+            }
+            return categories;
+        }
+
+        
+        
     }
 }

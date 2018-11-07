@@ -1,5 +1,8 @@
 ﻿using System;
+using hrhdashboard.Services;
+
 namespace hrhdashboard.Models
+    
 {
     public class NormsItems
     {
@@ -15,5 +18,11 @@ namespace hrhdashboard.Models
             Type = new NormsType();
             Category = new NormsCategory();
         }
+
+        public NormsItems Save()
+        {
+            return new FacilityService().SaveNormsItems(this);
+        }
+      
     }
 }

@@ -135,7 +135,6 @@
     <None Include="wwwroot\images\gallary\27.png" />
     <None Include="wwwroot\images\gallary\28.png" />
     <None Include="wwwroot\images\gallary\29.png" />
-    <None Include="wwwroot\images\gallary\3.png" />
     <None Include="wwwroot\images\gallary\30.png" />
     <None Include="wwwroot\images\gallary\31.png" />
     <None Include="wwwroot\images\gallary\32.png" />
@@ -153,8 +152,13 @@
     <Folder Include="wwwroot\js\scripts\" />
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="Services\" />
-    <Folder Include="ViewModel\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Stores\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Update="Views\Admin\AdminServices.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 </Project>
