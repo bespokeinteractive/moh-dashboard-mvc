@@ -10,8 +10,8 @@ namespace hrhdashboard.Models
         public String Password { get; set; }
         public Boolean Enabled { get; set; }
         public Boolean ToChange { get; set; }
-        public Int64 AdminLevel { get; set; }
-        public String AccessLevel { get; set; }
+        public int AdminLevel { get; set; }
+        public int AccessLevel { get; set; }
         public string Message { get; set; }
 
         public Users()
@@ -24,7 +24,7 @@ namespace hrhdashboard.Models
             Enabled = true;
             ToChange = false;
             AdminLevel = 0;
-            AccessLevel = "";
+            AccessLevel = 0;
 
             Message = "";
         }

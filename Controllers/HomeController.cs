@@ -49,9 +49,10 @@ namespace hrhdashboard.Controllers
         }
 
         [Route("/kmhfl/facility/{code}")]
-        public IActionResult Facility(int code)
+        public IActionResult Facility(string code, FacilityViewModel model, FacilityService service)
         {
-            return View();
+            model.facility = service.GetFacility(code);
+            return View(model);
         }
 
         [Route("/kmhfl/facilities")]

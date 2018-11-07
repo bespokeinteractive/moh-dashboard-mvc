@@ -66,19 +66,19 @@
                         colr = '#F00';
                     }
                     else if(perc < 30){
-                        colr = '#E95546'
+                        colr = '#E95546';
                     }
                     else if(perc < 45){
-                        colr = '#D870A9'
+                        colr = '#D870A9';
                     }
                     else if(perc < 60){
-                        colr = '#5C93C8'
+                        colr = '#5C93C8';
                     }
                     else if(perc < 75){
-                        colr = '#46CFB0'
+                        colr = '#46CFB0';
                     }
                     else{
-                        colr = '#8BC163'
+                        colr = '#8BC163';
                     }
 
 					$this.prepend($chart); //add the chart back to the target element
