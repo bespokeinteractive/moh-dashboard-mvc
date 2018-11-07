@@ -4,7 +4,8 @@ using System.Data.SqlClient;
 
 using hrhdashboard.Models;
 using hrhdashboard.Extensions;
-          
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 namespace hrhdashboard.Services
 {
     public class UserServices
@@ -75,6 +76,29 @@ namespace hrhdashboard.Services
             }
 
             return roles;
+        }
+
+        public List<SelectListItem> GetRolesIEnumarable()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT rl_idnt, rl_role FROM Roles");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Value = Convert.ToInt16(dr[0]),
+                        Text = dr[1].ToString()
+                    };
+
+                    items.Add(item);
+                }
+            }
+
+            return items;
         }
 
     }
