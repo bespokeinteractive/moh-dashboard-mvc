@@ -90,7 +90,7 @@ namespace hrhdashboard.Services
                 {
                     SelectListItem item = new SelectListItem
                     {
-                        Value = Convert.ToInt16(dr[0]),
+                        Value = dr[0].ToString(),
                         Text = dr[1].ToString()
                     };
 
