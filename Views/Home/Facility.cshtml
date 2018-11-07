@@ -2,8 +2,88 @@
 
 @{
     ViewData["Title"] = @Model.facility.Name;
+
+    double facilitycheckspercent = 0;
+    double infrastructurepercent = 0;
+    double humanresourcespercent = 0;
+    double facilityscorespercent = 0;
+    double facilityscoredpercent = 0;
+
+    double hr_male_percent = 0;
+    double hr_female_percent = 0;
+    double hr_disabled_percent = 0;
+
+    double fc_norm = 0;
+    double fc_value = 0;
+
+    double if_norm = 0;
+    double if_value = 0;
+
+    double hr_norm = 0;
+    double hr_value = 0;
+    double hr_male = 0;
+    double hr_female = 0;
+    double hr_disabled = 0;
+
+    foreach (var norm in Model.FacilityChecks)
+    {
+        fc_norm += norm.Norm;
+        fc_value += norm.Value;
+    }
+
+    foreach (var norm in Model.Infrastructure)
+    {
+        if_norm += norm.Norm;
+        if_value += norm.Value;
+    }
+
+    foreach (var norm in Model.HumanResources)
+    {
+        hr_norm += norm.Norm;
+        hr_value += norm.Value;
+        hr_male += norm.Male;
+        hr_female += norm.Female;
+        hr_disabled += norm.Disabled;
+    }
+
+    facilitycheckspercent = (fc_value / fc_norm) * 100;
+    infrastructurepercent = (if_value / if_norm) * 100;
+    humanresourcespercent = (hr_value / hr_norm) * 100;
+    facilityscorespercent = (facilitycheckspercent + infrastructurepercent + humanresourcespercent) / 3;
+    facilityscoredpercent = ((fc_value + if_value + hr_value) / (fc_norm + if_norm + hr_norm)) * 100;
+
+    hr_male_percent = (hr_male / hr_value) * 100;
+    hr_female_percent = (hr_female / hr_value) * 100;
+    hr_disabled_percent = (hr_disabled / hr_value) * 100;
 }
 
+<style>
+    .demo-chart > .chart-circle {
+        float: left;
+        margin: 3px;
+        text-align: center;
+        font-weight: 900;
+    }
+    #flight-card .card-header .card-title {
+        padding:10px;
+    }
+</style>
+
+<script src="~/js/jquery.circlechart.js"></script>
+<script>
+    jq(function() {
+        jq('.chart-circle').percentcircle({
+            animate: true,
+            diameter: 100,
+            guage: 10,
+            coverBg: '#fff',
+            bgColor: '#efefef',
+            fillColor: '#D870A9',
+            percentSize: '18px',
+            percentWeight: 'normal'
+        });
+    });
+</script>
 
 <div class="row">
     <div class="col-md-4">
@@ -11,48 +91,83 @@
             <div class="card-image waves-effect waves-block waves-light">
                 <img class="activator" src="../../images/gallary/3.png" alt="user bg">
             </div>
+
             <div class="card-content">
-                <img src="../../images/avatar/avatar-7.png" alt="" class="circle responsive-img activator card-profile-image cyan lighten-1 padding-2">
-                <a class="btn-floating activator btn-move-up waves-effect waves-light red accent-2 z-depth-4 right">
-                    <i class="material-icons">edit</i>
-                </a>
+                <img src="../../images/logo/@Model.owner.Image" alt="" class="responsive-img activator card-profile-image cyan lighten-1 padding-2">
+                <a class="btn-floating activator btn-move-up waves-effect waves-light red accent-2 z-depth-4 right"><i class="material-icons">edit</i></a>
                 <span class="card-title activator grey-text text-darken-4">@Model.facility.Name</span>
-                <p>
-                    <i class="material-icons">perm_identity</i> Project Manager
-                </p>
-                <p>
-                    <i class="material-icons">perm_phone_msg</i> +1 (612) 222 8989
-                </p>
-                <p>
-                    <i class="material-icons">email</i> yourmail@domain.com
-                </p>
+                <p><i class="material-icons">perm_identity</i> @Model.owner.Type</p>
+
+                @if (Model.contacts.count > 0)
+                {
+                    foreach (var contact in Model.contacts.results)
+                    {
+                        if (contact.contact_type.Equals("email", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            <p><i class="material-icons">email</i> @contact.actual_contact</p>
+                        }
+                        else
+                        {
+                            <p><i class="material-icons">perm_phone_msg</i> @contact.actual_contact</p>
+                        }
+                    }
+                }
+                else
+                {
+                    <p><i class="material-icons">perm_phone_msg</i> +254 7xx xxxxxx</p>
+                }
             </div>
             <div class="card-reveal">
                 <span class="card-title grey-text text-darken-4">
-                    Roger Waters
+                    @Model.facility.Name
                     <i class="material-icons right">close</i>
                 </span>
-                <p>Here is some more information about this card.</p>
-                <p>
-                    <i class="material-icons">perm_identity</i> Project Manager
-                </p>
-                <p>
-                    <i class="material-icons">perm_phone_msg</i> +1 (612) 222 8989
-                </p>
-                <p>
-                    <i class="material-icons">email</i> yourmail@domain.com
-                </p>
-                <p>
-                    <i class="material-icons">cake</i> 18th June 1990
-                </p>
-                <p>
-                </p>
-                <p>
-                    <i class="material-icons">airplanemode_active</i> BAR - AUS
-                </p>
-                <p>
-                </p>
+                <p>Here is some more information about this facility.</p>
+                <p><i class="material-icons">perm_identity</i> @Model.owner.Name</p>
+                @foreach (var contact in Model.contacts.results)
+                {
+                    if (contact.contact_type.Equals("email", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        <p><i class="material-icons">email</i> @contact.actual_contact</p>
+                    }
+                    else
+                    {
+                        <p><i class="material-icons">perm_phone_msg</i> @contact.actual_contact</p>
+                    }
+                }
             </div>
         </div>
+    </div>
+
+    <div class="col-md-8 zero-margin">
+        <nav class="navbar nav-extended">
+            <div class="nav-content" style="border: 1px solid rgba(0,0,0,0.1)">
+                <ul class="tabs">
+                    <li class="tab"><a href="#general" class="active">Overall</a></li>
+                    <li class="tab"><a href="#summary" class="active">Summary</a></li>
+                </ul>
+
+                <div id="general" class="body">
+                    <div id="flight-card" class="card" style="margin-top:0px;">
+                        <div class="card-header deep-orange accent-2">
+                          <div class="card-title">
+                            <h5 class="flight-card-title">Norm Summary<span class="right">%</span></h5>
+                              
+                          </div>
+                        </div>
+                        <div class="demo-chart">
+                            <div class="chart-circle" data-percent="@facilitycheckspercent">Checklist</div>
+                            <div class="chart-circle" data-percent="@humanresourcespercent">HR</div>
+                            <div class="chart-circle" data-percent="@infrastructurepercent">Infrastructure</div>
+                            <div class="chart-circle" data-percent="@facilityscorespercent">OVERALL</div>
+
+                            <div class="chart-circle" data-percent="@hr_male" style="border-left:1px solid #eee; padding-left:6px;">Males</div>
+                            <div class="chart-circle" data-percent="@hr_female_percent">Females</div>
+                            <div class="chart-circle" data-percent="@hr_disabled_percent">Disabled</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </div>
 </div>

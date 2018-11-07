@@ -42,8 +42,8 @@ namespace hrhdashboard.Controllers
         [Route("/ward/{idnt}")]
         public IActionResult Ward(int idnt, HomeWardViewModel model, CountyService service, FacilityService fac)
         {
-            model.Ward = service.GetWard(idnt);
-            model.Levels = fac.GetFacilityCategorizationByLevels(model.Ward);
+            model.ward = service.GetWard(idnt);
+            model.levels = fac.GetFacilityCategorizationByLevels(model.ward);
 
             return View(model);
         }
@@ -52,6 +52,22 @@ namespace hrhdashboard.Controllers
         public IActionResult Facility(string code, FacilityViewModel model, FacilityService service)
         {
             model.facility = service.GetFacility(code);
+            model.owner = service.GetFacilityOwner(model.facility);
+
+            using (WebClient client = new WebClient())
+            {
+                client.Headers.Clear();
+                client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Add("Authorization", "Bearer " + new Utils().GetToken());
+                var response = client.DownloadString("http://api.kmhfltest.health.go.ke/api/facilities/contacts/?format=json&fields=contact_type,actual_contact&facility=" + model.facility.GUID);
+
+                model.contacts = JsonConvert.DeserializeObject<KmhflContactsObject>(response);
+            }
+
+            model.HumanResources = service.GetNorms(model.facility, 1);
+            model.Infrastructure = service.GetNorms(model.facility, 2);
+            model.FacilityChecks = service.GetNorms(model.facility, 3);
+
             return View(model);
         }
 

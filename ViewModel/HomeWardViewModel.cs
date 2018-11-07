@@ -8,13 +8,13 @@ namespace hrhdashboard.ViewModel
 
     public class HomeWardViewModel
     {
-        public Ward Ward { get; set; }
-        public List<Level> Levels { get; set; }
+        public Ward ward { get; set; }
+        public List<Level> levels { get; set; }
 
         public HomeWardViewModel()
         {
-            Ward = new Ward();
-            Levels = new List<Level>();
+            ward = new Ward();
+            levels = new List<Level>();
         }
     }
 }

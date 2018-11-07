@@ -4,6 +4,7 @@ namespace hrhdashboard.Models
     public class Facility
     {
         public Int64 Id { get; set; }
+        public String GUID { get; set; }
         public String Name { get; set; }
         public String Code { get; set; }
         public String Type { get; set; }
@@ -20,6 +21,7 @@ namespace hrhdashboard.Models
         public Facility()
         {
             Id = 0;
+            GUID = "";
             Name = "";
             Code = "";
             Type = "";
@@ -34,21 +36,9 @@ namespace hrhdashboard.Models
             Category = new Category();
         }
 
-        public Facility(Int64 idnt)
+        public Facility(Int64 idnt) : this()
         {
             Id = idnt;
-            Name = "";
-            Code = "";
-            Type = "";
-            Owner = "";
-            Regulator = "";
-            Level = new Level();
-            County = new County();
-            SubCounty = new Constituency();
-            Ward = new Ward();
-
-            Status = new Status();
-            Category = new Category();
         }
     }
 }

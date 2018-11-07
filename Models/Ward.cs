@@ -31,10 +31,6 @@ namespace hrhdashboard.Models
         {
             Id = idnt;
         }
-
-        public int GetFacilitiesCount() {
-            return new FacilityService().GetFacilityCount(this);
-        }
         
         public JObject GetMarkers(){
             return new CountyService().GetMarkers(this);

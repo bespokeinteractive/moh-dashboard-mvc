@@ -23,7 +23,7 @@ namespace hrhdashboard.Extensions
         public string id { get; set; }
     }
 
-    public class Result
+    public class ResultFacilities
     {
         public string id { get; set; }
         public string regulatory_status_name { get; set; }
@@ -107,6 +107,12 @@ namespace hrhdashboard.Extensions
         public List<string> contacts { get; set; }
     }
 
+    public class ResultContacts
+    {
+        public string contact_type { get; set; }
+        public string actual_contact { get; set; }
+    }
+
     public class KmhflFacilitiesObject
     {
         public int count { get; set; }
@@ -119,6 +125,21 @@ namespace hrhdashboard.Extensions
         public int end_index { get; set; }
         public List<int> near_pages { get; set; }
         public List<int> far_pages { get; set; }
-        public List<Result> results { get; set; }
+        public List<ResultFacilities> results { get; set; }
+    }
+
+    public class KmhflContactsObject
+    {
+        public int count { get; set; }
+        public string next { get; set; }
+        public object previous { get; set; }
+        public int page_size { get; set; }
+        public int current_page { get; set; }
+        public int total_pages { get; set; }
+        public int start_index { get; set; }
+        public int end_index { get; set; }
+        public List<int> near_pages { get; set; }
+        public List<int> far_pages { get; set; }
+        public List<ResultContacts> results { get; set; }
     }
 }
