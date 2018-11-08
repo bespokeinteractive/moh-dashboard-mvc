@@ -3,8 +3,6 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using hrhdashboard.Models;
 using hrhdashboard.Extensions;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -305,15 +303,19 @@ namespace hrhdashboard.Services
             return tiers;
         }
 
-        public List<Norms> GetNorms(Facility facility, Int64 type, Boolean includeZeros = false){
+        public List<Norms> GetNorms(Facility facility, Int64 type, Boolean includeZeros = false, Boolean filterServices = false){
             List<Norms> norms = new List<Norms>();
 
             string AdditionalQuery = " AND NOT (nt_norm=0 AND NULLIF(nr_available,0) IS NULL)";
+            string ServicesQuery = "";
+
             if (includeZeros)
                 AdditionalQuery = "";
-
+            if (filterServices)
+                ServicesQuery = "AND nc_idnt IN (SELECT ns_category FROM NormsServices WHERE ns_level=" + facility.Category.Level.Id + ")";
+            
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail, ISNULL(nr_female,0) nt_female, ISNULL(nr_male,0)_nt_male, ISNULL(nr_disabled,0) nt_disabled FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail, ISNULL(nr_female,0) nt_female, ISNULL(nr_male,0)_nt_male, ISNULL(nr_disabled,0) nt_disabled FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt " + ServicesQuery + " LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
             if (dr.HasRows)
             {
                 while (dr.Read())

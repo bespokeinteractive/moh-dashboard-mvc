@@ -11,7 +11,6 @@ namespace hrhdashboard.Models
         public String Owner { get; set; }
         public String Regulator { get; set; }
 
-        public Level Level { get; set; }
         public County County { get; set; }
         public Constituency SubCounty { get; set; }
         public Ward Ward { get; set; }
@@ -27,7 +26,6 @@ namespace hrhdashboard.Models
             Type = "";
             Owner = "";
             Regulator = "";
-            Level = new Level();
             County = new County();
             SubCounty = new Constituency();
             Ward = new Ward();

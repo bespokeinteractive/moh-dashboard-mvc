@@ -68,6 +68,9 @@ namespace hrhdashboard.Controllers
             model.Infrastructure = service.GetNorms(model.facility, 2);
             model.FacilityChecks = service.GetNorms(model.facility, 3);
 
+            model.FacilityServices = service.GetNorms(model.facility, 2, false, true);
+            model.FacilityServices.Add(new Norms());
+
             return View(model);
         }
 

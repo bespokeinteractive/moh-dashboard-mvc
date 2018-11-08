@@ -13,6 +13,7 @@ namespace hrhdashboard.ViewModel
         public List<Norms> FacilityChecks { get; set; }
         public List<Norms> HumanResources { get; set; }
         public List<Norms> Infrastructure { get; set; }
+        public List<Norms> FacilityServices { get; set; }
 
         public FacilityViewModel()
         {
@@ -22,6 +23,7 @@ namespace hrhdashboard.ViewModel
             FacilityChecks = new List<Norms>();
             HumanResources = new List<Norms>();
             Infrastructure = new List<Norms>();
+            FacilityServices = new List<Norms>();
         }
     }
 }
