@@ -159,14 +159,14 @@ namespace hrhdashboard.Services
             string markers = "{}";
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_geolocation, fc_idnt, fc_name FROM Facility WHERE fc_geolocation<>'Null' AND fc_ward=" + Ward.Id);
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_geolocation, fc_kmflcode, fc_name FROM Facility WHERE fc_geolocation<>'Null' AND fc_ward=" + Ward.Id);
             if (dr.HasRows)
             {
                 markers = "{type: 'FeatureCollection',features:[";
 
                 while (dr.Read())
                 {
-                    markers += "{type:'Feature',geometry:{type:'Point',coordinates:[" + dr[0].ToString() + "]},properties:{id:" + Convert.ToInt16(dr[1]) + ",title: 'Facility',description:'" + dr[2].ToString() + "'}},";
+                    markers += "{type:'Feature',geometry:{type:'Point',coordinates:" + dr[0].ToString() + "},properties:{id:" + dr[1].ToString() + ",title: 'Facility',description:'" + dr[2].ToString() + "'}},";
                 }
 
                 markers += "]}";

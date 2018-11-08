@@ -113,6 +113,8 @@
 
     var geojson = @Html.Raw(Model.constituency.GetMarkers());
 
+    console.log(geojson);
+
     mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2aWVtdWt1bmdpIiwiYSI6ImNqbXVhbjNwYzAwc3EzcHBjbW5vcDRoMWEifQ.4J5fIUC3XydcHasrtAt3qQ';
     var map = new mapboxgl.Map({
         container: 'map',

@@ -299,8 +299,7 @@
                                             {
                                                 var norm = Model.HumanResources[i];
 
-                                                @if (!catg.Equals(norm.Item.Category.Name))
-                                                {
+                                                @if (!catg.Equals(norm.Item.Category.Name)) {
                                                     catg = norm.Item.Category.Name;
                                                     index = 1;
 
@@ -309,8 +308,7 @@
                                                         <td colspan="8" class="bold-text">@catg</td>
                                                     </tr>
                                                 }
-                                                else
-                                                {
+                                                else {
                                                     index += 1;
                                                 }
 
