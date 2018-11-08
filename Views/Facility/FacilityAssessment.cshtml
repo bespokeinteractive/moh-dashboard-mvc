@@ -1,7 +1,8 @@
 ﻿@model hrhdashboard.ViewModel.FacilityAssessmentViewModel;
 
 @{
-    ViewData["Title"] = "Infrastructure";
+    ViewData["Title"] = "Assessment";
+
     string catg = "";
     Int64 index = 0;
     
@@ -126,19 +127,16 @@
                                         <td>
                                             <div class="switch">
                                                 <label>
-                                                    @if (norm.Value == 1)
-                                                    {
+                                                    @if (norm.Value == 1) {
                                                         available_checklist += norm.Value;
 
                                                         <input checked type="checkbox" data-idnt="@(i)">
                                                     }
-                                                    else
-                                                    {
+                                                    else {
 
                                                         <input type="checkbox" data-idnt="@(i)">
                                                     }
-                                                    @if (norm.Norm > 0)
-                                                    {
+                                                    @if (norm.Norm > 0) {
                                                         must_have_checklist += norm.Norm;
                                                     }
                                                     else
@@ -348,7 +346,7 @@
                         total_available_norms = available_checklist + available_hr_norms + available_infra_norms;
                         checklist_percentage = ((available_checklist) / (must_have_checklist) * 100);
                         hr_percentage = ((available_hr_norms) / (must_have_hr_norms) * 100);
-                        infra_percentage = ((available_hr_norms) / (must_have_infra_norms) * 100);
+                        infra_percentage = ((available_infra_norms) / (must_have_infra_norms) * 100);
                         overal_percentage = ((total_available_norms) / (total_must_have_norms) * 100);
 
                         string s = string.Format("{0:N0}%", checklist_percentage);

@@ -19,7 +19,7 @@ jq(function() {
         }
     });
 
-    jq('input[type=number]').change(function(){
+    jq('td.now input[type=number]').change(function(){
         var item = jq(this).closest('tr').find('.aft');
 
         var vals = parseInt(jq(this).val());

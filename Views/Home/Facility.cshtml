@@ -2,8 +2,108 @@
 
 @{
     ViewData["Title"] = @Model.facility.Name;
+
+    double facilitycheckspercent = 0;
+    double infrastructurepercent = 0;
+    double humanresourcespercent = 0;
+    double facilityscorespercent = 0;
+
+    double hr_male_percent = 0;
+    double hr_female_percent = 0;
+    double hr_disabled_percent = 0;
+
+    double fc_norm = 0;
+    double fc_value = 0;
+
+    double if_norm = 0;
+    double if_value = 0;
+
+    double hr_norm = 0;
+    double hr_value = 0;
+    double hr_male = 0;
+    double hr_female = 0;
+    double hr_disabled = 0;
+
+    string service = "";
+    double norms = 0;
+    double value = 0;
+
+    string catg = "";
+    int index = 0;
+
+    foreach (var norm in Model.FacilityChecks)
+    {
+        fc_norm += norm.Norm;
+        fc_value += norm.Value;
+    }
+
+    foreach (var norm in Model.Infrastructure)
+    {
+        if_norm += norm.Norm;
+        if_value += norm.Value;
+    }
+
+    foreach (var norm in Model.HumanResources)
+    {
+        hr_norm += norm.Norm;
+        hr_value += norm.Value;
+        hr_male += norm.Male;
+        hr_female += norm.Female;
+        hr_disabled += norm.Disabled;
+    }
+
+    facilitycheckspercent = (fc_value / fc_norm) * 100;
+    infrastructurepercent = (if_value / if_norm) * 100;
+    humanresourcespercent = (hr_value / hr_norm) * 100;
+    facilityscorespercent = (facilitycheckspercent + infrastructurepercent + humanresourcespercent) / 3;
+
+    hr_male_percent = (hr_male / hr_value) * 100;
+    hr_female_percent = (hr_female / hr_value) * 100;
+    hr_disabled_percent = (hr_disabled / hr_value) * 100;
 }
 
+<style>
+    .demo-chart > .chart-circle {
+        float: left;
+        margin: 3px 3px 20px 3px;
+        text-align: center;
+        font-weight: 900;
+    }
+
+    #flight-card .card-header .card-title {
+        padding: 10px;
+    }
+
+    #issues-collection li.collection-item {
+        width: 100%;
+    }
+    .collection .collection-item {
+        padding: 5px 20px;
+    }
+    #work-collections .collection-item.avatar {
+        padding-top: 10px;
+    }
+    .collection .collection-item.avatar {
+        min-height: 65px;
+    }
+    ul.collapsible.collapsible-accordion li {
+        width: 100%;
+    }
+</style>
+
+<script src="~/js/jquery.circlechart.js"></script>
+<script>jq(function() {
+        jq('.chart-circle').percentcircle({
+            animate: true,
+            diameter: 100,
+            guage: 10,
+            coverBg: '#fff',
+            bgColor: '#efefef',
+            fillColor: '#D870A9',
+            percentSize: '18px',
+            percentWeight: 'normal'
+        });
+});</script>
 
 <div class="row">
     <div class="col-md-4">
@@ -11,48 +111,276 @@
             <div class="card-image waves-effect waves-block waves-light">
                 <img class="activator" src="../../images/gallary/3.png" alt="user bg">
             </div>
+
             <div class="card-content">
-                <img src="../../images/avatar/avatar-7.png" alt="" class="circle responsive-img activator card-profile-image cyan lighten-1 padding-2">
-                <a class="btn-floating activator btn-move-up waves-effect waves-light red accent-2 z-depth-4 right">
-                    <i class="material-icons">edit</i>
-                </a>
+                <img src="../../images/logo/@Model.owner.Image" alt="" class="responsive-img activator card-profile-image cyan lighten-1 padding-2">
+                <a class="btn-floating activator btn-move-up waves-effect waves-light red accent-2 z-depth-4 right"><i class="material-icons">edit</i></a>
                 <span class="card-title activator grey-text text-darken-4">@Model.facility.Name</span>
-                <p>
-                    <i class="material-icons">perm_identity</i> Project Manager
-                </p>
-                <p>
-                    <i class="material-icons">perm_phone_msg</i> +1 (612) 222 8989
-                </p>
-                <p>
-                    <i class="material-icons">email</i> yourmail@domain.com
-                </p>
+                <p style="padding-bottom:10px; border-bottom: 1px dotted #ddd">@Model.facility.Category.Level.Name <span class="task-cat cyan" style="font-size: 1rem">@Model.facility.Category.Name</span></p>
+                <p><i class="material-icons">perm_identity</i> @Model.owner.Type</p>
+
+                @if (Model.contacts.count > 0)
+                {
+                    foreach (var contact in Model.contacts.results)
+                    {
+                        if (contact.contact_type.Equals("email", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            <p><i class="material-icons">email</i> @contact.actual_contact</p>
+                        }
+                        else
+                        {
+                            <p><i class="material-icons">perm_phone_msg</i> @contact.actual_contact</p>
+                        }
+                    }
+                }
+                else
+                {
+                    <p><i class="material-icons">perm_phone_msg</i> +254 7xx xxxxxx</p>
+                }
             </div>
             <div class="card-reveal">
                 <span class="card-title grey-text text-darken-4">
-                    Roger Waters
+                    @Model.facility.Name
                     <i class="material-icons right">close</i>
                 </span>
-                <p>Here is some more information about this card.</p>
-                <p>
-                    <i class="material-icons">perm_identity</i> Project Manager
-                </p>
-                <p>
-                    <i class="material-icons">perm_phone_msg</i> +1 (612) 222 8989
-                </p>
-                <p>
-                    <i class="material-icons">email</i> yourmail@domain.com
-                </p>
-                <p>
-                    <i class="material-icons">cake</i> 18th June 1990
-                </p>
-                <p>
-                </p>
-                <p>
-                    <i class="material-icons">airplanemode_active</i> BAR - AUS
-                </p>
-                <p>
-                </p>
+                <p>Here is some more information about this facility.</p>
+                <p><i class="material-icons">perm_identity</i> @Model.owner.Name</p>
+                @foreach (var contact in Model.contacts.results)
+                {
+                    if (contact.contact_type.Equals("email", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        <p><i class="material-icons">email</i> @contact.actual_contact</p>
+                    }
+                    else
+                    {
+                        <p><i class="material-icons">perm_phone_msg</i> @contact.actual_contact</p>
+                    }
+                }
             </div>
         </div>
+    </div>
+
+    <div class="col-md-8 zero-margin">
+        <nav class="navbar nav-extended">
+            <div class="nav-content" style="border: 1px solid rgba(0,0,0,0.1)">
+                <ul class="tabs">
+                    <li class="tab"><a href="#general" class="active">OVERVIEW</a></li>
+                    <li class="tab"><a href="#norms" class="active">Norms</a></li>
+                </ul>
+
+                <div id="general" class="body">
+                    <div id="flight-card" class="card" style="margin-top:0px;">
+                        <div class="card-header deep-orange accent-2">
+                            <div class="card-title">
+                                <h5 class="flight-card-title">Facility Summary<span class="right small white-text">@string.Format("{0:N}", facilityscorespercent)%</span></h5>
+                            </div>
+                        </div>
+
+                        <div class="demo-chart">
+                            <div class="chart-circle" data-percent="@facilitycheckspercent">Checklist</div>
+                            <div class="chart-circle" data-percent="@humanresourcespercent">HR</div>
+                            <div class="chart-circle" data-percent="@infrastructurepercent">Infrastructure</div>
+                            <div class="chart-circle" data-percent="@facilityscorespercent">OVERALL</div>
+
+                            <div class="chart-circle" data-percent="@hr_male" style="border-left:1px solid #eee; padding-left:6px;">Males</div>
+                            <div class="chart-circle" data-percent="@hr_female_percent">Females</div>
+                            <div class="chart-circle" data-percent="@hr_disabled_percent">Disabled</div>
+                        </div>
+                    </div>
+
+                    <div id="work-collections">
+                        <ul id="issues-collection" class="collection z-depth-1">
+                            <li class="collection-item avatar">
+                                <i class="material-icons red accent-2 circle">bug_report</i>
+                                <h6 class="collection-header m-0">Facility Services</h6>
+                                <p>Services Requirements for a @Model.facility.Category.Level.Name</p>
+                            </li>
+
+                            @foreach (var svc in Model.FacilityServices)
+                            {
+                                if (!service.Equals(svc.Item.Category.Name))
+                                {
+                                    if (!string.IsNullOrEmpty(service))
+                                    {
+                                        double perc = (value / norms) * 100;
+
+                                        <li class="collection-item">
+                                            <div class="row" style="margin-bottom:0px;">
+                                                <div class="col s8"><p class="collections-title">@service</p></div>
+                                                <div class="col s2"><span class="task-cat deep-orange accent-2">@string.Format("{0:N}", perc)%</span></div>
+                                                <div class="col s2"><div class="progress"><div class="determinate" style="width: @perc%"></div></div></div>
+                                            </div>
+                                        </li>
+                                    }
+
+                                    service = svc.Item.Category.Name;
+                                    norms = 0;
+                                    value = 0;
+                                }
+                                else
+                                {
+                                    norms += svc.Norm;
+                                    value += svc.Value;
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="norms" class="body">
+                    <div class="col-md-12">
+                        <ul class="collapsible collapsible-accordion" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">pie_chart_outlined</i> Checklist
+                                </div>
+                                <div class="collapsible-body">
+                                    <table id="facilitychecks-list" class="bordered">
+                                        <thead class="deep-orange accent-1 white-text">
+                                            <tr>
+                                                <th style="width: 1px;">&nbsp;</th>
+                                                <th>FACILITY CHECKLIST</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @for (int i = 0; i < Model.FacilityChecks.Count; i++)
+                                            {
+                                                var norm = Model.FacilityChecks[i];
+                                                <tr>
+                                                    <td>
+                                                        <div class="switch">
+                                                            <label>
+                                                                @if (norm.Value == 1) {
+                                                                    <input disabled checked type="checkbox" data-idnt="@(i)">
+                                                                }
+                                                                else {
+                                                                    <input disabled type="checkbox" data-idnt="@(i)">
+                                                                }
+                                                                <span class="lever"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class='@(norm.Norm > 0?"":"grey-text")'>
+                                                        @norm.Item.Name
+                                                        @Html.HiddenFor(model => Model.FacilityChecks[i].Value)
+                                                        @Html.HiddenFor(model => Model.FacilityChecks[i].Item.Id)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">border_all</i> Human Resources
+                                </div>
+                                <div class="collapsible-body">
+                                    <table id="human-resources-list" class="bordered">
+                                        <thead class="deep-orange accent-1 white-text">
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>HUMAN RESOURCE</th>
+                                                <th>NORMS</th>
+                                                <th>AVAILABLE</th>
+                                                <th>GAPS</th>
+                                                <th>FEMALE</th>
+                                                <th>MALE</th>
+                                                <th>DISABLED</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @(catg = "")
+
+                                            @for (int i = 0; i < Model.HumanResources.Count; i++)
+                                            {
+                                                var norm = Model.HumanResources[i];
+
+                                                @if (!catg.Equals(norm.Item.Category.Name))
+                                                {
+                                                    catg = norm.Item.Category.Name;
+                                                    index = 1;
+
+                                                    <tr style="background-color: #f2f2f2">
+                                                        <td>&nbsp;</td>
+                                                        <td colspan="8" class="bold-text">@catg</td>
+                                                    </tr>
+                                                }
+                                                else
+                                                {
+                                                    index += 1;
+                                                }
+
+                                                <tr>
+                                                    <td>@(index).</td>
+                                                    <td>@norm.Item.Name</td>
+                                                    <td class="bfo">@norm.Norm</td>
+                                                    <td class="now">@norm.Value</td>
+                                                    <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
+                                                    <td>@norm.Female</td>
+                                                    <td>@norm.Male</td>
+                                                    <td>@norm.Disabled</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">trending_up</i> Infrastructure
+                                </div>
+                                <div class="collapsible-body">
+                                   <table id="infrastructure-list" class="bordered">
+                                        <thead class="deep-orange accent-1 white-text">
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>INFRASTRUCTURE</th>
+                                                <th>NORMS</th>
+                                                <th>AVAILABLE</th>
+                                                <th>GAPS</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @for (int i = 0; i < Model.Infrastructure.Count; i++)
+                                            {
+                                                var norm = Model.Infrastructure[i];
+
+                                                @if (!catg.Equals(norm.Item.Category.Name))
+                                                {
+                                                    catg = norm.Item.Category.Name;
+                                                    index = 1;
+
+                                                    <tr style="background-color: #f2f2f2">
+                                                        <td>&nbsp;</td>
+                                                        <td colspan="4" class="bold-text">@catg</td>
+                                                    </tr>
+                                                }
+                                                else
+                                                {
+                                                    index += 1;
+                                                }
+
+                                                <tr>
+                                                    <td>@(index).</td>
+                                                    <td>@norm.Item.Name</td>
+                                                    <td class="bfo">@norm.Norm</td>
+                                                    <td class="now">@norm.Value</td>
+                                                    <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </div>
 </div>

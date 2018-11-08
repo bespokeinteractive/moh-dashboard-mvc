@@ -13,15 +13,12 @@ namespace hrhdashboard.ViewModel
         public Facility Selected { get; set; }
         public String ActiveTab { get; set; }
 
-        public List<NormsItems> NormsItems { get; set; }
-
         public FacilityAssessmentViewModel()
         {
             Facilities = new List<Facility>();
             FacilityChecks = new List<Norms>();
             HumanResources = new List<Norms>();
             Infrastructure = new List<Norms>();
-            NormsItems = new List<NormsItems>();
 
             Selected = new Facility();
             ActiveTab = "";

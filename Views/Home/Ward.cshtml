@@ -1,8 +1,12 @@
 ﻿@model hrhdashboard.ViewModel.HomeWardViewModel
 
 @{
-    ViewData["Title"] = Model.Ward.Name + " Ward";
-    int count = Model.Ward.GetFacilitiesCount();
+    ViewData["Title"] = Model.ward.Name + " Ward";
+    double count = 0;
+
+    foreach (var fac in Model.levels) {
+        count += fac.Count;
+    }
 }
 
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
@@ -62,7 +66,7 @@
 
     #trending-bar-chart {
         height: 100px !important;
-        width: 350px !important;
+  w     width: 350px !important;
     }
 </style>
 
@@ -76,7 +80,7 @@
                 <a class="btn-floating btn-move-up waves-effect waves-light red accent-2 z-depth-4 right">
                     <i class="material-icons activator">filter_list</i>
                 </a>
-                <p class="cyan-text"><a asp-area="" asp-controller="Home" asp-action="Index">Kenya, </a><a asp-area="" asp-controller="Home" asp-action="County" asp-route-idnt="@Model.Ward.Constituency.County.Id">@Model.Ward.Constituency.County.Name County,</a> @Model.Ward.Constituency.Name, @Model.Ward.Name<span class="deep-orange-text"><b> &raquo; @count</b> facilities</span></p>
+                <p class="cyan-text"><a asp-area="" asp-controller="Home" asp-action="Index">Kenya, </a><a asp-area="" asp-controller="Home" asp-action="County" asp-route-idnt="@Model.ward.Constituency.County.Id">@Model.ward.Constituency.County.Name County,</a> @Model.ward.Constituency.Name, @Model.ward.Name<span class="deep-orange-text"><b> &raquo; @count</b> facilities</span></p>
             </li>
 
             <li class="collection-item">
@@ -86,7 +90,7 @@
                             <canvas id="doughnut-chart" height="200" style="height:300"></canvas>
                             <div class="doughnut-chart-status">
                                 @count
-                            <p class="ultra-small center-align">FACILITIES</p>
+                            <p class="ultra-smalw center-align">FACILITIES</p>
                             </div>
                         </div>
                     </div>
@@ -98,23 +102,23 @@
 </div>
 
 <script>
-    var data = "@Model.Ward.Json.ToString()";
+    var data = "@Model.ward.Json.ToString()";
 
     var parser = new DOMParser;
     var dom = parser.parseFromString('<!doctype html><body>' + data, 'text/html');
     var dom2 = parser.parseFromString('<!doctype html><body>' + mark, 'text/html');
-    
+ w  
     var data = dom.body.textContent;
     var mark = dom2.body.textContent;
 
-    var geojson = @Html.Raw(Model.Ward.GetMarkers());
+    var geojson = @Html.Raw(Model.ward.GetMarkers());
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2aWVtdWt1bmdpIiwiYSI6ImNqbXVhbjNwYzAwc3EzcHBjbW5vcDRoMWEifQ.4J5fIUC3XydcHasrtAt3qQ';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v9',
-        center: @Model.Ward.Center,
-        zoom: @Model.Ward.Zoom
+        center: @Model.ward.Center,
+        zowm: @Model.ward.Zoom
     });
 
     var hoveredStateId =  null;
@@ -138,24 +142,24 @@
                  "fill-opacity": ["case",
                       ["boolean", ["feature-state", "hover"], false],
                      1, 0.3
-                  ]
+   w              ]
              }
         });
 
         map.addLayer({
             "id": "state-borders",
             "type": "line",
-           "source": "states",
+           "source": "stawes",
            "layout": {},
             "paint": {
                "line-color": "#f00",
                "line-width": 3
           }
-        });
+        })w
     
         map.on("mousemove", "state-fills", function(e) {
             if (e.features.length > 0) {
-                if (hoveredStateId) {
+                if (hoveredStatewd) {
                     map.setFeatureState({source: 'states', id: hoveredStateId}, { hover: false});
                 }
                 hoveredStateId = e.features[0].id;
