@@ -50,7 +50,7 @@
 <script>
 $(function() {
         //Username Blurred
-        jq('#Username').blur(function() {
+        jq('#User_Username').blur(function() {
             var un = jq(this).val();
             var dv = jq(this).closest('div').find('div');
             if (un.length == 0) {
@@ -68,7 +68,7 @@ $(function() {
         });
 
         //Password Blurred
-        jq('#Password').blur(function() {
+        jq('#User_Password').blur(function() {
             var pw = jq(this).val();
             var dv = jq(this).closest('div').find('div');
             if (pw.length == 0) {
@@ -87,8 +87,8 @@ $(function() {
 
         //Validate Form before Submit
         jq('form a').on('click', function(e) {
-            jq('#Username').blur();
-            jq('#Password').blur();
+            jq('#User_Username').blur();
+            jq('#User_Password').blur();
 
             var un = jq('#User_Username');
             var pw = jq('#User_Password');

@@ -100,6 +100,17 @@ namespace hrhdashboard.Services
 
             return items;
         }
+       
+        public Users SaveUsers(Users users)
+        {
+            SqlServerConnection conn = new SqlServerConnection();
+            users.Id = conn.SqlServerUpdate("DECLARE @username nvarchar(100)='"+users.Username+"', @email nvarchar(100)= '"+users.Email+"';  BEGIN INSERT INTO Users (usr_name, usr_email) output INSERTED.usr_idnt VALUES (@username, @email) END");
+            conn.SqlServerUpdate("DECLARE @userid INT = "+users.Id+", @username nvarchar(100)= '"+users.Username + "', @password nvarchar(100) = '"+users.Password+ "', @adminlvl INT = "+users.Roles.Id+ ";  BEGIN INSERT INTO Login(log_user, log_username ,log_password , log_admin_lvl ) output INSERTED.log_idnt VALUES (@userid, @username , @password , @adminlvl ) END");
+
+            return users;
+        }
+
+
 
     }
 }

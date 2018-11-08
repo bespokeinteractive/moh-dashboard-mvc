@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hrhdashboard.Services;
+using System;
 namespace hrhdashboard.Models
 {
     public class Users
@@ -13,6 +14,7 @@ namespace hrhdashboard.Models
         public int AdminLevel { get; set; }
         public int AccessLevel { get; set; }
         public string Message { get; set; }
+        public  Roles Roles { get; set; }
 
         public Users()
         {
@@ -27,6 +29,14 @@ namespace hrhdashboard.Models
             AccessLevel = 0;
 
             Message = "";
+
+            Roles = new Roles();
         }
+
+        public Users Save() {
+
+            return new UserServices().SaveUsers(this);
+        }
+
     }
 }

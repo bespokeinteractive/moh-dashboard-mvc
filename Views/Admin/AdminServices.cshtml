@@ -29,6 +29,65 @@
     $(document).ready(function () {
         $('.modal').modal();
     });
+
+     //$(function() {
+     // jq('#User').blur(function () {
+     //      var pw = jq(this).val();
+     //       var dv = jq(this).closest('div').find('div');
+     //        if (pw.length == 0) {
+     //           dv.html("Enter a password");
+     //           jq(this).addClass('error');
+     //        }
+     //        else if (pw.length < 4) {
+     //            dv.html("Enter at least 4 characters");
+     //            jq(this).addClass('error');
+     //        }
+     //        else {
+     //            dv.html("");
+     //            jq(this).removeClass('error');
+     //        }
+     //    });
+
+     //    jq('#ConfirmPass').blur(function () {
+     //        var pw = jq(this).val();
+     //        var dv = jq(this).closest('div').find('div');
+     //        if (pw.length == 0) {
+     //            dv.html("Enter a password");
+     //            jq(this).addClass('error');
+     //        }
+     //        else if (pw.length < 4) {
+     //            dv.html("Enter at least 4 characters");
+     //            jq(this).addClass('error');
+     //        }
+     //        else {
+     //            dv.html("");
+     //            jq(this).removeClass('error');
+     //        }
+     //    });
+
+     //    jq('form a').on('click', function (e) {
+     //        jq('#Username').blur();
+     //        jq('#Password').blur();
+
+     //        var pw = jq('#User_Username');
+     //        var cpw = jq('#User_Password');
+
+     //        if (pw.hasClass('error') || cpw.hasClass('error')) {
+     //            return;
+     //        }
+     //        if (!pw == cpw)
+     //        {
+     //            dv.html("Password Mismatch!!");
+     //            return;
+     //         }
+               
+     //       jq("form").submit();
+     //    });
+
+
+
+
+      //}
 </script>
 
 <div class="row" style="margin-top: 10px">
@@ -117,7 +176,7 @@
             <div class="col s12 m4 l4">
                 <div id="profile-card" class="card">
                     <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" src="../../images/avatar/profile-bg.png" alt="user bg">
+                        <img class="activator" src="../../images/gallary/12.png" alt="user bg">
                     </div>
                     <div class="card-content">
                         <img src="../../images/avatar/avatar-7.png" alt="" class="circle responsive-img activator card-profile-image cyan lighten-1 padding-2">
@@ -133,7 +192,7 @@
                             </li>
                             <li class="collection-item dismissable">
                                 <p>
-                                    <i class="material-icons">perm_phone_msg</i> <a  href="#">Allocate Facility</a>
+                                    <i class="material-icons">perm_phone_msg</i> <a href="#">Allocate Facility</a>
                                 </p>
                             </li>
                             <li class="collection-item dismissable">
@@ -188,144 +247,150 @@
             </div>
         </div>
     </div>
-    <div id="modal2" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h4 class="header2">User Registration Form</h4>
-            <div class="row">
-                <form class="col s12">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">account_circle</i>
-                            <input id="name4" type="text" class="validate">
-                            <label for="first_name">Name</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">email</i>
-                            <input id="email4" type="email" class="validate">
-                            <label for="email">Email</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">lock_outline</i>
-                            <input id="password5" type="password" class="validate">
-                            <label for="password">Password</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">lock_outline</i>
-                            <input id="password5" type="password" class="validate">
-                            <label for="password">Confirm Password</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">question_answer</i>
-                            <select>
-                                <option> Role Select</option>
-                                <option> Admin</option>
-                                <option> Supervisor</option>
-                            </select>
-                            <label for="message">Role</label>
+    @using (Html.BeginForm("PostUsers", "Admin", FormMethod.Post))
+    {
+        <div id="modal2" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4 class="header2">User Registration Form</h4>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                @Html.TextBoxFor(model => model.Users.Username)
+                                <label for="first_name">Name</label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <button class="btn cyan waves-effect waves-light right" type="submit" name="action">
-                                    Submit
-                                    <i class="material-icons right">send</i>
-                                </button>
+                                <i class="material-icons prefix">email</i>
+                                @Html.TextBoxFor(model => model.Users.Email)
+                                <label for="email">Email</label>
                             </div>
                         </div>
-                    </div>
-                </form>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">lock_outline</i>
+                                @Html.PasswordFor(model => model.Users.Password)
+                                <label for="password">Password</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">lock_outline</i>
+                                 <input id="password5" type="password" class="validate">
+                                <label for="password">Confirm Password</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">question_answer</i>
+                                @Html.DropDownListFor(model => model.Users.Roles.Id, Model.Role, "Select Role")
+                                <label for="message">Role</label>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <button class="btn cyan waves-effect waves-light right" type="submit" name="action">
+                                        Submit
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="add_norm" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h4 class="header2">ADD NORM</h4>
-            <div class="row">
-                <form class="col s12">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">account_circle</i>
-                            <input id="name4" type="text" class="validate">
-                            <label for="first_name">Name</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">question_answer</i>
-                            @Html.DropDownListFor(model => model.NormsItems.Type.Id, Model.Types, "Select Type")
-                            <label for="message">Type</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">question_answer</i>
-                            @Html.DropDownListFor(model => model.NormsItems.Category.Id, Model.Categories, "Select Category")
-                            <label for="message">Category</label>
-                        </div>
-                    </div>
+    }
 
-                    <div id="profile-card" class="card">
-                       
-                        <div class="card-content">
-                            <h4 class="header2">Requirements</h4>
-                            <div class="divider"></div>
-                            <div class="row">
-                                <div class="col s4">
-                                    <label style="text-align:left" for="first_name">Level 1</label>
-                                    &nbsp;&nbsp;
-                                    <input style="width:200px;" type="number" class="validate">
-                                </div>
-                                <div class="col s4">
-                                    <label style="text-align:left" for="first_name">Level 2</label>
-                                    &nbsp;&nbsp;
-                                    <input style="width:200px;" type="number" class="validate">
-                                </div>
-                                <div class="col s4">
-                                    <label style="text-align:left" for="first_name">Level 3</label>
-                                    &nbsp;&nbsp;
-                                    <input style="width:200px;" type="number" class="validate">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col s4">
-                                    <label style="text-align:left" for="first_name">Level 4</label>
-                                    &nbsp;&nbsp;
-                                    <input style="width:200px;" type="number" class="validate">
-                                </div>
-                                <div class="col s4">
-                                    <label style="text-align:left" for="first_name">Level 5</label>
-                                    &nbsp;&nbsp;
-                                    <input style="width:200px;" type="number" class="validate">
-                                </div>
-                                <div class="col s4">
-                                    <label style="text-align:left" for="first_name">Level 6</label>
-                                    &nbsp;&nbsp;
-                                    <input style="width:200px;" type="number" class="validate">
-                                </div>
-                            </div>
-                        </div>
-                        </div>
+   
+        <div id="add_norm" class="modal modal-fixed-footer">
+
+            @using (Html.BeginForm("PostNormItems", "Admin", FormMethod.Post))
+            {
+                <div class="modal-content">
+                    <h4 class="header2">ADD NORM</h4>
                     <div class="row">
-                        <div class="input-field col s12">
-                            <button class="btn cyan waves-effect waves-light right" type="submit" name="action">
-                                Submit
-                                <i class="material-icons right">send</i>
-                            </button>
-                        </div>
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    @Html.TextBoxFor(model => model.NormsItems.Name)
+                                    <label for="first_name">Name</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">question_answer</i>
+                                    @Html.DropDownListFor(model => model.NormsItems.Type.Id, Model.Types, "Select Type")
+                                    <label for="message">Type</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">question_answer</i>
+                                    @Html.DropDownListFor(model => model.NormsItems.Category.Id, Model.Categories, "Select Category")
+                                    <label for="message">Category</label>
+                                </div>
+                            </div>
+
+                            <div id="profile-card" class="card">
+
+                                <div class="card-content">
+                                    <h4 class="header2">Requirements</h4>
+                                    <div class="divider"></div>
+                                    <div class="row">
+                                        <div class="col s4">
+                                            <label style="text-align:left" for="first_name">Level 1</label>
+                                            &nbsp;&nbsp;
+                                            <input style="width:200px;" type="number" class="validate">
+                                        </div>
+                                        <div class="col s4">
+                                            <label style="text-align:left" for="first_name">Level 2</label>
+                                            &nbsp;&nbsp;
+                                            <input style="width:200px;" type="number" class="validate">
+                                        </div>
+                                        <div class="col s4">
+                                            <label style="text-align:left" for="first_name">Level 3</label>
+                                            &nbsp;&nbsp;
+                                            <input style="width:200px;" type="number" class="validate">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s4">
+                                            <label style="text-align:left" for="first_name">Level 4</label>
+                                            &nbsp;&nbsp;
+                                            <input style="width:200px;" type="number" class="validate">
+                                        </div>
+                                        <div class="col s4">
+                                            <label style="text-align:left" for="first_name">Level 5</label>
+                                            &nbsp;&nbsp;
+                                            <input style="width:200px;" type="number" class="validate">
+                                        </div>
+                                        <div class="col s4">
+                                            <label style="text-align:left" for="first_name">Level 6</label>
+                                            &nbsp;&nbsp;
+                                            <input style="width:200px;" type="number" class="validate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <button class="btn cyan waves-effect waves-light right" type="submit" name="action">
+                                        Submit
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+            }
             </div>
-        </div>
+    
+        <!--card widgets end-->
+        <!-- //////////////////////////////////////////////////////////////////////////// -->
+        <div class="divider"></div>
     </div>
-    <!--card widgets end-->
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-    <div class="divider"></div>
-</div>
 

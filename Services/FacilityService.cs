@@ -362,14 +362,6 @@ namespace hrhdashboard.Services
             return norm;
         }
 
-        public NormsItems SaveNormsItems(NormsItems items) {
-
-            SqlServerConnection conn = new SqlServerConnection();
-            items.Id = conn.SqlServerUpdate("DECLARE @idnt INT=722,@type INT = 3, @catg INT= 999,@norm nvarchar(100) = 'Lighting';  BEGIN INSERT INTO NormsItems(ni_idnt, ni_type, ni_catg, ni_item) output INSERTED.ni_idnt VALUES (@idnt, @type, @catg, @norm) END");
-
-            return items;
-        }
-
         public List<SelectListItem> GetNormsTypesIEnumerable()
         {
             List<SelectListItem> types = new List<SelectListItem>();
@@ -411,7 +403,14 @@ namespace hrhdashboard.Services
             return categories;
         }
 
-        
-        
+        public NormsItems SaveNormItems(NormsItems normsItems)
+        {
+            SqlServerConnection conn = new SqlServerConnection();
+            normsItems.Id = conn.SqlServerUpdate("DECLARE @type INT = " + normsItems.Type.Id + ", @catg INT= " + normsItems.Category.Id + " ,@item nvarchar(100)= '" + normsItems.Name + "' ;  BEGIN INSERT INTO NormsItems(ni_type, ni_catg , ni_item) output INSERTED.ni_idnt VALUES (@type, @catg ,@item ) END");
+           
+            return normsItems;
+        }
+
+
     }
 }

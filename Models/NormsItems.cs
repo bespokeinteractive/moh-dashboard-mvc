@@ -21,7 +21,7 @@ namespace hrhdashboard.Models
 
         public NormsItems Save()
         {
-            return new FacilityService().SaveNormsItems(this);
+            return new FacilityService().SaveNormItems(this);
         }
       
     }
