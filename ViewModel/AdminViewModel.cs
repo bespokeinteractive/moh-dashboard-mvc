@@ -15,11 +15,16 @@ namespace hrhdashboard.ViewModel
 
          public List<SelectListItem> Role { get; set; }
 
-         public Roles Roles { get; set; }
+        public List<SelectListItem> Counties { get; set; }
+
+        public List<SelectListItem> Constituencies { get; set; }
+
+        public Roles Roles { get; set; }
         public NormsItems NormsItems { get; set; }
 
         public Users Users { get; set; }
 
+ 
         public AdminViewModel()
         {
             NormsItems = new NormsItems();
@@ -27,8 +32,11 @@ namespace hrhdashboard.ViewModel
             Types = new List<SelectListItem>();
             Categories = new List<SelectListItem>();
             Role = new List<SelectListItem>();
+            Counties = new List<SelectListItem>();
+            Constituencies = new List<SelectListItem>();
 
             Users = new Users();
+         
 
         }
     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace hrhdashboard.Services
 {
@@ -173,6 +174,52 @@ namespace hrhdashboard.Services
             }
 
             return JObject.Parse(markers);
+        }
+
+        public List<SelectListItem> GetCountyIEnumarable()
+        {
+            List<SelectListItem> counties = new List<SelectListItem>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT ct_idnt, ct_name FROM County");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Value = dr[0].ToString(),
+                        Text = dr[1].ToString()
+                    };
+
+                    counties.Add(item);
+                }
+            }
+
+            return counties;
+        }
+
+        public List<SelectListItem> GetConstituencyIEnumarable(County county)
+        {
+            List<SelectListItem> constituencies = new List<SelectListItem>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT cn_idnt, cn_name FROM Constituency where cn_county = " + county.Id);
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Value = dr[0].ToString(),
+                        Text = dr[1].ToString()
+                    };
+
+                    constituencies.Add(item);
+                }
+            }
+
+            return constituencies;
         }
 
     }

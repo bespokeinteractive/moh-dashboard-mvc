@@ -7,6 +7,7 @@ using hrhdashboard.Models;
 using hrhdashboard.Services;
 using hrhdashboard.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace hrhdashboard.Controllers
 {
@@ -16,11 +17,12 @@ namespace hrhdashboard.Controllers
         public AdminViewModel Input { get; set; }
 
         [Route("/adminstrator")]
-        public IActionResult AdminServices(AdminViewModel model, FacilityService service, UserServices user)
+        public IActionResult AdminServices(AdminViewModel model, FacilityService service, UserServices user , CountyService dashboard)
         {
             model.Types = service.GetNormsTypesIEnumerable();
             model.Categories = service.GetNormsCategoryIEnumerable();
             model.Role = user.GetRolesIEnumarable();
+            model.Counties = dashboard.GetCountyIEnumarable();
             return View(model);
         }
 
@@ -46,5 +48,12 @@ namespace hrhdashboard.Controllers
 
         }
 
+
+        public JsonResult GetConstituency(int idnt, CountyService dashboard)
+        {
+            List<SelectListItem> constt = new List<SelectListItem>(dashboard.GetConstituencyIEnumarable(new County(idnt)));
+
+            return Json(constt);
+         }
     }
 }

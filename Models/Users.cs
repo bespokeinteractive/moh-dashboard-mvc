@@ -16,6 +16,11 @@ namespace hrhdashboard.Models
         public string Message { get; set; }
         public  Roles Roles { get; set; }
 
+        public County County { get; set; }
+
+        public Constituency Constituency { get; set; }
+
+
         public Users()
         {
             Id = 0;
@@ -31,7 +36,9 @@ namespace hrhdashboard.Models
             Message = "";
 
             Roles = new Roles();
-        }
+            County = new County();
+            Constituency = new Constituency();
+    }
 
         public Users Save() {
 
