@@ -5,6 +5,7 @@ using hrhdashboard.Models;
 using hrhdashboard.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Linq;
 
 namespace hrhdashboard.Services
 {
@@ -190,6 +191,24 @@ namespace hrhdashboard.Services
             }
 
             return facilities;
+        }
+
+        public JObject GetFacilitiesAutocomplete(string query = ""){
+            string facilities = "{}";
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_kmflcode+' '+fc_name facility, fo_image FROM Facility INNER JOIN facilityOwner ON fc_owner=fo_name " + query + " ORDER BY fc_kmflcode");
+            if (dr.HasRows) {
+                facilities = "{";
+
+                while (dr.Read()) {
+                    facilities += "'" + dr[0].ToString().Replace("'", "`").Replace(":","") + "': '../../images/logo/" + dr[1].ToString() + "', ";
+                }
+
+                facilities += "}";
+            }
+
+            return JObject.Parse(facilities);
         }
 
         public FacilityOwner GetFacilityOwner(Facility facility){

@@ -161,4 +161,7 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\Autocomplete.cs" />
+  </ItemGroup>
 </Project>

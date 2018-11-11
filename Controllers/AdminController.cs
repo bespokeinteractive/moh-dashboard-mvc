@@ -42,7 +42,6 @@ namespace hrhdashboard.Controllers
         {
 
             Input.NormsItems.Save();
-
           
             return LocalRedirect("/adminstrator");
 

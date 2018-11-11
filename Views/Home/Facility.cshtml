@@ -198,10 +198,8 @@
 
                             @foreach (var svc in Model.FacilityServices)
                             {
-                                if (!service.Equals(svc.Item.Category.Name))
-                                {
-                                    if (!string.IsNullOrEmpty(service))
-                                    {
+                                if (!service.Equals(svc.Item.Category.Name)) {
+                                    if (!string.IsNullOrEmpty(service)) {
                                         double perc = (value / norms) * 100;
 
                                         <li class="collection-item">
@@ -214,11 +212,10 @@
                                     }
 
                                     service = svc.Item.Category.Name;
-                                    norms = 0;
-                                    value = 0;
+                                    norms = svc.Norm;
+                                    value = svc.Value;
                                 }
-                                else
-                                {
+                                else {
                                     norms += svc.Norm;
                                     value += svc.Value;
                                 }

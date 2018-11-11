@@ -137,3 +137,8 @@ table.station tbody tr td {
 .center-text {
     text-align: center;
 }
+div.page-title > h4 {
+    border-bottom: 1px solid #eee;
+    color: #008dc9;
+    padding-bottom: 4px;
+}

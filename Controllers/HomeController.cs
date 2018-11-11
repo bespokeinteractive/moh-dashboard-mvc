@@ -10,6 +10,7 @@ using hrhdashboard.Models;
 using hrhdashboard.ViewModel;
 using hrhdashboard.Extensions;
 using hrhdashboard.Services;
+using System.Collections.Generic;
 
 namespace hrhdashboard.Controllers
 {
@@ -94,6 +95,13 @@ namespace hrhdashboard.Controllers
             }
         }
 
+        [Route("/kmhfl/facilities/compare")]
+        public ActionResult FacilityCompareIndex(CompareIndexViewModel model, FacilityService service) {
+            model.facilities = service.GetFacilitiesAutocomplete();
+                
+            return View(model);   
+        }
+
         [Route("/search")]
         public ActionResult FacilitySearch(FacilitySearchViewModel model, FacilityService service, CountyService dashboard, string facility="", int county=0, int level=0){
             string SearchString = "WHERE fc_level<>99";
@@ -128,6 +136,57 @@ namespace hrhdashboard.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [AllowAnonymous]
+        public JsonResult GetCompareFacilities(string code, Boolean ifac, FacilityService service)
+        {
+            code = code.Trim().Split(null)[0];
+
+            CompareModel model = new CompareModel();
+            model.Facility = service.GetFacility(code);
+            if (ifac)
+                model.Facilities = service.GetFacilitiesAutocomplete("WHERE fc_idnt<>" + model.Facility.Id + " AND fc_level=" + model.Facility.Category.Level.Id);
+
+            List<Norms> HumanResources = service.GetNorms(model.Facility, 1);
+            List<Norms> Infrastructure = service.GetNorms(model.Facility, 2);
+            List<Norms> FacilityChecks = service.GetNorms(model.Facility, 3);
+
+            double norms = 0;
+            double value = 0;
+
+            foreach (var norm in HumanResources){
+                norms += norm.Norm;
+                value += norm.Value;
+            }
+
+            model.ScoreHumanResources = (value / norms) * 100;
+            norms = 0;
+            value = 0;
+
+            foreach (var norm in Infrastructure)
+            {
+                norms += norm.Norm;
+                value += norm.Value;
+            }
+
+            model.ScoreInfrastructure = (value / norms) * 100;
+            norms = 0;
+            value = 0;
+
+            foreach (var norm in FacilityChecks)
+            {
+                norms += norm.Norm;
+                value += norm.Value;
+            }
+
+            model.ScoreChecklist = (value / norms) * 100;
+            norms = 0;
+            value = 0;
+
+            model.ScoreOverall = (model.ScoreChecklist + model.ScoreInfrastructure + model.ScoreHumanResources) / 3;
+
+            return Json(model);
         }
     }
 }

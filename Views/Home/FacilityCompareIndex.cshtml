@@ -1,0 +1,82 @@
+﻿@model hrhdashboard.ViewModel.CompareIndexViewModel;
+
+@{
+    ViewData["Title"] = "Compare";
+}
+
+<style>
+    div.compare-box {
+        background: #f3f3f3;
+        padding: 15px;
+        margin: 0;
+        position: relative;
+        z-index: 2;
+        border: 1px solid #ddd;
+    }
+    div.compare-box h5 {
+        color: #F00;
+        margin-top: 0px;
+        border-bottom: 1px solid #ddd;
+    }
+    div.compare-box input {
+        padding: 15px;
+        width: 400px;
+        border: 1px solid #ddd;
+    }
+    div.compare-box a.btn {
+        width: 120px;
+        height: 47px;
+        padding-top: 5px;
+    }
+    input:focus, textarea:focus {
+        outline: 1px solid #008dc9;
+    }
+    div.detail-box {
+        background: #f3f3f3;
+        padding: 15px;
+        margin-top: 10px;
+        position: relative;
+        z-index: 1;
+        border: 1px solid #ddd;
+    }
+    div.detail-box table td {
+        padding: 0 5px;
+    }
+    .autocomplete-content {
+        position: absolute;
+        width: 398px;
+        margin-top: 4px;
+    }
+</style>
+
+<script>
+    var facility_data = @Html.Raw(Model.facilities);
+</script>
+
+<script src="~/js/facility-compare.scripts.js"></script>
+
+<div class="page-title">
+    <h4>COMPARE FACILITIES</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="compare-box">
+            <h5>Facility 1</h5>
+            <a class="btn waves-effect waves-light gradient-45deg-light-blue-cyan gradient-shadow right">LOOKUP</a>
+            <input id="facility1" type="text" class="browser-default autocomplete" />
+        </div>
+
+        <div id="detail-box-1" class="detail-box" style="display:none;"></div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="compare-box">
+            <h5>Facility 2</h5>
+            <input id="facility2" type="text" class="browser-default autocomplete" />
+            <a class="btn waves-effect waves-light gradient-45deg-light-blue-cyan gradient-shadow right">LOOKUP</a>
+        </div>
+
+        <div id="detail-box-2" class="detail-box" style="display: none;"></div>
+    </div>
+</div>
