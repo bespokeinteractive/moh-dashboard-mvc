@@ -318,14 +318,14 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">question_answer</i>
-                                @Html.DropDownListFor(model => model.Users.Roles.Id, Model.Role, "Select Role")
+                                @Html.DropDownListFor(model => model.Users.Role.Id, Model.Role, "Select Role")
                                 <label for="message">Role</label>
                             </div>
                         </div>
                         <div id="county" class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">question_answer</i>
-                                @Html.DropDownListFor(model => model.Users.County.Id, Model.Counties, "Select County")
+                                @Html.DropDownListFor(model => model.Users.AccessLevel, Model.Counties, "Select County")
                                 <label for="message">county</label>
                             </div>
                         </div>

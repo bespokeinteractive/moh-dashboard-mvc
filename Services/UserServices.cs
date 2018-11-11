@@ -37,6 +37,39 @@ namespace hrhdashboard.Services
             return user;
         }
 
+        public List<Users> GetUsers(){
+            List<Users> users = new List<Users>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT usr_idnt, usr_name, usr_email, log_username, log_enabled, log_tochange, log_admin_lvl, log_access_lvl, rl_idnt, rl_type, rl_role FROM Users INNER JOIN [Login] ON usr_idnt=log_user INNER JOIN Roles ON log_admin_lvl=rl_idnt ORDER BY usr_idnt");
+            if (dr.HasRows)
+            {
+                while (dr.Read()){
+                    Users user = new Users
+                    {
+                        Id = Convert.ToInt64(dr[0]),
+                        Name = dr[1].ToString(),
+                        Email = dr[2].ToString(),
+                        Username = dr[3].ToString(),
+                        Enabled = Convert.ToBoolean(dr[4]),
+                        ToChange = Convert.ToBoolean(dr[5]),
+                        AdminLevel = Convert.ToInt16(dr[6]),
+                        AccessLevel = Convert.ToInt16(dr[7])
+                    };
+                    
+                    user.Role = new Roles{
+                        Id = Convert.ToInt16(dr[8]),
+                        Type = Convert.ToInt16(dr[9]),
+                        Name = dr[10].ToString()                    
+                    };
+                    
+                    users.Add(user);
+                }
+            }
+
+            return users;
+        }
+
         public Roles GetRole(int idnt){
             Roles role = null;
 
@@ -105,7 +138,7 @@ namespace hrhdashboard.Services
         {
             SqlServerConnection conn = new SqlServerConnection();
             users.Id = conn.SqlServerUpdate("DECLARE @username nvarchar(100)='"+users.Username+"', @email nvarchar(100)= '"+users.Email+"';  BEGIN INSERT INTO Users (usr_name, usr_email) output INSERTED.usr_idnt VALUES (@username, @email) END");
-            conn.SqlServerUpdate("DECLARE @userid INT = "+users.Id+", @username nvarchar(100)= '"+users.Username + "', @password nvarchar(100) = '"+users.Password+ "', @adminlvl INT = "+users.Roles.Id+ ";  BEGIN INSERT INTO Login(log_user, log_username ,log_password , log_admin_lvl ) output INSERTED.log_idnt VALUES (@userid, @username , @password , @adminlvl ) END");
+            conn.SqlServerUpdate("DECLARE @userid INT = "+users.Id+", @username nvarchar(100)= '"+users.Username + "', @password nvarchar(100) = '"+users.Password+ "', @adminlvl INT = "+users.Role.Id+ ";  BEGIN INSERT INTO Login(log_user, log_username ,log_password , log_admin_lvl ) output INSERTED.log_idnt VALUES (@userid, @username , @password , @adminlvl ) END");
 
             return users;
         }

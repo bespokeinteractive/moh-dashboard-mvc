@@ -6,11 +6,13 @@ using hrhdashboard.Extensions;
 using hrhdashboard.Models;
 using hrhdashboard.Services;
 using hrhdashboard.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace hrhdashboard.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         [BindProperty]
@@ -23,9 +25,16 @@ namespace hrhdashboard.Controllers
             model.Categories = service.GetNormsCategoryIEnumerable();
             model.Role = user.GetRolesIEnumarable();
             model.Counties = dashboard.GetCountyIEnumarable();
+
             return View(model);
         }
 
+        [Route("/adminstrator/users")]
+        public IActionResult Users(UserServices service)
+        {
+            List<Users> users = new List<Users>(service.GetUsers());
+            return View(users);
+        }
 
         [HttpPost]
         public IActionResult PostUsers(AdminViewModel model, UserServices svc , CrytoUtilsExtensions Cryto)
@@ -34,25 +43,17 @@ namespace hrhdashboard.Controllers
             Input.Users.Save();
            
            return LocalRedirect("/adminstrator");
-
         }
 
         [HttpPost]
-        public IActionResult PostNormItems(AdminViewModel model, UserServices svc  )
-        {
-
-            Input.NormsItems.Save();
-          
+        public IActionResult PostNormItems(AdminViewModel model, UserServices svc) {
+            Input.NormsItems.Save();          
             return LocalRedirect("/adminstrator");
-
         }
 
-
-        public JsonResult GetConstituency(int idnt, CountyService dashboard)
-        {
-            List<SelectListItem> constt = new List<SelectListItem>(dashboard.GetConstituencyIEnumarable(new County(idnt)));
-
-            return Json(constt);
+        public JsonResult GetConstituency(int idnt, CountyService service) {
+            List<SelectListItem> constituency = new List<SelectListItem>(service.GetConstituencyIEnumarable(new County(idnt)));
+            return Json(constituency);
          }
     }
 }

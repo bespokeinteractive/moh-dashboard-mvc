@@ -14,12 +14,7 @@ namespace hrhdashboard.Models
         public int AdminLevel { get; set; }
         public int AccessLevel { get; set; }
         public string Message { get; set; }
-        public  Roles Roles { get; set; }
-
-        public County County { get; set; }
-
-        public Constituency Constituency { get; set; }
-
+        public  Roles Role { get; set; }
 
         public Users()
         {
@@ -32,16 +27,12 @@ namespace hrhdashboard.Models
             ToChange = false;
             AdminLevel = 0;
             AccessLevel = 0;
-
             Message = "";
 
-            Roles = new Roles();
-            County = new County();
-            Constituency = new Constituency();
-    }
+            Role = new Roles();
+        }
 
         public Users Save() {
-
             return new UserServices().SaveUsers(this);
         }
 
