@@ -15,7 +15,11 @@
         });
 
         jq('#queue-table_filter').on('click', 'i', function() {
-            jq('#add-assets').modal('open');
+            window.location.href = "/administrator/users/add";
+        });
+
+        jq('#queue-table td').on('click', 'i.blue-text', function() {
+            window.location.href = "/administrator/users/edit/" + jq(this).data('idnt');
         });
 
         jq('<i class="material-icons medium blue-text">person_add</i>').insertBefore(jq("#queue-table_filter label"));
@@ -27,41 +31,36 @@
     #queue-table_length {
         display: none;
     }
-
     #queue-table_filter {
         text-align: left;
         margin-top: 10px;
     }
+    #queue-table_filter i {
+        cursor: pointer;
+        margin: 13px 30px 0;
+        float: right;
+    }
 
-        #queue-table_filter i {
-            cursor: pointer;
-            margin: 13px 30px 0;
-            float: right;
-        }
-
-        #queue-table_filter label input {
-            padding: 0px;
-            height: 1.9rem;
-            margin: 0;
-        }
+    #queue-table_filter label input {
+        padding: 0px;
+        height: 1.9rem;
+        margin: 0;
+    }
 
     #queue-table,
     #queue-table th,
     #queue-table td {
         border-radius: 0px;
     }
-
-        #queue-table tbody tr {
-            cursor: pointer;
-        }
-
+    #queue-table tbody tr {
+        cursor: pointer;
+    }
     #queue-title {
         display: inline-block;
         margin-bottom: -60px;
         float: left;
         margin-top: 15px;
     }
-
     i.medium {
         font-size: 2.5rem;
         z-index: 1000;
@@ -101,16 +100,16 @@
         <tbody>
             @foreach (var user in Model)
             {
-                <tr data-idnt="@user.Id">
+                <tr>
                     <td>@user.Id</td>
-                    <td>@user.Name</td>
+                    <td><a class="who-color-text" href="/administrator/users/@user.Id">@user.Name</a></td>
                     <td>@user.Email</td>
                     <td>@user.Username</td>
                     <td>@user.Enabled</td>
                     <td>@user.ToChange</td>
                     <td>@user.Role.Name</td>
                     <td>
-                        <i class="material-icons blue-text">border_color</i>
+                        <i class="material-icons blue-text" data-idnt="@user.Id">border_color</i>
                         <i class="material-icons red-text">delete_forever</i>
                     </td>
                 </tr>

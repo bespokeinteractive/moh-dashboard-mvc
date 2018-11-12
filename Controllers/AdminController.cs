@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using hrhdashboard.Extensions;
 using hrhdashboard.Models;
 using hrhdashboard.Services;
@@ -18,7 +15,7 @@ namespace hrhdashboard.Controllers
         [BindProperty]
         public AdminViewModel Input { get; set; }
 
-        [Route("/adminstrator")]
+        [Route("/administrator")]
         public IActionResult AdminServices(AdminViewModel model, FacilityService service, UserServices user , CountyService dashboard)
         {
             model.Types = service.GetNormsTypesIEnumerable();
@@ -29,11 +26,28 @@ namespace hrhdashboard.Controllers
             return View(model);
         }
 
-        [Route("/adminstrator/users")]
-        public IActionResult Users(UserServices service)
-        {
+        [Route("/administrator/users")]
+        public IActionResult Users(UserServices service) {
             List<Users> users = new List<Users>(service.GetUsers());
             return View(users);
+        }
+
+        [Route("/administrator/users/{idnt}")]
+        public IActionResult UsersView(int idnt, UserServices service) {
+            Users user = service.GetUser(idnt);
+            return View(user);
+        }
+
+        [Route("/administrator/users/add")]
+        public IActionResult UsersAdd(UserServices service) {
+            Users user = new Users();
+            return View(user);
+        }
+
+        [Route("/administrator/users/edit/{idnt}")]
+        public IActionResult UsersEdit(int idnt, UserServices service) {
+            Users user = service.GetUser(idnt);
+            return View(user);
         }
 
         [HttpPost]
@@ -42,13 +56,13 @@ namespace hrhdashboard.Controllers
             Input.Users.Password = Cryto.Encrypt(Input.Users.Password);
             Input.Users.Save();
            
-           return LocalRedirect("/adminstrator");
+           return LocalRedirect("/administrator");
         }
 
         [HttpPost]
         public IActionResult PostNormItems(AdminViewModel model, UserServices svc) {
             Input.NormsItems.Save();          
-            return LocalRedirect("/adminstrator");
+            return LocalRedirect("/administrator");
         }
 
         public JsonResult GetConstituency(int idnt, CountyService service) {
