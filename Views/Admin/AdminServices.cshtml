@@ -61,18 +61,6 @@
             }
         });
 
-        //jq('#Users_County_Id').change(function () {
-        //    jq.get("/Admin/GetConstituency", { idnt: jq('#Users_County_Id').val() }, function (data) {
-               
-        //        jq('#Users_Constituency_Id').empty();
-        //        jq.each(data, function (index, row) {
-        //            console.log(data[index].Value);
-        //            jq('#Users_Constituency_Id').append("<option value='" + row.Value + "'>" + row.Text + "</option>")
-        //        });
-        //    });
-
-        //});
-
         jq('#Users_County_Id').change(function () {
             jq.ajax({
                 dataType: "json",
@@ -88,40 +76,10 @@
                 }
             });
         });
-
-
-        //jq('#Users_County_Id').change(function () {
-
-        //    jq.get("/Admin/GetConstituency", { CountyId: jq("#Users_County_Id").val() }, function (data) {
-        //        alert(CountyId);
-        //        jq('#Users_Constituency_Id').empty();
-
-        //        jq.each(data, function (index, row) {
-        //            alert(row);
-        //            //jq('#Users_Constituency_Id').append("<option value='" + row. + "'>" + row.StateName + "</option>")
-        //        });
-        //    });
-        //})
-
     });
 
 
 </script>
-
-@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script>
-    jq(document).ready(function () {
-        jq("#Users_County_Id").change(function () {
-            jq.get("/Admin/GetConstituency", { CountyId: jq("#Users_County_Id").val() }, function (data) {             
-                jq("#Users_Constituency_Id").empty();
-                jq.each(data, function (index, row) {
-                    //$("#StateId").append("<option value='" + row.StateId + "'>" + row.StateName + "</option>")
-                });
-            });
-        })
-    });
-</script>*@
-
 
 <div class="row" style="margin-top: 10px">
     <div class="col-md-12">

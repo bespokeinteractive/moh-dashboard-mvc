@@ -1,0 +1,380 @@
+﻿@model hrhdashboard.ViewModel.FacilityAssessmentViewModel;
+
+@{
+    ViewData["Title"] = "Assessment";
+
+    string catg = "";
+    Int64 index = 0;
+
+    float available_checklist = 0;
+    float available_hr_norms = 0;
+    float available_infra_norms = 0;
+    float must_have_checklist = 0;
+    float ticked_grayed = 0;
+    float must_have_hr_norms = 0;
+    float must_have_infra_norms = 0;
+    float total_must_have_norms = 0;
+    float total_available_norms = 0;
+    float checklist_percentage = 0;
+    float hr_percentage = 0;
+    float infra_percentage = 0;
+    float overal_percentage = 0;
+
+}
+
+<style>
+    #flight-card .card-header .card-title {
+        padding: 10px 20px;
+    }
+
+    #infrastructure-list td:first-child,
+    #human-resources-list td:first-child {
+        padding-left: 20px;
+    }
+
+    td, th {
+        border-radius: 0;
+        padding: 0 5px;
+        line-height: 2.5em;
+    }
+
+    input:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[typeAssessmenl]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea {
+        border: none;
+        margin: 0px;
+        width: 50px;
+        height: 1.2rem;
+    }
+
+    #human-resources-list td:nth-child(3),
+    #infrastructure-list td:nth-child(3),
+    #human-resources-list td:nth-child(4),
+    #infrastructure-list td:nth-child(4),
+    #infrastructure-list td:nth-child(5),
+    #human-resources-list td:nth-child(5) {
+        text-align: center;
+    }
+
+    button.btn {
+        margin: 10px 0 50px 72px;
+    }
+
+    .demo-chart > .chart-circle {
+        float: left;
+        margin: 20px;
+        text-align: center;
+        font-weight: 900;
+    }
+</style>
+
+<script src="~/js/facility-list-main.scripts.js"></script>
+<script src="~/js/jquery.circlechart.js"></script>
+
+<div class="row" style="margin-bottom:0px;">
+    <div id="email-list" class="col s10 m3 l3 card-panel z-depth-1" style="margin-bottom:0px; margin-top: 20px;">
+        <ul class="collection">
+            @foreach (var fac in Model.Facilities)
+            {
+                var dateClass = fac.Code == Model.Selected.Code ? "grey-text" : "blue-text";
+                var iconClass = fac.Code == Model.Selected.Code ? "attach_file" : "";
+
+                <li class="collection-item avatar email-unread @(fac.Code == Model.Selected.Code ? " selected" : "" )" data-facility="@fac.Code.ToLower()">
+                    <img src="~/images/kcoa.png" alt="" class="circle">
+                    <span class="email-title">@fac.Name</span>
+                    <p class="truncate grey-text ultra-small"> @fac.Ward.Name, @fac.SubCounty.Name, @fac.County.Name COUNTY</p>
+                    <a href="#!" class="secondary-content email-time">
+                        <i class="material-icons attach-file">@iconClass</i>
+                        <span class="@dateClass ultra-small">@fac.Code</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <div id="flight-card" class="card">
+            <div class="card-header deep-orange accent-2">
+                <div class="card-title">
+                    <h4 class="flight-card-title">@Model.Selected.Name</h4>
+                    <p class="flight-card-date">
+                        @Model.Selected.Ward.Name > @Model.Selected.SubCounty.Name > @Model.Selected.County.Name COUNTY
+                        <span class="task-cat cyan">&nbsp; @Model.Selected.Category.Name &nbsp;</span>
+                        <span class="task-cat cyan">&nbsp; @Model.Selected.Category.Level.Name &nbsp;</span>
+                    </p>
+                </div>
+            </div>
+
+            <nav class="navbar nav-extended">
+                <div class="nav-content">
+                    <ul class="tabs">
+                        <li class="tab"><a href="#summaries" class="active">Summary</a>/li>
+                        <li class="tab"><a href="#checklist">Checklist</a>/li>
+                        <li class="tab"><a href="#humanresources">Human Resource</a></li>
+                        <li class="tab"><a href="#infrastructure">Infrastructure</a></li>
+                        <li class="tab"><a href="#services">Services</a></li>
+                    </ul>
+                </div>
+
+                <div id="checklist" class="body">
+                    @using (Html.BeginForm("PostFacilityChecks", "Facility", FormMethod.Post))
+                    {
+                        <table id="facilitychecks-list" class="bordered">
+                            <thead class="deep-orange accent-1 white-text">
+                                <tr>
+                                    <th style="width:1px;">&nbsp;</th>
+                                    <th>FACILITY CHECKLIST</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.FacilityChecks.Count; i++)
+                                {
+                                    var norm = Model.FacilityChecks[i];
+                                    <tr>
+                                        <td>
+                                            <div class="switch">
+                                                <label>
+                                                    @if (norm.Value == 1)
+                                                    {
+                                                        available_checklist += norm.Value;
+
+                                                        <input checked type="checkbox" data-idnt="@(i)">
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <input type="checkbox" data-idnt="@(i)">
+                                                    }
+                                                    @if (norm.Norm > 0)
+                                                    {
+                                                        must_have_checklist += norm.Norm;
+                                                    }
+                                                    else
+                                                    {
+                                                        ticked_grayed += norm.Value;
+                                                    }
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+
+                                        <td class='@(norm.Norm > 0?"":"grey-text")'>
+                                            @norm.Item.Name
+                                            @Html.HiddenFor(model => Model.FacilityChecks[i].Value)
+                                            @Html.HiddenFor(model => Model.FacilityChecks[i].Item.Id)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @Html.HiddenFor(model => model.Selected.Id)
+                        @Html.HiddenFor(model => model.Selected.Code)
+                        @Html.HiddenFor(model => model.ActiveTab)
+
+                        <button type="submit" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan z-depth-4 mr-1">Update</button>
+                    }
+                </div>
+
+                <div id="humanresources" class="body">
+                    @using (Html.BeginForm("PostHumanResources", "Facility", FormMethod.Post))
+                    {
+                        <table id="human-resources-list" class="bordered">
+                            <thead class="deep-orange accent-1 white-text">
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>HUMAN RESOURCE</th>
+                                    <th>NORMS</th>
+                                    <th>AVAILABLE</th>
+                                    <th>GAPS</th>
+                                    <th>FEMALE</th>
+                                    <th>MALE</th>
+                                    <th>DISABLED</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @(catg = "")
+
+                                @for (int i = 0; i < Model.HumanResources.Count; i++)
+                                {
+                                    var norm = Model.HumanResources[i];
+                                    must_have_hr_norms += norm.Norm;
+                                    available_hr_norms += norm.Value;
+
+                                    @if (!catg.Equals(norm.Item.Category.Name))
+                                    {
+                                        catg = norm.Item.Category.Name;
+                                        index = 1;
+
+                                        <tr style="background-color:#f2f2f2">
+                                            <td>&nbsp;</td>
+                                            <td colspan="8" class="bold-text">@catg</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        index += 1;
+                                    }
+
+                                    <tr>
+                                        <td>@(index).</td>
+                                        <td>@norm.Item.Name</td>
+                                        <td class="bfo">@norm.Norm</td>
+                                        <td class="now">@Html.TextBoxFor(model => Model.HumanResources[i].Value, new { type = "number", min = "0", step = "1" })</td>
+                                        <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
+                                        <td>@Html.TextBoxFor(model => Model.HumanResources[i].Female, new { type = "number", min = "0", step = "1" })</td>
+                                        <td>@Html.TextBoxFor(model => Model.HumanResources[i].Male, new { type = "number", min = "0", step = "1" })</td>
+                                        <td>
+                                            @Html.HiddenFor(model => Model.HumanResources[i].Item.Id)
+                                            @Html.TextBoxFor(model => Model.HumanResources[i].Disabled, new { type = "number", min = "0", step = "1" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @Html.HiddenFor(model => model.Selected.Id)
+                        @Html.HiddenFor(model => model.Selected.Code)
+                        @Html.HiddenFor(model => model.ActiveTab)
+
+                        <button type="submit" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan z-depth-4 mr-1">Update</button>
+                    }
+                </div>
+
+                <div id="infrastructure" class="body">
+                    @(catg = "")
+                    @using (Html.BeginForm("PostInfrastructure", "Facility", FormMethod.Post))
+                    {
+                        <table id="infrastructure-list" class="bordered">
+                            <thead class="deep-orange accent-1 white-text">
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>INFRASTRUCTURE</th>
+                                    <th>NORMS</th>
+                                    <th>AVAILABLE</th>
+                                    <th>GAPS</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.Infrastructure.Count; i++)
+                                {
+                                    var norm = Model.Infrastructure[i];
+
+                                    must_have_infra_norms += norm.Norm;
+                                    available_infra_norms += norm.Value;
+
+                                    @if (!catg.Equals(norm.Item.Category.Name))
+                                    {
+                                        catg = norm.Item.Category.Name;
+                                        index = 1;
+
+                                        <tr style="background-color:#f2f2f2">
+                                            <td>&nbsp;</td>
+                                            <td colspan="4" class="bold-text">@catg</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        index += 1;
+                                    }
+
+                                    <tr>
+                                        <td>@(index).</td>
+                                        <td>@norm.Item.Name</td>
+                                        <td class="bfo">@norm.Norm</td>
+                                        <td class="now">
+                                            @Html.TextBoxFor(model => Model.Infrastructure[i].Value, new { type = "number", min = "0", step = "1" })
+                                            @Html.HiddenFor(model => Model.Infrastructure[i].Item.Id)
+                                        </td>
+                                        <td class='aft @(norm.Gaps > 0 ? "red-text" : "")'>@norm.Gaps</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @Html.HiddenFor(model => model.Selected.Id)
+                        @Html.HiddenFor(model => model.Selected.Code)
+                        @Html.HiddenFor(model => model.ActiveTab)
+
+                        <button type="submit" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan z-depth-4 mr-1">Update</button>
+                    }
+                </div>
+
+                <div id="services" class="body">
+                    @(catg = "")
+                    @using (Html.BeginForm("PostInfrastructure", "Facility", FormMethod.Post))
+                    {
+                        <table id="infrastructure-list" class="bordered">
+                            <thead class="deep-orange accent-1 white-text">
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>SERVICES AVAILABLE</th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.Infrastructure.Count; i++)
+                                {
+                                    var norm = Model.Infrastructure[i];
+
+                                    must_have_infra_norms += norm.Norm;
+                                    available_infra_norms += norm.Value;
+
+                                    @if (!catg.Equals(norm.Item.Category.Name))
+                                    {
+                                        catg = norm.Item.Category.Name;
+                                        index = 1;
+
+                                        <tr style="background-color:#f2f2f2">
+                                            <td>&nbsp;</td>
+                                            <td colspan="4" class="bold-text">@catg</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        index += 1;
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+
+                        @Html.HiddenFor(model => model.Selected.Id)
+                        @Html.HiddenFor(model => model.Selected.Code)
+                        @Html.HiddenFor(model => model.ActiveTab)
+
+
+                    }
+                </div>
+
+                <div id="summaries" class="body demo-chart">
+                    @{
+                        total_must_have_norms = must_have_checklist + must_have_hr_norms + must_have_infra_norms;
+                        total_available_norms = available_checklist + available_hr_norms + available_infra_norms;
+                        checklist_percentage = ((available_checklist) / (must_have_checklist) * 100);
+                        hr_percentage = ((available_hr_norms) / (must_have_hr_norms) * 100);
+                        infra_percentage = ((available_infra_norms) / (must_have_infra_norms) * 100);
+                        overal_percentage = ((total_available_norms) / (total_must_have_norms) * 100);
+
+                        string s = string.Format("{0:N0}%", checklist_percentage);
+                        string t = string.Format("{0:N0}%", hr_percentage);
+                        string u = string.Format("{0:N0}%", infra_percentage);
+                        string v = string.Format("{0:N0}%", overal_percentage);
+
+                        <div class="chart-circle" data-percent="@checklist_percentage">Checklist</div>
+                        <div class="chart-circle" data-percent="@hr_percentage">Human Resource</div>
+                        <div class="chart-circle" data-percent="@infra_percentage">Infrastructure</div>
+                        <div class="chart-circle" data-percent="@overal_percentage">OVERALL SCORE</div>
+
+                        <h6 class="flight-card-title" style="color:#448AFF;padding-top:30px">CHECKLIST: <b>@s</b>  </h6>
+                        <h6 class="flight-card-title" style="color:#448AFF;"> HR: <b>@t</b> </h6>
+                        <h6 class="flight-card-title" style="color:#448AFF; ">INFRA: <b>@u</b></h6>
+                        <h6 class="flight-card-title" style="color:indianred; padding-top:10px; "> <strong> OVERALL SCORE: @v</strong></h6>
+                    }
+
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

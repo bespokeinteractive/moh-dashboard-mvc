@@ -69,5 +69,15 @@ namespace hrhdashboard.Controllers
             List<SelectListItem> constituency = new List<SelectListItem>(service.GetConstituencyIEnumarable(new County(idnt)));
             return Json(constituency);
          }
+
+        [Route("/administrator/norms/add")]
+        public IActionResult NormsAdd()
+        {
+
+           return View();
+        }
+
+
+
     }
 }
