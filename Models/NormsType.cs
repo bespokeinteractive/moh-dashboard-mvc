@@ -6,10 +6,14 @@ namespace hrhdashboard.Models
         public int Id { get; set; }
         public String Name { get; set; }
 
-        public NormsType()
+        public NormsType() 
         {
             Id = 0;
             Name = "";
+        }
+
+        public NormsType(int idnt) : this() {
+            Id = idnt;
         }
     }
 }

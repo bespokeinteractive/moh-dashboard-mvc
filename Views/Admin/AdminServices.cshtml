@@ -16,9 +16,9 @@
         min-height: 10px;
     }
 
-        .dropdown-content li > a, .dropdown-content li > span {
-            padding: 10px;
-        }
+    .dropdown-content li > a, .dropdown-content li > span {
+        padding: 10px;
+    }
 
     a.btn.waves-effect.waves-light {
         margin: 0px 55px 55px;
@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-    <div id="card-stats">
+    <div id="card-stats" style="display:none">
         <div class="row">
             <div class="col s12 m6 l3">
                 <div class="card gradient-45deg-light-blue-cyan gradient-shadow min-height-100 white-text">
@@ -165,75 +165,38 @@
     <div id="card-widgets" class="seaction">
         <div class="row">
             <div class="col s12 m4 l4">
-                <div id="profile-card" class="card">
-                    <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" src="../../images/gallary/12.png" alt="user bg">
-                    </div>
-                    <div class="card-content">
-                        <img src="../../images/avatar/avatar-7.png" alt="" class="circle responsive-img activator card-profile-image cyan lighten-1 padding-2">
-                        <a class="btn-floating activator btn-move-up waves-effect waves-light red accent-2 z-depth-4 right">
-                            <i class="material-icons">edit</i>
-                        </a>
-                        <span class="card-title activator grey-text text-darken-4">User Management</span>
-                        <ul>
-                            <li class="collection-item dismissable">
-                                <p>
-                                    <i class="material-icons "> perm_identity</i> <a class="modal-trigger" href="#modal2">Add User </a>
-                                </p>
-                            </li>
-                            <li class="collection-item dismissable">
-                                <p>
-                                    <i class="material-icons">perm_phone_msg</i> <a href="#">Allocate Facility</a>
-                                </p>
-                            </li>
-                            <li class="collection-item dismissable">
-                                <p>
-                                    <i class="material-icons">email</i>  <a href="#"> Disable Account</a>
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">
-                            Roger Waters
-                            <i class="material-icons right">close</i>
-                        </span>
-                        <p>Here is some more information about this card.</p>
+                <ul id="task-card" class="collection with-header">
+                    <li class="collection-header cyan">
+                        <h4 class="task-card-title">User Manager</h4>
+                        <p class="task-card-date">@DateTime.Now.ToString("MMM d, yyyy")</p>
+                    </li>
+                    <li class="collection-item dismissable">
                         <p>
-                            <i class="material-icons">perm_identity</i> Project Manager
+                            <i class="material-icons">perm_identity</i> <a href="/administrator/users">View Users</a>
                         </p>
+
                         <p>
-                            <i class="material-icons">perm_phone_msg</i> +1 (612) 222 8989
+                            <i class="material-icons">person_add</i> <a href="/administrator/users/add">Add User</a>
                         </p>
-                        <p>
-                            <i class="material-icons">email</i> yourmail@domain.com
-                        </p>
-                        <p>
-                            <i class="material-icons">cake</i> 18th June 1990
-                        </p>
-                        <p>
-                        </p>
-                        <p>
-                            <i class="material-icons">airplanemode_active</i> BAR - AUS
-                        </p>
-                        <p>
-                        </p>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
+
             <div class="col s12 m4 l4">
                 <ul id="task-card" class="collection with-header">
                     <li class="collection-header cyan">
                         <h4 class="task-card-title">Minimums</h4>
-                        <p class="task-card-date">Sept 16, 2017</p>
+                        <p class="task-card-date">Manage Norms &amp; Standards</p>
                     </li>
                     <li class="collection-item dismissable">
                         <p>
-                            <i class="material-icons"> perm_identity</i> <a class="modal-trigger" href="#add_norm">Add Norms </a>
+                            <i class="material-icons"> assessment</i> <a href="/administrator/norms">View Norms </a>
                         </p>
 
+                        <p>
+                            <i class="material-icons"> add</i> <a class="modal-trigger" href="#add_norm">Add Norms </a>
+                        </p>
                     </li>
-
                 </ul>
             </div>
         </div>

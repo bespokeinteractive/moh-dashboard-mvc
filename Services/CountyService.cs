@@ -125,7 +125,7 @@ namespace hrhdashboard.Services
 
                 while (dr.Read())
                 {
-                    markers += "{type:'Feature',geometry:{type:'Point',coordinates:" + dr[0].ToString() + "},properties:{id:" + Convert.ToInt16(dr[1]) + ",title: 'Facility',description:'" + dr[2].ToString() + "'}},";
+                    markers += "{type:'Feature',geometry:{type:'Point',coordinates:" + dr[0].ToString() + "},properties:{id:" + Convert.ToInt16(dr[1]) + ",title: 'Constituency',description:'" + dr[2].ToString() + "'}},";
                 }
 
                 markers += "]}";
@@ -144,9 +144,8 @@ namespace hrhdashboard.Services
             {
                 markers = "{type: 'FeatureCollection',features:[";
 
-                while (dr.Read())
-                {
-                    markers += "{type:'Feature',geometry:{type:'Point',coordinates:" + dr[0].ToString() + "},properties:{id:" + Convert.ToInt16(dr[1]) + ",title: 'Facility',description:'" + dr[2].ToString() + "'}},";
+                while (dr.Read()) {
+                    markers += "{type:'Feature',geometry:{type:'Point',coordinates:" + dr[0].ToString() + "},properties:{id:" + Convert.ToInt16(dr[1]) + ",title: 'Ward',description:'" + dr[2].ToString() + "'}},";
                 }
 
                 markers += "]}";
@@ -161,12 +160,10 @@ namespace hrhdashboard.Services
 
             SqlServerConnection conn = new SqlServerConnection();
             SqlDataReader dr = conn.SqlServerConnect("SELECT fc_geolocation, fc_kmflcode, fc_name FROM Facility WHERE fc_geolocation<>'Null' AND fc_ward=" + Ward.Id);
-            if (dr.HasRows)
-            {
+            if (dr.HasRows) {
                 markers = "{type: 'FeatureCollection',features:[";
 
-                while (dr.Read())
-                {
+                while (dr.Read()) {
                     markers += "{type:'Feature',geometry:{type:'Point',coordinates:" + dr[0].ToString() + "},properties:{id:" + dr[1].ToString() + ",title: 'Facility',description:'" + dr[2].ToString() + "'}},";
                 }
 
@@ -209,8 +206,7 @@ namespace hrhdashboard.Services
             {
                 while (dr.Read())
                 {
-                    SelectListItem item = new SelectListItem
-                    {
+                    SelectListItem item = new SelectListItem {
                         Value = dr[0].ToString(),
                         Text = dr[1].ToString()
                     };

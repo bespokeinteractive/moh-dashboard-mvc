@@ -9,14 +9,10 @@ namespace hrhdashboard.ViewModel
 {
     public class AdminViewModel
     {
-         public List<SelectListItem> Types { get; set; }
-
-         public List<SelectListItem>  Categories { get; set; }
-
-         public List<SelectListItem> Role { get; set; }
-
+        public List<SelectListItem> Types { get; set; }
+        public List<SelectListItem>  Categories { get; set; }
+        public List<SelectListItem> Role { get; set; }
         public List<SelectListItem> Counties { get; set; }
-
         public List<SelectListItem> Constituencies { get; set; }
 
         public Roles Roles { get; set; }

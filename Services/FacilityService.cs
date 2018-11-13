@@ -366,6 +366,42 @@ namespace hrhdashboard.Services
             return norms;
         }
 
+        public List<NormsView> GetNormsViews(NormsType type) {
+            List<NormsView> views = new List<NormsView>();
+
+            string AdditionalQuery = "";
+            if (type.Id > 0) {
+                AdditionalQuery = "WHERE ni_type=" + type.Id;
+            }
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT ni_idnt, ni_item, ni_catg, ni_category, ni_type, ni_types, L1, L2, L3, L4, L5, L6 FROM vNormsLevels ORDER BY ni_type, ni_catg, ni_idnt");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    NormsView view = new NormsView();
+                    view.Item.Id = Convert.ToInt16(dr[0]);
+                    view.Item.Name = dr[1].ToString();
+                    view.Item.Category.Id = Convert.ToInt16(dr[2]);
+                    view.Item.Category.Name = dr[3].ToString();
+                    view.Item.Type.Id = Convert.ToInt16(dr[4]);
+                    view.Item.Type.Name = dr[5].ToString();
+
+                    view.L1Norm = Convert.ToInt16(dr[6]);
+                    view.L2Norm = Convert.ToInt16(dr[7]);
+                    view.L3Norm = Convert.ToInt16(dr[8]);
+                    view.L4Norm = Convert.ToInt16(dr[9]);
+                    view.L5Norm = Convert.ToInt16(dr[10]);
+                    view.L6Norm = Convert.ToInt16(dr[11]);
+
+                    views.Add(view);
+                }
+            }
+
+            return views;
+        }
+
         /*DataWriters*/
         public Norms SaveNorms(Norms norm) {
             SqlServerConnection conn = new SqlServerConnection();

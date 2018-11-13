@@ -125,8 +125,7 @@ namespace hrhdashboard.Services
             return role;
         }
 
-        public List<Roles> GetRoles()
-        {
+        public List<Roles> GetRoles() {
             List<Roles> roles = new List<Roles>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -148,8 +147,7 @@ namespace hrhdashboard.Services
             return roles;
         }
 
-        public List<SelectListItem> GetRolesIEnumarable()
-        {
+        public List<SelectListItem> GetRolesIEnumarable() {
             List<SelectListItem> items = new List<SelectListItem>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -171,11 +169,11 @@ namespace hrhdashboard.Services
             return items;
         }
        
-        public Users SaveUsers(Users users)
-        {
+        public Users SaveUsers(Users users) {
             SqlServerConnection conn = new SqlServerConnection();
-            users.Id = conn.SqlServerUpdate("DECLARE @username nvarchar(100)='"+users.Username+"', @email nvarchar(100)= '"+users.Email+"';  BEGIN INSERT INTO Users (usr_name, usr_email) output INSERTED.usr_idnt VALUES (@username, @email) END");
-            conn.SqlServerUpdate("DECLARE @userid INT = "+users.Id+", @username nvarchar(100)= '"+users.Username + "', @password nvarchar(100) = '"+users.Password+ "', @adminlvl INT = "+users.Role.Id+ ";  BEGIN INSERT INTO Login(log_user, log_username ,log_password , log_admin_lvl ) output INSERTED.log_idnt VALUES (@userid, @username , @password , @adminlvl ) END");
+            users.Id = conn.SqlServerUpdate("DECLARE @idnt INT=" + users.Id + ", @name nvarchar(100)='" + users.Name + "', @email nvarchar(100)= '" + users.Email + "'; IF NOT EXISTS (SELECT usr_idnt FROM Users WHERE usr_idnt=@idnt) BEGIN INSERT INTO Users(usr_name, usr_email) output INSERTED.usr_idnt VALUES (@name, @email) END ELSE BEGIN UPDATE Users SET usr_name=@name, usr_email=@email output INSERTED.usr_idnt WHERE usr_idnt=@idnt END");
+
+            conn.SqlServerUpdate("DECLARE @idnt INT=" + users.Id + ", @username nvarchar(100)= '" + users.Username + "', @password nvarchar(100) = '" + users.Password + "', @adminlvl INT = "+users.Role.Id+ "; IF NOT EXISTS (SELECT log_user FROM Login WHERE log_user=@idnt) BEGIN INSERT INTO Login(log_user, log_username, log_password, log_admin_lvl) output INSERTED.log_idnt VALUES (@idnt, @username, @password, @adminlvl) END ELSE UPDATE Login SET log_username=@username, log_admin_lvl=@adminlvl output INSERTED.log_idnt WHERE log_user=@idnt");
 
             return users;
         }

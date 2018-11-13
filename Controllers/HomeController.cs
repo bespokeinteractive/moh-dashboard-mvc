@@ -88,7 +88,7 @@ namespace hrhdashboard.Controllers
                 client.Headers.Clear();
                 client.Headers.Add("Content-Type", "application/json");
                 client.Headers.Add("Authorization", "Bearer " + new Utils().GetToken());
-                var response = client.DownloadString("http://api.kmhfltest.health.go.ke/api/facilities/facilities/?format=json&fields=code,name,facility_type_name,keph_level_name,operation_status_name,county,constituency,ward_name,owner_name,lat_long&owner_type=6a833136-5f50-46d9-b1f9-5f961a42249f" + additionalCommand);
+                var response = client.DownloadString("http://api.kmhfltest.health.go.ke/api/facilities/facilities/?format=json&fields=code,name,facility_type_name,keph_level_name,operation_status_name,county,constituency,ward_name,owner_name,lat_long" + additionalCommand);
 
                 var data = JsonConvert.DeserializeObject<KmhflFacilitiesObject>(response);
                 return View(data);

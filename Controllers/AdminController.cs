@@ -13,7 +13,8 @@ namespace hrhdashboard.Controllers
     public class AdminController : Controller
     {
         [BindProperty]
-        public AdminViewModel Input { get; set; }
+        public UsersAddViewModel Input { get; set; }
+        public AdminViewModel Admin { get; set; }
 
         [Route("/administrator")]
         public IActionResult AdminServices(AdminViewModel model, FacilityService service, UserServices user , CountyService dashboard)
@@ -39,29 +40,31 @@ namespace hrhdashboard.Controllers
         }
 
         [Route("/administrator/users/add")]
-        public IActionResult UsersAdd(UserServices service) {
-            Users user = new Users();
-            return View(user);
+        public IActionResult UsersAdd(UsersAddViewModel model, UserServices service) {
+            model.roles = service.GetRolesIEnumarable();
+            return View(model);
         }
 
         [Route("/administrator/users/edit/{idnt}")]
-        public IActionResult UsersEdit(int idnt, UserServices service) {
-            Users user = service.GetUser(idnt);
-            return View(user);
+        public IActionResult UsersEdit(int idnt, UsersAddViewModel model, UserServices service) {
+            model.user = service.GetUser(idnt);
+            model.roles = service.GetRolesIEnumarable();
+
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult PostUsers(AdminViewModel model, UserServices svc , CrytoUtilsExtensions Cryto)
+        public IActionResult PostUsers(UsersAddViewModel model, UserServices svc , CrytoUtilsExtensions Cryto)
         {
-            Input.Users.Password = Cryto.Encrypt(Input.Users.Password);
-            Input.Users.Save();
+            Input.user.Password = Cryto.Encrypt(Input.user.Password);
+            Input.user.Save();
            
            return LocalRedirect("/administrator");
         }
 
         [HttpPost]
         public IActionResult PostNormItems(AdminViewModel model, UserServices svc) {
-            Input.NormsItems.Save();          
+            Admin.NormsItems.Save();          
             return LocalRedirect("/administrator");
         }
 
