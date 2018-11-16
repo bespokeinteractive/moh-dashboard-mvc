@@ -18,11 +18,6 @@ namespace hrhdashboard.Models
             Type = new NormsType();
             Category = new NormsCategory();
         }
-
-        public NormsItems Save()
-        {
-            return new FacilityService().SaveNormItems(this);
-        }
-      
+       
     }
 }

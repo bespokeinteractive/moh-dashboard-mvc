@@ -16,7 +16,7 @@ namespace hrhdashboard.Services
             Facility facility = new Facility();
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level, fc_guid FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_kmflcode='" + code +"' ORDER BY fc_name");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fc_idnt, fc_name, fc_kmflcode, fc_type, fc_owner, fc_regulator, ct_idnt, ct_name, cn_idnt, cn_name, wd_idnt, wd_name, fs_idnt, fs_status, fctg_idnt, fctg_name, ft_idnt, ft_tier, fl_idnt, fl_level, fc_guid FROM Facility INNER JOIN FacilityCategory ON fc_catg=fctg_idnt INNER JOIN FacilityTier ON fctg_tier=ft_idnt INNER JOIN Levels ON fctg_level=fl_idnt INNER JOIN County ON ct_idnt=fc_county INNER JOIN Constituency ON cn_idnt=fc_subcounty INNER JOIN Wards ON wd_idnt=fc_ward INNER JOIN FacilityStatus ON fc_status=fs_idnt WHERE fc_kmflcode='" + code + "' ORDER BY fc_name");
             if (dr.Read())
             {
                 facility.Id = Convert.ToInt64(dr[0]);
@@ -141,12 +141,12 @@ namespace hrhdashboard.Services
 
             return facilities;
         }
-        
-        public List<Facility> GetFacilitiesByUserLoggedIn(){
+
+        public List<Facility> GetFacilitiesByUserLoggedIn() {
             return GetFacilitiesByUser(1);
         }
 
-        public List<Facility> GetFacilitiesByUser(Int64 UserId){
+        public List<Facility> GetFacilitiesByUser(Int64 UserId) {
             List<Facility> facilities = new List<Facility>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -193,7 +193,7 @@ namespace hrhdashboard.Services
             return facilities;
         }
 
-        public JObject GetFacilitiesAutocomplete(string query = ""){
+        public JObject GetFacilitiesAutocomplete(string query = "") {
             string facilities = "{}";
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -202,7 +202,7 @@ namespace hrhdashboard.Services
                 facilities = "{";
 
                 while (dr.Read()) {
-                    facilities += "'" + dr[0].ToString().Replace("'", "`").Replace(":","") + "': '../../images/logo/" + dr[1].ToString() + "', ";
+                    facilities += "'" + dr[0].ToString().Replace("'", "`").Replace(":", "") + "': '../../images/logo/" + dr[1].ToString() + "', ";
                 }
 
                 facilities += "}";
@@ -211,7 +211,7 @@ namespace hrhdashboard.Services
             return JObject.Parse(facilities);
         }
 
-        public FacilityOwner GetFacilityOwner(Facility facility){
+        public FacilityOwner GetFacilityOwner(Facility facility) {
             FacilityOwner owner = null;
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -228,9 +228,9 @@ namespace hrhdashboard.Services
             }
 
             return owner;
-        } 
+        }
 
-        public List<Level> GetFacilityCategorizationByLevels(County county){
+        public List<Level> GetFacilityCategorizationByLevels(County county) {
             List<Level> levels = new List<Level>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -300,7 +300,7 @@ namespace hrhdashboard.Services
             return levels;
         }
 
-        public List<Tiers> GetFacilityCategorizationByTiers(County county){
+        public List<Tiers> GetFacilityCategorizationByTiers(County county) {
             List<Tiers> tiers = new List<Tiers>();
 
             SqlServerConnection conn = new SqlServerConnection();
@@ -322,7 +322,7 @@ namespace hrhdashboard.Services
             return tiers;
         }
 
-        public List<Norms> GetNorms(Facility facility, Int64 type, Boolean includeZeros = false, Boolean filterServices = false){
+        public List<Norms> GetNorms(Facility facility, Int64 type, Boolean includeZeros = false, Boolean filterServices = false) {
             List<Norms> norms = new List<Norms>();
 
             string AdditionalQuery = " AND NOT (nt_norm=0 AND NULLIF(nr_available,0) IS NULL)";
@@ -332,7 +332,7 @@ namespace hrhdashboard.Services
                 AdditionalQuery = "";
             if (filterServices)
                 ServicesQuery = "AND nc_idnt IN (SELECT ns_category FROM NormsServices WHERE ns_level=" + facility.Category.Level.Id + ")";
-            
+
             SqlServerConnection conn = new SqlServerConnection();
             SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, ni_idnt, ni_item, nt_norm, ISNULL(nr_available,0) nt_avail, ISNULL(nr_female,0) nt_female, ISNULL(nr_male,0)_nt_male, ISNULL(nr_disabled,0) nt_disabled FROM NormsTiers INNER JOIN NormsItems ON nt_item=ni_idnt AND ni_type=" + type + " INNER JOIN NormsCategory ON ni_catg=nc_idnt " + ServicesQuery + " LEFT OUTER JOIN Norms ON nt_item=nr_norm AND nr_facility=" + facility.Id + " WHERE nt_tctg=" + facility.Category.Id + AdditionalQuery + " ORDER BY ni_catg, nt_item");
             if (dr.HasRows)
@@ -352,7 +352,7 @@ namespace hrhdashboard.Services
                     norm.Male = Convert.ToInt64(dr[7]);
                     norm.Disabled = Convert.ToInt64(dr[8]);
 
-                    if (norm.Value > norm.Norm){
+                    if (norm.Value > norm.Norm) {
                         norm.Gaps = 0;
                     }
                     else {
@@ -369,13 +369,14 @@ namespace hrhdashboard.Services
         public List<NormsView> GetNormsViews(NormsType type) {
             List<NormsView> views = new List<NormsView>();
 
-            string AdditionalQuery = "";
-            if (type.Id > 0) {
-                AdditionalQuery = "WHERE ni_type=" + type.Id;
-            }
+            //string AdditionalQuery = "";
+            //if (type.Id > 0) {
+            //    AdditionalQuery = "WHERE ni_type=" + type.Id;
+            //}
+            string AdditionalQuery = "WHERE ni_type=" + 2;
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT ni_idnt, ni_item, ni_catg, ni_category, ni_type, ni_types, L1, L2, L3, L4, L5, L6 FROM vNormsLevels ORDER BY ni_type, ni_catg, ni_idnt");
+            SqlDataReader dr = conn.SqlServerConnect("SELECT ni_idnt, ni_item, ni_catg, ni_category, ni_type, ni_types, L1, L2, L3, L4, L5, L6 FROM vNormsLevels " + AdditionalQuery + " ORDER BY ni_type, ni_catg, ni_idnt");
             if (dr.HasRows)
             {
                 while (dr.Read())
@@ -401,6 +402,39 @@ namespace hrhdashboard.Services
 
             return views;
         }
+
+        public NormsView GetNormsViews(int idnt)
+        {
+            NormsView normsView = new NormsView();
+
+            //string AdditionalQuery = "";
+            //if (type.Id > 0) {
+            //    AdditionalQuery = "WHERE ni_type=" + type.Id;
+            //}
+            string AdditionalQuery = "WHERE ni_type =" + 2;
+
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT ni_idnt, ni_item, ni_catg, ni_category, ni_type, ni_types, L1, L2, L3, L4, L5, L6 FROM vNormsLevels " + AdditionalQuery + " AND ni_idnt = " + idnt + " ORDER BY ni_type, ni_catg, ni_idnt");
+            if (dr.Read())
+            {
+                
+                {
+                    normsView.Item.Id = Convert.ToInt64(dr[0]);
+                    normsView.Item.Name = dr[1].ToString();
+                    normsView.Item.Category.Name = dr[3].ToString();
+                    normsView.L1Norm = Convert.ToInt16(dr[6]);
+                    normsView.L2Norm = Convert.ToInt16(dr[7]);
+                    normsView.L3Norm = Convert.ToInt16(dr[8]);
+                    normsView.L4Norm = Convert.ToInt16(dr[9]);
+                    normsView.L5Norm = Convert.ToInt16(dr[10]);
+                    normsView.L6Norm = Convert.ToInt16(dr[11]);
+                }
+        }
+
+            return normsView;
+        }
+
 
         /*DataWriters*/
         public Norms SaveNorms(Norms norm) {
@@ -451,12 +485,12 @@ namespace hrhdashboard.Services
             return categories;
         }
 
-        public NormsItems SaveNormItems(NormsItems normsItems)
+        public NormsView SaveNormItems(NormsView normsView)
         {
             SqlServerConnection conn = new SqlServerConnection();
-            normsItems.Id = conn.SqlServerUpdate("DECLARE @type INT = " + normsItems.Type.Id + ", @catg INT= " + normsItems.Category.Id + " ,@item nvarchar(100)= '" + normsItems.Name + "' ;  BEGIN INSERT INTO NormsItems(ni_type, ni_catg , ni_item) output INSERTED.ni_idnt VALUES (@type, @catg ,@item ) END");
+            normsView.Item.Id = conn.SqlServerUpdate("DECLARE @type INT = " + normsView.Item.Type.Id + ", @catg INT= " + normsView.Item.Category.Id + " ,@item nvarchar(100)= '" + normsView.Item.Name + "' ;  BEGIN INSERT INTO NormsItems(ni_type, ni_catg , ni_item) output INSERTED.ni_idnt VALUES (@type, @catg ,@item ) END");
            
-            return normsItems;
+            return normsView;
         }
 
       

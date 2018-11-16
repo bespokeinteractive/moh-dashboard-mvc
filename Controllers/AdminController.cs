@@ -63,8 +63,8 @@ namespace hrhdashboard.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostNormItems(AdminViewModel model, UserServices svc) {
-            Admin.NormsItems.Save();          
+        public IActionResult PostNormItems(AdminViewModel model) {
+            Admin.NormsView.Save();         
             return LocalRedirect("/administrator");
         }
 
@@ -73,13 +73,28 @@ namespace hrhdashboard.Controllers
             return Json(constituency);
          }
 
-        [Route("/administrator/norms/add")]
-        public IActionResult NormsAdd()
-        {
+        //[Route("/administrator/norms/add")]
+        //public IActionResult NormsAdd()
+        //{
 
-           return View();
+        //   return View();
+        //}
+
+        [Route("/administrator/norms")]
+        public IActionResult NormsItemsView(FacilityService service , NormsView model, int type)
+        {
+            List<NormsView> norms = new List<NormsView>(service.GetNormsViews(new NormsType(type)));
+            return View(norms);
         }
 
+        [Route("/administrator/norms/edit/{idnt}")]
+        public IActionResult NormsAdd(int idnt, AdminViewModel model, FacilityService service)
+        {
+            model.NormsView = service.GetNormsViews(idnt);
+            model.Types = service.GetNormsTypesIEnumerable();
+            model.Categories = service.GetNormsCategoryIEnumerable();
+            return View(model);
+        }
 
 
     }

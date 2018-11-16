@@ -1,0 +1,234 @@
+﻿@model System.Collections.Generic.List<hrhdashboard.Models.NormsView>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<script src="~/lib/data-tables/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    jq(function () {
+        
+        jq('#queue-table td').on('click', 'i.blue-text', function () {
+            window.location.href = "/administrator/norms/edit/" + jq(this).data('idnt');
+        });
+       
+    });
+</script>
+
+<style>
+ 
+    #queue-table_length {
+        display: none;
+    }
+
+    #queue-table_filter {
+        text-align: left;
+        margin-top: 10px;
+    }
+
+        #queue-table_filter i {
+            cursor: pointer;
+            margin: 13px 30px 0;
+            float: right;
+        }
+
+        #queue-table_filter label input {
+            padding: 0px;
+            height: 1.9rem;
+            margin: 0;
+        }
+
+    #queue-table,
+    #queue-table th,
+    #queue-table td {
+        border-radius: 0px;
+        padding: 0px;
+        /* display: table-cell; */
+        text-align: left;
+        vertical-align: middle;
+        border-radius: 2px;
+    }
+
+        #queue-table tbody tr {
+            cursor: pointer;
+        }
+
+    #queue-title {
+        display: inline-block;
+        margin-bottom: -60px;
+        float: left;
+        margin-top: 15px;
+    }
+
+    i.medium {
+        font-size: 2.5rem;
+        z-index: 1000;
+    }
+</style>
+
+
+<nav class="navbar nav-extended">
+    <div class="nav-content">
+        <ul class="tabs">
+            <li class="tab tab1"><a href="#checklist">Minimum Standards</a></li>
+            <li class="tab tab2"><a href="#humanresources">Human Resource</a></li>
+            <li class="tab tab3"><a href="#infrastructure">Infrastructure</a></li>
+        </ul>
+    </div>
+    <div id="checklist" class="col s12">
+        <table id="queue-table" class="responsive-table display stripped" cellspacing="0">
+            <thead class="who-color white-text">
+                <tr>
+                    <th>#</th>
+                    <th>NAME</th>
+                    <th>TYPE</th>
+                    <th style="padding-left: 12px;">CATEGORY</th>
+                    <th>Level 1</th>
+                    <th>Level 2</th>
+                    <th>Level 3</th>
+                    <th>Level 4</th>
+                    <th>Level 5</th>
+                    <th>Level 6</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                    <tr>
+                        <td></td>
+                        <td><a class="who-color-text" href="/administrator/users/d"></a></td>
+                        
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            @*<i class="material-icons blue-text" data-idnt="">border_color</i>
+                            <i class="material-icons red-text">delete_forever</i>*@
+                        </td>
+                   </tr>              
+            </tbody>
+        </table>
+    </div>
+    <div id="humanresources" class="body">      
+            <table id="queue-table" class="responsive-table display stripped" cellspacing="0">
+                <thead class="who-color white-text">
+                    <tr>
+                    
+                        <th style="text-align:center">NAME</th>
+                        <th>CATEGORY</th>
+                        <th>Level 1</th>
+                        <th>Level 2</th>
+                        <th>Level 3</th>
+                        <th>Level 4</th>
+                        <th>Level 5</th>
+                        <th>Level 6</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var norms in Model)
+                    {
+                    <tr>                       
+                        <td><a class="who-color-text" href="/administrator/users/@norms.Item.Id">@norms.Item.Name</a></td>
+                        <td>@norms.Item.Category.Name</td>                        
+                        <td>@norms.L1Norm</td>
+                        <td>@norms.L2Norm</td>
+                        <td>@norms.L3Norm</td>
+                        <td>@norms.L4Norm</td>
+                        <td>@norms.L5Norm</td>
+                        <td>@norms.L6Norm</td>
+                        <td>
+                            <i class="material-icons blue-text" data-idnt="@norms.Item.Id">border_color</i>
+                            <i class="material-icons red-text">delete_forever</i>
+                        </td>
+                    </tr>
+                    }
+                    </tbody>
+            </table>
+        </div> 
+    <div id="infrastructure" class="body">
+        <table id="queue-table" class="responsive-table display stripped" cellspacing="0">
+            <thead class="who-color white-text">
+                <tr>
+
+                    <th style="text-align:center">NAME</th>
+                    <th>CATEGORY</th>
+                    <th>Level 1</th>
+                    <th>Level 2</th>
+                    <th>Level 3</th>
+                    <th>Level 4</th>
+                    <th>Level 5</th>
+                    <th>Level 6</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var norms in Model)
+                {
+                    <tr>
+                        <td><a class="who-color-text" href="/administrator/users/@norms.Item.Id">@norms.Item.Name</a></td>
+                        <td>@norms.Item.Category.Name</td>
+                        <td>@norms.L1Norm</td>
+                        <td>@norms.L2Norm</td>
+                        <td>@norms.L3Norm</td>
+                        <td>@norms.L4Norm</td>
+                        <td>@norms.L5Norm</td>
+                        <td>@norms.L6Norm</td>
+                        <td>
+                            <i class="material-icons blue-text" data-idnt="@norms.Item.Id">border_color</i>
+                            <i class="material-icons red-text">delete_forever</i>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</nav>
+<div id="add-assets" class="modal modal-fixed-footer" style="width: 600px">
+    <div class="modal-content">
+        <h4> ADD USERS</h4>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-red btn-flat ">Disagree</a>
+        <a class="waves-effect modal-close waves-green btn-flat " id="agree-btn">Agree</a>
+    </div>
+</div>

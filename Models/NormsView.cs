@@ -1,4 +1,7 @@
-﻿using System;
+﻿using hrhdashboard.Services;
+using System;
+using System.Collections.Generic;
+
 namespace hrhdashboard.Models
 {
     public class NormsView
@@ -11,6 +14,7 @@ namespace hrhdashboard.Models
         public int L5Norm { get; set; }
         public int L6Norm { get; set; }
 
+
         public NormsView() {
             Item = new NormsItems();
 
@@ -20,6 +24,11 @@ namespace hrhdashboard.Models
             L4Norm = 0;
             L5Norm = 0;
             L6Norm = 0;
+
         }
+        public NormsView Save()
+        {
+            return new FacilityService().SaveNormItems(this);
+        }       
     }
 }

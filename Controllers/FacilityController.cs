@@ -122,9 +122,5 @@ namespace hrhdashboard.Controllers
 
             return LocalRedirect("/assessment/facility/" + Input.Selected.Code + "#infrastructure");
         }
-
-
-        
-
     }
 }

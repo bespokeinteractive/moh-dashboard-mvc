@@ -20,7 +20,9 @@ namespace hrhdashboard.ViewModel
 
         public Users Users { get; set; }
 
- 
+        public NormsView NormsView { get; set; }
+
+
         public AdminViewModel()
         {
             NormsItems = new NormsItems();
@@ -32,6 +34,7 @@ namespace hrhdashboard.ViewModel
             Constituencies = new List<SelectListItem>();
 
             Users = new Users();
+            NormsView = new NormsView();
          
 
         }
