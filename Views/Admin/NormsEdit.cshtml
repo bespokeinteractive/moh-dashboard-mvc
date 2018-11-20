@@ -1,0 +1,175 @@
+﻿@model hrhdashboard.ViewModel.AdminViewModel;
+
+@{
+    ViewData["Title"] = "Edit Norm";
+}
+
+<style>
+    .collection .collection-item.avatar {
+        min-height: 0;
+        line-height: 0;
+    }
+</style>
+<script>
+jq(function() {
+        jq('a.btn').click(function() {
+            jq('form').submit();
+        });
+
+        jq('input.filled-in').click(function(){
+            var value = 0;
+
+            if (jq(this).is(':checked')) {
+                value = 1;
+            }
+
+            jq(this).closest('div').find('input[type=hidden]').val(value);
+        });
+});</script>
+<div>
+    @using (Html.BeginForm("PostNorms", "Admin", FormMethod.Post))
+    {
+    <ul style="background-color:white" id="projects-collection" class="collection z-depth-1">
+        <li class="collection-item avatar">
+            <i class="material-icons red accent-2 circle">Norm_add</i>
+            <h5 class="collection-header deep-orange-text">Norm Details</h5>
+            <span class="right"></span>
+        </li>
+        <li class="collection-item">
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">account_circle</i>
+                    @Html.TextBoxFor(model => model.NormsView.Item.Name)
+                    <label for="icon_prefix">Norm Item</label>
+                </div>
+
+                <div class="input-field col-md-6">
+                    <i class="material-icons prefix">question_answer</i>
+                    @Html.DropDownListFor(model => model.NormsView.Item.Type.Id, Model.Types, "Select Type")
+                    <label for="message">Type</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">email</i>
+                    @Html.DropDownListFor(model => model.NormsView.Item.Category.Id, Model.Categories, "Select Catgegory")
+                    <label for="icon_prefix">Norm Category</label>
+                </div>
+            </div>
+        </li>
+
+        <li class="collection-item">
+            <div class="row">
+                @if(Model.NormsView.Item.Type.Id != 3) {
+                    <div class="input-field col s4">
+                        <i class="material-icons prefix">account_circle</i>
+                        @Html.TextBoxFor(model => model.NormsView.L1Norm)
+                        <label for="icon_prefix">Level 1</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <i class="material-icons prefix">email</i>
+                        @Html.TextBoxFor(model => model.NormsView.L2Norm)
+                        <label for="icon_prefix">Level 2</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <i class="material-icons prefix">email</i>
+                        @Html.TextBoxFor(model => model.NormsView.L3Norm)
+                        <label for="icon_prefix">Level 3</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <i class="material-icons prefix">account_circle</i>
+                        @Html.TextBoxFor(model => model.NormsView.L4Norm)
+                        <label for="icon_prefix">Level 4</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <i class="material-icons prefix">email</i>
+                        @Html.TextBoxFor(model => model.NormsView.L5Norm)
+                        <label for="icon_prefix">Level 5</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <i class="material-icons prefix">email</i>
+                        @Html.TextBoxFor(model => model.NormsView.L6Norm)
+                        <label for="icon_prefix">Level 6</label>
+                    </div>
+                }
+                else {
+                    <div class="col s2">
+                        @if (Model.NormsView.L1Norm == 0) {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l1">
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l1" checked>
+                        }
+                        <label for="filled-in-box-l1">Level 1</label>
+                        @Html.HiddenFor(model => model.NormsView.L1Norm)
+                    </div>
+
+                    <div class="col s2">
+                        @if (Model.NormsView.L2Norm == 0) {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l2">
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l2" checked>
+                        }
+                        <label for="filled-in-box-l2">Level 2</label>
+                        @Html.HiddenFor(model => model.NormsView.L2Norm)
+                    </div>
+
+                    <div class="col s2">
+                        @if (Model.NormsView.L3Norm == 0) {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l3">
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l3" checked>
+                        }
+                        <label for="filled-in-box-l3">Level 3</label>
+                        @Html.HiddenFor(model => model.NormsView.L3Norm)
+                    </div>
+
+                    <div class="col s2">
+                        @if (Model.NormsView.L4Norm == 0) {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l4">
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l4" checked>
+                        }
+                        <label for="filled-in-box-l4">Level 4</label>
+                        @Html.HiddenFor(model => model.NormsView.L4Norm)
+                    </div>
+
+                    <div class="col s2">
+                        @if (Model.NormsView.L5Norm == 0) {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l5">
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l5" checked>
+                        }
+                        <label for="filled-in-box-l5">Level 5</label>
+                        @Html.HiddenFor(model => model.NormsView.L5Norm)
+                    </div>
+
+                    <div class="col s2">
+                        @if (Model.NormsView.L6Norm == 0) {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l6">
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l6" checked>
+                        }
+                        <label for="filled-in-box-l6">Level 6</label>
+                        @Html.HiddenFor(model => model.NormsView.L6Norm)
+                    </div>
+                }
+            </div>
+        </li>
+
+        <li class="collection-item">
+            <div style="margin: 0 0 45px 45px">
+                <a class="btn waves-effect waves-light gradient-45deg-purple-deep-orange">Save</a>
+            </div>
+        </li>
+    </ul>
+    @Html.HiddenFor(model => model.NormsView.Item.Id)
+    }
+</div>

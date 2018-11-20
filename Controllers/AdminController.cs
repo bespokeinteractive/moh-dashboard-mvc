@@ -13,8 +13,10 @@ namespace hrhdashboard.Controllers
     public class AdminController : Controller
     {
         [BindProperty]
-        public UsersAddViewModel Input { get; set; }
-        public AdminViewModel Admin { get; set; }
+        public UsersAddViewModel UserInput { get; set; }
+
+        [BindProperty]
+        public AdminViewModel NormsImput { get; set; }
 
         [Route("/administrator")]
         public IActionResult AdminServices(AdminViewModel model, FacilityService service, UserServices user , CountyService dashboard)
@@ -56,41 +58,37 @@ namespace hrhdashboard.Controllers
         [HttpPost]
         public IActionResult PostUsers(UsersAddViewModel model, UserServices svc , CrytoUtilsExtensions Cryto)
         {
-            Input.user.Password = Cryto.Encrypt(Input.user.Password);
-            Input.user.Save();
+            UserInput.user.Password = Cryto.Encrypt(UserInput.user.Password);
+            UserInput.user.Save();
            
-           return LocalRedirect("/administrator");
+           return LocalRedirect("/administrator/users");
         }
 
         [HttpPost]
-        public IActionResult PostNormItems(AdminViewModel model) {
-            Admin.NormsView.Save();         
-            return LocalRedirect("/administrator");
+        public IActionResult PostNorms(AdminViewModel model) {
+            NormsImput.NormsView.Save();         
+            return LocalRedirect("/administrator/norms");
         }
 
         public JsonResult GetConstituency(int idnt, CountyService service) {
             List<SelectListItem> constituency = new List<SelectListItem>(service.GetConstituencyIEnumarable(new County(idnt)));
             return Json(constituency);
-         }
-
-        //[Route("/administrator/norms/add")]
-        //public IActionResult NormsAdd()
-        //{
-
-        //   return View();
-        //}
+        }
 
         [Route("/administrator/norms")]
-        public IActionResult NormsItemsView(FacilityService service , NormsView model, int type)
+        public IActionResult Norms(FacilityService service , AdminNormsViewModel model)
         {
-            List<NormsView> norms = new List<NormsView>(service.GetNormsViews(new NormsType(type)));
-            return View(norms);
+            model.HumanResources = new List<NormsView>(service.GetNormsViews(new NormsType(1)));
+            model.Infrastructure = new List<NormsView>(service.GetNormsViews(new NormsType(2)));
+            model.FacilityChecks = new List<NormsView>(service.GetNormsViews(new NormsType(3)));
+
+            return View(model);
         }
 
         [Route("/administrator/norms/edit/{idnt}")]
-        public IActionResult NormsAdd(int idnt, AdminViewModel model, FacilityService service)
+        public IActionResult NormsEdit(int idnt, AdminViewModel model, FacilityService service)
         {
-            model.NormsView = service.GetNormsViews(idnt);
+            model.NormsView = service.GetNormsViewsItem(idnt);
             model.Types = service.GetNormsTypesIEnumerable();
             model.Categories = service.GetNormsCategoryIEnumerable();
             return View(model);

@@ -18,6 +18,10 @@ namespace hrhdashboard.Models
             Type = new NormsType();
             Category = new NormsCategory();
         }
+
+        public NormsItems(Int64 idnt) : this() {
+            Id = idnt;
+        }
        
     }
 }

@@ -369,11 +369,10 @@ namespace hrhdashboard.Services
         public List<NormsView> GetNormsViews(NormsType type) {
             List<NormsView> views = new List<NormsView>();
 
-            //string AdditionalQuery = "";
-            //if (type.Id > 0) {
-            //    AdditionalQuery = "WHERE ni_type=" + type.Id;
-            //}
-            string AdditionalQuery = "WHERE ni_type=" + 2;
+            string AdditionalQuery = "";
+            if (type.Id > 0) {
+                AdditionalQuery = "WHERE ni_type=" + type.Id;
+            }
 
             SqlServerConnection conn = new SqlServerConnection();
             SqlDataReader dr = conn.SqlServerConnect("SELECT ni_idnt, ni_item, ni_catg, ni_category, ni_type, ni_types, L1, L2, L3, L4, L5, L6 FROM vNormsLevels " + AdditionalQuery + " ORDER BY ni_type, ni_catg, ni_idnt");
@@ -403,36 +402,29 @@ namespace hrhdashboard.Services
             return views;
         }
 
-        public NormsView GetNormsViews(int idnt)
-        {
-            NormsView normsView = new NormsView();
-
-            //string AdditionalQuery = "";
-            //if (type.Id > 0) {
-            //    AdditionalQuery = "WHERE ni_type=" + type.Id;
-            //}
-            string AdditionalQuery = "WHERE ni_type =" + 2;
-
+        public NormsView GetNormsViewsItem(int idnt) {
+            NormsView view = null;
 
             SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT ni_idnt, ni_item, ni_catg, ni_category, ni_type, ni_types, L1, L2, L3, L4, L5, L6 FROM vNormsLevels " + AdditionalQuery + " AND ni_idnt = " + idnt + " ORDER BY ni_type, ni_catg, ni_idnt");
-            if (dr.Read())
-            {
-                
-                {
-                    normsView.Item.Id = Convert.ToInt64(dr[0]);
-                    normsView.Item.Name = dr[1].ToString();
-                    normsView.Item.Category.Name = dr[3].ToString();
-                    normsView.L1Norm = Convert.ToInt16(dr[6]);
-                    normsView.L2Norm = Convert.ToInt16(dr[7]);
-                    normsView.L3Norm = Convert.ToInt16(dr[8]);
-                    normsView.L4Norm = Convert.ToInt16(dr[9]);
-                    normsView.L5Norm = Convert.ToInt16(dr[10]);
-                    normsView.L6Norm = Convert.ToInt16(dr[11]);
-                }
-        }
+            SqlDataReader dr = conn.SqlServerConnect("SELECT ni_idnt, ni_item, ni_catg, ni_category, ni_type, ni_types, L1, L2, L3, L4, L5, L6 FROM vNormsLevels WHERE ni_idnt=" + idnt);
+            if (dr.Read()){
+                view = new NormsView();
 
-            return normsView;
+                view.Item.Id = Convert.ToInt16(dr[0]);
+                view.Item.Name = dr[1].ToString();
+                view.Item.Category.Id = Convert.ToInt16(dr[2]);
+                view.Item.Category.Name = dr[3].ToString();
+                view.Item.Type.Id = Convert.ToInt16(dr[4]);
+                view.Item.Type.Name = dr[5].ToString();
+                view.L1Norm = Convert.ToInt16(dr[6]);
+                view.L2Norm = Convert.ToInt16(dr[7]);
+                view.L3Norm = Convert.ToInt16(dr[8]);
+                view.L4Norm = Convert.ToInt16(dr[9]);
+                view.L5Norm = Convert.ToInt16(dr[10]);
+                view.L6Norm = Convert.ToInt16(dr[11]);
+            }
+
+            return view;
         }
 
 
@@ -484,13 +476,46 @@ namespace hrhdashboard.Services
             }
             return categories;
         }
-
-        public NormsView SaveNormItems(NormsView normsView)
-        {
+        
+        public NormsView SaveNormItems(NormsView view) {
             SqlServerConnection conn = new SqlServerConnection();
-            normsView.Item.Id = conn.SqlServerUpdate("DECLARE @type INT = " + normsView.Item.Type.Id + ", @catg INT= " + normsView.Item.Category.Id + " ,@item nvarchar(100)= '" + normsView.Item.Name + "' ;  BEGIN INSERT INTO NormsItems(ni_type, ni_catg , ni_item) output INSERTED.ni_idnt VALUES (@type, @catg ,@item ) END");
+            view.Item.Id = conn.SqlServerUpdate("DECLARE @idnt INT=" + view.Item.Id + ", @type INT=" + view.Item.Type.Id + ", @catg INT= " + view.Item.Category.Id + " , @name NVARCHAR(100)='" + view.Item.Name + "'; IF NOT EXISTS(SELECT ni_idnt FROM NormsItems WHERE ni_idnt=@idnt) BEGIN INSERT INTO NormsItems(ni_type, ni_catg, ni_item) output INSERTED.ni_idnt VALUES (@type, @catg, @name) END ELSE BEGIN UPDATE NormsItems SET ni_type=@type, ni_catg=@catg, ni_item=@name output INSERTED.ni_idnt WHERE ni_idnt=@idnt END");
            
-            return normsView;
+            conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT fctg_idnt, fctg_level FROM FacilityCategory");
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    NormsTiers tier = new NormsTiers();
+                    tier.Item = new NormsItems(view.Item.Id);
+                    tier.Category = new FacilityCategory(Convert.ToInt64(dr[0]));
+
+                    if (Convert.ToInt64(dr[1]) == 1)
+                        tier.Value = view.L1Norm;
+                    else if (Convert.ToInt64(dr[1]) == 2)
+                        tier.Value = view.L2Norm;
+                    else if (Convert.ToInt64(dr[1]) == 3)
+                        tier.Value = view.L3Norm;
+                    else if (Convert.ToInt64(dr[1]) == 4)
+                        tier.Value = view.L4Norm;
+                    else if (Convert.ToInt64(dr[1]) == 5)
+                        tier.Value = view.L5Norm;
+                    else if (Convert.ToInt64(dr[1]) == 6)
+                        tier.Value = view.L6Norm;
+
+                    tier.Save();
+                }
+            }
+
+            return view;
+        }
+
+        public NormsTiers SaveNormsTiers(NormsTiers tier){
+            SqlServerConnection conn = new SqlServerConnection();
+            tier.Id = conn.SqlServerUpdate("DECLARE @item INT=" + tier.Item.Id + ", @catg INT= " + tier.Category.Id + " , @value INT=" + tier.Value + "; IF NOT EXISTS(SELECT nt_idnt FROM NormsTiers WHERE nt_item=@item AND nt_tctg=@catg) BEGIN INSERT INTO NormsTiers(nt_item, nt_tctg, nt_norm) output INSERTED.nt_idnt VALUES (@item, @catg, @value) END ELSE BEGIN UPDATE NormsTiers SET nt_item=@item, nt_tctg=@catg, nt_norm=@value output INSERTED.nt_idnt WHERE nt_item=@item AND nt_tctg=@catg END");
+
+            return tier;
         }
 
       
