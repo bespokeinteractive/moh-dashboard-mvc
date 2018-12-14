@@ -94,6 +94,13 @@ namespace hrhdashboard.Controllers
             return View(model);
         }
 
+        [Route("/administrator/norms/add")]
+        public IActionResult NormsAdd( AdminViewModel model, FacilityService service)
+        {        
+            model.Types = service.GetNormsTypesIEnumerable();
+            model.Categories = service.GetNormsCategoryIEnumerable();
+            return View(model);
+        }
 
     }
 }
