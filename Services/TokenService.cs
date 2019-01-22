@@ -21,9 +21,9 @@ namespace hrhdashboard.Services
     {
         public string GetToken()
         {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://api.kmhfltest.health.go.ke/o/token/");
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://41.89.93.183:8080/o/token/");
 
-            string passw = "grant_type=password&username=10004&password=public&client_id=xMddOofHI0jOKboVxdoKAXWKpkEQAP0TuloGpfj5&client_secret=PHrUzCRFm9558DGa6Fh1hEvSCh3C9Lijfq8sbCMZhZqmANYV5ZP04mUXGJdsrZLXuZG4VCmvjShdKHwU6IRmPQld5LDzvJoguEP8AAXGJhrqfLnmtFXU3x2FO1nWLxUx";
+            string passw = "grant_type=password&username=10004&password=public&client_id=zzAmdUPF6MLcbLdbSkdv1MkRgYD9vuG8B8Bv4lIq&client_secret=JdxZDwF1NlLxxDyTkRIUT6az2YQ1olm4wN8y856CkpntiiRP2XqLPueDpUR3OZvPDxdiyZ4P2lNajoJLdGpS8ZmwGYNOx65qK3jXCndjbbfBZF8Uu0eDTOB4adkJQCnr";
             byte[] bytes = new ASCIIEncoding().GetBytes(passw);
             httpWebRequest.Method = "POST";
             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
@@ -37,7 +37,7 @@ namespace hrhdashboard.Services
 
             return token.access_token;// rootObject.access_token;
         }
-        private RestClient RestCliente = new RestClient("http://api.kmhfltest.health.go.ke");
+        private RestClient RestCliente = new RestClient("http://41.89.93.183:8080/api/");
 
         private CookieContainer SessionCookie = new CookieContainer();
 
@@ -62,7 +62,7 @@ namespace hrhdashboard.Services
         }
         private void InfoRequest()
         {
-            RestRequest infoneeded = new RestRequest("http://api.kmhfltest.health.go.ke/api/gis/drilldown/county/8?format=json", Method.GET);
+            RestRequest infoneeded = new RestRequest("http://41.89.93.183:8080/api/gis/drilldown/county/8?format=json", Method.GET);
 
             IRestResponse response = RestCliente.Execute(infoneeded);
 
