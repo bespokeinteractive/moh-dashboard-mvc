@@ -212,7 +212,7 @@ namespace hrhdashboard.Services
         }
 
         public FacilityOwner GetFacilityOwner(Facility facility) {
-            FacilityOwner owner = null;
+            FacilityOwner owner = new FacilityOwner();
 
             SqlServerConnection conn = new SqlServerConnection();
             SqlDataReader dr = conn.SqlServerConnect("SELECT fo_idnt, fo_type, fo_name, fo_image FROM facilityOwner WHERE fo_name='" + facility.Owner + "'");

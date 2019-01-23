@@ -16,6 +16,8 @@ namespace hrhdashboard.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly string _url = "http://41.89.93.183:8080";
+
         public IActionResult Index(HomeIndexViewModel model, CountyService service)
         {
             model.Markers = service.GetMarkers();
@@ -60,7 +62,7 @@ namespace hrhdashboard.Controllers
                 client.Headers.Clear();
                 client.Headers.Add("Content-Type", "application/json");
                 client.Headers.Add("Authorization", "Bearer " + new Utils().GetToken());
-                var response = client.DownloadString("http://41.89.93.183:8080/api/facilities/contacts/?format=json&fields=contact_type,actual_contact&facility=" + model.facility.GUID);
+                var response = client.DownloadString(_url + "/api/facilities/contacts/?format=json&fields=contact_type,actual_contact&facility=" + model.facility.GUID);
 
                 model.contacts = JsonConvert.DeserializeObject<KmhflContactsObject>(response);
             }
@@ -88,7 +90,7 @@ namespace hrhdashboard.Controllers
                 client.Headers.Clear();
                 client.Headers.Add("Content-Type", "application/json");
                 client.Headers.Add("Authorization", "Bearer " + new Utils().GetToken());
-                var response = client.DownloadString("http://41.89.93.183:8080/api/facilities/facilities/?format=json&fields=code,name,facility_type_name,keph_level_name,operation_status_name,county,constituency,ward_name,owner_name,lat_long" + additionalCommand);
+                var response = client.DownloadString(_url + "/api/facilities/facilities/?format=json&fields=code,name,facility_type_name,keph_level_name,operation_status_name,county,constituency,ward_name,owner_name,lat_long" + additionalCommand);
 
                 var data = JsonConvert.DeserializeObject<KmhflFacilitiesObject>(response);
                 return View(data);

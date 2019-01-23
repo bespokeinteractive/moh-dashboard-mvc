@@ -5,7 +5,7 @@ namespace hrhdashboard.Extensions
 {
     public class SqlServerConnection
     {
-        private static String sConn = "Data Source=localhost;Initial Catalog=hrh;User ID=davie;Password=michael844;Max Pool Size=200;";
+        private static readonly String sConn = "Data Source=192.168.43.184;Initial Catalog=hrh;User ID=davie;Password=michael844;Max Pool Size=200;";
         private readonly SqlConnection conn = new SqlConnection(sConn);
         private SqlCommand comm = new SqlCommand();
 
@@ -23,8 +23,7 @@ namespace hrhdashboard.Extensions
             }
         }
 
-        public Int64 SqlServerUpdate(string SqlString)
-        {
+        public Int64 SqlServerUpdate(string SqlString) {
             try {
                 SqlCommand command = new SqlCommand(SqlString, conn);
                 command.Connection.Open();
