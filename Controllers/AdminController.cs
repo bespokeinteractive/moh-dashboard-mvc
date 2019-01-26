@@ -19,8 +19,7 @@ namespace hrhdashboard.Controllers
         public AdminViewModel NormsImput { get; set; }
 
         [Route("/administrator")]
-        public IActionResult AdminServices(AdminViewModel model, FacilityService service, UserServices user , CountyService dashboard)
-        {
+        public IActionResult Index(AdminViewModel model, FacilityService service, UserServices user , CountyService dashboard) {
             model.Types = service.GetNormsTypesIEnumerable();
             model.Categories = service.GetNormsCategoryIEnumerable();
             model.Role = user.GetRolesIEnumarable();
@@ -55,24 +54,9 @@ namespace hrhdashboard.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult PostUsers(UsersAddViewModel model, UserServices svc , CrytoUtilsExtensions Cryto)
-        {
-            UserInput.user.Password = Cryto.Encrypt(UserInput.user.Password);
-            UserInput.user.Save();
-           
-           return LocalRedirect("/administrator/users");
-        }
-
-        [HttpPost]
-        public IActionResult PostNorms(AdminViewModel model) {
-            NormsImput.NormsView.Save();         
-            return LocalRedirect("/administrator/norms");
-        }
-
-        public JsonResult GetConstituency(int idnt, CountyService service) {
-            List<SelectListItem> constituency = new List<SelectListItem>(service.GetConstituencyIEnumarable(new County(idnt)));
-            return Json(constituency);
+        [Route("/administrator/users/roles")]
+        public IActionResult UsersRoles() {
+            return View();
         }
 
         [Route("/administrator/norms")]
@@ -83,6 +67,12 @@ namespace hrhdashboard.Controllers
             model.FacilityChecks = new List<NormsView>(service.GetNormsViews(new NormsType(3)));
 
             return View(model);
+        }
+
+        [Route("/administrator/norms/categories")]
+        public IActionResult NormsCategories(FacilityService service)
+        {
+            return View(service.GetNormsCategories());
         }
 
         [Route("/administrator/norms/edit/{idnt}")]
@@ -100,6 +90,27 @@ namespace hrhdashboard.Controllers
             model.Types = service.GetNormsTypesIEnumerable();
             model.Categories = service.GetNormsCategoryIEnumerable();
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult PostNorms(AdminViewModel model)
+        {
+            NormsImput.NormsView.Save();
+            return LocalRedirect("/administrator/norms");
+        }
+
+        [HttpPost]
+        public IActionResult PostUsers(UsersAddViewModel model, UserServices svc, CrytoUtilsExtensions Cryto)
+        {
+            UserInput.user.Password = Cryto.Encrypt(UserInput.user.Password);
+            UserInput.user.Save();
+
+            return LocalRedirect("/administrator/users");
+        }
+
+        public JsonResult GetConstituency(int idnt, CountyService service) {
+            List<SelectListItem> constituency = new List<SelectListItem>(service.GetConstituencyIEnumarable(new County(idnt)));
+            return Json(constituency);
         }
 
     }

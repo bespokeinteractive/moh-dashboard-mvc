@@ -12,6 +12,27 @@ namespace hrhdashboard.Services
     [Authorize]
     public class FacilityService
     {
+        public List<SelectListItem> GetIEnumerable(string query) {
+            List<SelectListItem> enumarables = new List<SelectListItem>();
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect(query);
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    SelectListItem option = new SelectListItem
+                    {
+                        Value = dr[0].ToString(),
+                        Text = dr[1].ToString()
+                    };
+
+                    enumarables.Add(option);
+                }
+            }
+
+            return enumarables;
+        }
+
         public Facility GetFacility(String code) {
             Facility facility = new Facility();
 
@@ -427,6 +448,36 @@ namespace hrhdashboard.Services
             return view;
         }
 
+        public List<NormsCategory> GetNormsCategories() {
+            List<NormsCategory> categories = new List<NormsCategory>();
+
+            SqlServerConnection conn = new SqlServerConnection();
+            SqlDataReader dr = conn.SqlServerConnect("SELECT nc_idnt, nc_category, nc_humanresource, nc_infrastructure, nc_notes, nc_added_by, nc_added_on FROM NormsCategory ORDER BY nc_category");
+            if (dr.HasRows) {
+                while (dr.Read()) {
+                    categories.Add(new NormsCategory {
+                        Id = Convert.ToInt64(dr[0]),
+                        Name = dr[1].ToString(),
+                        HumanResources = Convert.ToInt32(dr[2]),
+                        Infrastructure = Convert.ToInt32(dr[3]),
+                        Description = dr[4].ToString(),
+                        AddedBy = new Users(Convert.ToInt64(dr[5])),
+                        AddedOn = Convert.ToDateTime(dr[6]),
+                    });
+                }
+            }
+
+            return categories;
+        }
+
+        public List<SelectListItem> GetNormsTypesIEnumerable() {
+            return GetIEnumerable("SELECT ntp_idnt, ntp_type FROM NormsTypes ORDER BY ntp_type");
+        }
+
+        public List<SelectListItem> GetNormsCategoryIEnumerable() {
+            return GetIEnumerable("select nc_idnt, nc_category from NormsCategory ORDER BY nc_category");
+        }
+
 
         /*DataWriters*/
         public Norms SaveNorms(Norms norm) {
@@ -434,47 +485,6 @@ namespace hrhdashboard.Services
             norm.Id = conn.SqlServerUpdate("DECLARE @fac INT=" + norm.Facility.Id + " , @norm INT=" + norm.Item.Id + ", @val INT=" + norm.Value + ", @fem INT=" + norm.Female + ", @mal INT=" + norm.Male + ", @dis INT=" + norm.Disabled + "; IF NOT EXISTS (SELECT nr_idnt FROM Norms WHERE nr_facility=@fac AND nr_norm=@norm) BEGIN INSERT INTO Norms(nr_facility, nr_norm, nr_available, nr_female, nr_male, nr_disabled) output INSERTED.nr_idnt VALUES (@fac, @norm, @val, @fem, @mal, @dis) END ELSE BEGIN UPDATE Norms SET nr_available=@val, nr_female=@fem, nr_male=@mal, nr_disabled=@dis output INSERTED.nr_idnt WHERE nr_facility=@fac AND nr_norm=@norm END");
 
             return norm;
-        }
-
-        public List<SelectListItem> GetNormsTypesIEnumerable()
-        {
-            List<SelectListItem> types = new List<SelectListItem>();
-
-            SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("SELECT ntp_idnt, ntp_type FROM NormsTypes");
-            if (dr.HasRows)
-            {
-                while (dr.Read())
-                {
-                    SelectListItem type = new SelectListItem();
-                    type.Value = dr[0].ToString();
-                    type.Text = dr[1].ToString();
-
-                    types.Add(type);
-                }
-            }
-
-            return types;
-        }
-
-        public List<SelectListItem> GetNormsCategoryIEnumerable()
-        {
-            List<SelectListItem> categories = new List<SelectListItem>();
-            SqlServerConnection conn = new SqlServerConnection();
-            SqlDataReader dr = conn.SqlServerConnect("select nc_idnt, nc_category from NormsCategory");
-
-            if (dr.HasRows)
-            {
-                while (dr.Read())
-                {
-                    SelectListItem category = new SelectListItem();
-                    category.Value = dr[0].ToString();
-                    category.Text = dr[1].ToString();
-
-                    categories.Add(category);
-                }
-            }
-            return categories;
         }
         
         public NormsView SaveNormItems(NormsView view) {

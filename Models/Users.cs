@@ -16,8 +16,7 @@ namespace hrhdashboard.Models
         public string Message { get; set; }
         public  Roles Role { get; set; }
 
-        public Users()
-        {
+        public Users() {
             Id = 0;
             Name = "";
             Email = "";
@@ -30,6 +29,10 @@ namespace hrhdashboard.Models
             Message = "";
 
             Role = new Roles();
+        }
+
+        public Users(long idnt) : this() {
+            Id = idnt;
         }
 
         public Users Save() {

@@ -5,7 +5,7 @@ namespace hrhdashboard.Extensions
 {
     public class SqlServerConnection
     {
-        private static readonly String sConn = "Data Source=192.168.43.184;Initial Catalog=hrh;User ID=davie;Password=michael844;Max Pool Size=200;";
+        private static readonly String sConn = "Data Source=192.168.0.100;Initial Catalog=hrh;User ID=davie;Password=michael844;Max Pool Size=200;";
         private readonly SqlConnection conn = new SqlConnection(sConn);
         private SqlCommand comm = new SqlCommand();
 

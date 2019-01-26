@@ -23,6 +23,9 @@
     a.btn.waves-effect.waves-light {
         margin: 0px 55px 55px;
     }
+    li.collection-item.no-border {
+        border-bottom: 0px none;
+    }
 </style>
 
 <script>
@@ -82,79 +85,14 @@
 </script>
 
 <div class="row" style="margin-top: 10px">
-    <div class="col-md-12">
+    <div class="col-md-12 zero-margin">
         <div id="flight-card" class="card">
             <div class="card-header deep-orange accent-2">
                 <div class="card-title">
                     <h4 class="flight-card-title"></h4>
                     <p class="flight-card-date">
-                        <span class="task-cat cyan"> Admin Page </span>
-
+                        <span class="white-text"> Admin Page </span>
                     </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="card-stats" style="display:none">
-        <div class="row">
-            <div class="col s12 m6 l3">
-                <div class="card gradient-45deg-light-blue-cyan gradient-shadow min-height-100 white-text">
-                    <div class="padding-4">
-                        <div class="col s7 m7">
-                            <i class="material-icons background-round mt-5">timeline</i>
-                            <p>Minimums Norms</p>
-                        </div>
-                        <div class="col s5 m5 right-align">
-                            <h5 class="mb-0">690</h5>
-                            <p class="no-margin">Total</p>
-                            <p>6,00,00</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m6 l3">
-                <div class="card gradient-45deg-red-pink gradient-shadow min-height-100 white-text">
-                    <div class="padding-4">
-                        <div class="col s7 m7">
-                            <i class="material-icons background-round mt-5">perm_identity</i>
-                            <p>Human Resource</p>
-                        </div>
-                        <div class="col s5 m5 right-align">
-                            <h5 class="mb-0">1885</h5>
-                            <p class="no-margin">Total</p>
-                            <p>1,12,900</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m6 l3">
-                <div class="card gradient-45deg-amber-amber gradient-shadow min-height-100 white-text">
-                    <div class="padding-4">
-                        <div class="col s7 m7">
-                            <i class="material-icons background-round mt-5">timeline</i>
-                            <p>Infrastructure</p>
-                        </div>
-                        <div class="col s5 m5 right-align">
-                            <h5 class="mb-0">80%</h5>
-                            <p class="no-margin">Total</p>
-                            <p>3,42,230</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m6 l3">
-                <div class="card gradient-45deg-green-teal gradient-shadow min-height-100 white-text">
-                    <div class="padding-4">
-                        <div class="col s7 m7">
-                            <i class="material-icons background-round mt-5">attach_money</i>
-                            <p>Users</p>
-                        </div>
-                        <div class="col s5 m5 right-align">
-                            <h5 class="mb-0">$890</h5>
-                            <p class="no-margin">Total</p>
-                            <p>$25,000</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -170,16 +108,19 @@
                         <h4 class="task-card-title">User Manager</h4>
                         <p class="task-card-date">@DateTime.Now.ToString("MMM d, yyyy")</p>
                     </li>
-                    <li class="collection-item dismissable">
-                        <p>
-                            <i class="material-icons">perm_identity</i> <a href="/administrator/users">View Users</a>
-                        </p>
+                    <li class="collection-item no-border">
+                        <p><i class="material-icons left">perm_identity</i> <a href="/administrator/users">View Users</a></p>
+                    </li>
 
-                        <p>
-                            <i class="material-icons">person_add</i> <a href="/administrator/users/add">Add User</a>
-                        </p>
+                    <li class="collection-item">
+                        <p><i class="material-icons left">person_add</i> <a href="/administrator/users/add">Add User</a></p>
+                    </li>
+
+                    <li class="collection-item">
+                        <p><i class="material-icons left">assignment</i> <a href="/administrator/users/roles">Manage Roles</a></p>
                     </li>
                 </ul>
+                <div style="clear:both"></div>
             </div>
 
             <div class="col s12 m4 l4">
@@ -188,19 +129,23 @@
                         <h4 class="task-card-title">Minimums</h4>
                         <p class="task-card-date">Manage Norms &amp; Standards</p>
                     </li>
-                    <li class="collection-item dismissable">
-                        <p>
-                            <i class="material-icons"> assessment</i> <a href="/administrator/norms">View Norms </a>
-                        </p>
+                    <li class="collection-item no-border">
+                        <p><i class="material-icons left"> assessment</i> <a href="/administrator/norms">View Norms</a></p>
 
-                        <p>
-                            <i class="material-icons"> add</i> <a class="modal-trigger" href="/administrator/norms/add">Add Norms </a>
-                        </p>
+                    </li>
+
+                    <li class="collection-item">
+                        <p><i class="material-icons left"> add</i> <a class="modal-trigger" href="/administrator/norms/add">Add Norms</a></p>
+                    </li>
+
+                    <li class="collection-item">
+                        <p><i class="material-icons left">list</i> <a class="modal-trigger" href="/administrator/norms/categories">View Categories</a></p>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+
     @using (Html.BeginForm("PostUsers", "Admin", FormMethod.Post))
     {
         <div id="modal2" class="modal modal-fixed-footer">

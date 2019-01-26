@@ -1,0 +1,173 @@
+﻿@model System.Collections.Generic.List<hrhdashboard.Models.NormsCategory>
+
+@{
+    ViewData["Title"] = "Norms Categories";
+}
+
+<link rel="stylesheet" href="~/lib/data-tables/css/jquery.dataTables.min.css" />
+
+<script src="~/lib/data-tables/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    jq(function() {
+        jq('.modal').modal();
+
+        jq('#queue-table').DataTable({
+            "displayLength": 25,
+        });
+
+        jq('#queue-table_filter').on('click', 'i', function() {
+            window.location.href = "/administrator/users/add";
+        });
+
+        jq('#queue-table td').on('click', 'i.blue-text', function() {
+            window.location.href = "/administrator/users/edit/" + jq(this).data('idnt');
+        });
+
+        jq('<i class="material-icons medium blue-text">playlist_add</i>').insertBefore(jq("#queue-table_filter label"));
+        jq("#queue-table_filter label").addClass('right');
+    });
+</script>
+
+
+<style>
+    #queue-table_length {
+        display: none;
+    }
+    #queue-table_filter {
+        text-align: left;
+        margin-top: 10px;
+    }
+    #queue-table_filter i {
+        cursor: pointer;
+        margin: 13px 30px 0;
+        float: right;
+    }
+    #queue-table_filter label input {
+        padding: 0px;
+        height: 1.9rem;
+        margin: 0;
+    }
+    #queue-table,
+    #queue-table th,
+    #queue-table td {
+        border-radius: 0px;
+    }
+    #queue-table tbody tr {
+        cursor: pointer;
+    }
+    #queue-title {
+        display: inline-block;
+        margin-bottom: -60px;
+        float: left;
+        margin-top: 15px;
+    }
+    i.medium {
+        font-size: 2.5rem;
+        z-index: 1000;
+    }
+    td i.material-icons {
+        font-size: 24px;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 2px;
+    }
+    td {
+        padding: 5px;
+        line-height: 0px;
+    }
+    [type="checkbox"].filled-in:disabled:not(:checked) + label:after {
+        border-color: #2196F3;
+        background-color: transparent;
+    }
+    [type="checkbox"].filled-in:disabled:checked + label:after {
+        background-color: #2196F3;
+        border-color: #2196F3;
+    }
+    [type="checkbox"] + label {
+        height: 11px;
+    }
+    table td:first-child {
+        padding-left: 25px;
+        text-align: left;
+    }
+    [type="checkbox"].filled-in:checked + label:before {
+        width: 4px;
+        height: 10px;
+    }
+    [type="checkbox"].filled-in:checked + label:after {
+        width: 16px;
+        height: 16px;
+    }
+</style>
+
+
+<div class="col s12">
+    <div id="queue-title">
+        <h4 class="zero-margin deep-orange-text">NORMS CATEGORIES</h4>
+    </div>
+    <table id="queue-table" class="responsive-table display stripped bordered" cellspacing="0">
+        <thead class="who-color white-text">
+            <tr>
+                <th class="center-align">#</th>
+                <th>NAME</th>
+                <th>HUMANRESOURCE</th>
+                <th>INFRASTRUCTURE</th>
+                <th>DESCRIPTION</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Name</td>
+                    <td class="center-align">
+                        @if (user.HumanResources.Equals(1)){
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l1" checked disabled>
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l1" disabled>
+                        }
+                        <label for="filled-in-box-l1"></label>
+                    </td>
+                    <td class="center-align">
+                        @if (user.Infrastructure.Equals(1)){
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l1" checked disabled>
+                        }
+                        else {
+                            <input type="checkbox" class="filled-in" id="filled-in-box-l1" disabled>
+                        }
+                        <label for="filled-in-box-l1"></label>
+                    </td>
+                    <td>@user.Description</td>
+                    <td>
+                        <i class="material-icons blue-text" data-idnt="@user.Id">border_color</i>
+                        <i class="material-icons red-text">delete_forever</i>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="add-assets" class="modal modal-fixed-footer" style="width: 600px">
+    <div class="modal-content">
+        <h4> ADD USERS</h4>
+
+    </div>
+    <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-red btn-flat ">Disagree</a>
+        <a class="waves-effect modal-close waves-green btn-flat " id="agree-btn">Agree</a>
+    </div>
+</div>
