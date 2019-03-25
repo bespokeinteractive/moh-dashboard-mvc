@@ -16,7 +16,7 @@ namespace hrhdashboard.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly string _url = "http://41.89.93.183:8080";
+        private readonly string _url = "http://api.kmhfltest.health.go.ke";
 
         public IActionResult Index(HomeIndexViewModel model, CountyService service)
         {
@@ -141,11 +141,9 @@ namespace hrhdashboard.Controllers
         }
 
         [AllowAnonymous]
-        public JsonResult GetCompareFacilities(string code, Boolean ifac, FacilityService service)
+        public JsonResult GetCompareFacilities(string code, Boolean ifac, CompareModel model, FacilityService service)
         {
             code = code.Trim().Split(null)[0];
-
-            CompareModel model = new CompareModel();
             model.Facility = service.GetFacility(code);
             if (ifac)
                 model.Facilities = service.GetFacilitiesAutocomplete("WHERE fc_idnt<>" + model.Facility.Id + " AND fc_level=" + model.Facility.Category.Level.Id);

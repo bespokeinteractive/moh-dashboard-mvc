@@ -19,9 +19,11 @@ namespace hrhdashboard.Services
     }
     public class Utils
     {
+        private static readonly string _url = "http://api.kmhfltest.health.go.ke";
+
         public string GetToken()
         {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://41.89.93.183:8080/o/token/");
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(_url + "/o/token/");
 
             string passw = "grant_type=password&username=10004&password=public&client_id=zzAmdUPF6MLcbLdbSkdv1MkRgYD9vuG8B8Bv4lIq&client_secret=JdxZDwF1NlLxxDyTkRIUT6az2YQ1olm4wN8y856CkpntiiRP2XqLPueDpUR3OZvPDxdiyZ4P2lNajoJLdGpS8ZmwGYNOx65qK3jXCndjbbfBZF8Uu0eDTOB4adkJQCnr";
             byte[] bytes = new ASCIIEncoding().GetBytes(passw);
@@ -37,7 +39,7 @@ namespace hrhdashboard.Services
 
             return token.access_token;// rootObject.access_token;
         }
-        private RestClient RestCliente = new RestClient("http://41.89.93.183:8080/api/");
+        private RestClient RestCliente = new RestClient(_url + "/api/");
 
         private CookieContainer SessionCookie = new CookieContainer();
 
@@ -62,14 +64,14 @@ namespace hrhdashboard.Services
         }
         private void InfoRequest()
         {
-            RestRequest infoneeded = new RestRequest("http://41.89.93.183:8080/api/gis/drilldown/county/8?format=json", Method.GET);
+            RestRequest infoneeded = new RestRequest(_url +  "/api/gis/drilldown/county/8?format=json", Method.GET);
 
             IRestResponse response = RestCliente.Execute(infoneeded);
 
             Console.WriteLine(response.Content);
         }
-        public string getCounty()
-        {
+
+        public string GetCounty() {
             ServiceSession();
             InfoRequest();
 
